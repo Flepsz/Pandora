@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigator from "./TabNavigator";
+import "../../globals.css"
 
 const RootStack = createNativeStackNavigator();
 
