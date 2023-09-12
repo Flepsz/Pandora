@@ -3,7 +3,7 @@ import Topbar from "../components/Topbar";
 
 export default function HomeScreen() {
   return (
-    <View className="bg-green-700">
+    <View>
       <Topbar />
     </View>
   )

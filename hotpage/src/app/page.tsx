@@ -1,7 +1,11 @@
+import Navbar from "@/components/Navbar";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      Pandora
+    <main 
+    style={{ background: "#F0F4F8" }}
+    className="relative flex flex-col justify-between w-full min-h-screen">
+      <Navbar />
     </main>
   )
 }
