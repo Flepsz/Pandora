@@ -15,11 +15,12 @@ const ThemeSwitcher = () => {
   }
 
   return (
-    <div className="flex flex-col gap-5 justify-start">
-      <h1 className="dark:text-red-600">The current theme is: {theme}</h1>
-      <button onClick={() => setTheme("light")}>Light Mode</button>
-      <button onClick={() => setTheme("dark")}>Dark Mode</button>
-    </div>
+    <button
+      className={`w-fit absolute right-96 top-2 p-2 rounded-md hover:scale-110 active:scale-100 duration-200 bg-slate-200 dark:bg-[#212933]`}
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+    >
+      {theme === "light" ? "Dark" : "Light"}
+    </button>
   );
 };
 
