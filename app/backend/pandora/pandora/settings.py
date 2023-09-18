@@ -131,10 +131,6 @@ JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "Pandora Admin",
 
-    "theme": "flatly",
-    
-    "dark_mode_theme": "darkly",
-
     # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
     "site_header": "Pandora",
 
@@ -265,4 +261,9 @@ JAZZMIN_SETTINGS = {
     "changeform_format": "horizontal_tabs",
     # override change forms on a per modeladmin basis
     "changeform_format_overrides": {"auth.user": "collapsible", "auth.group": "vertical_tabs"},
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    "dark_mode_theme": "darkly",
 }
