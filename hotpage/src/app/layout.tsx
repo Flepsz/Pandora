@@ -3,8 +3,8 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import Providers from './providers'
-import ThemeSwitcher from './ThemeSwitcher'
+import Providers from '@/components/providers'
+import { sonoma } from '@/font/BRSonoma'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,8 +20,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-slate-50 dark:bg-[#0a0c0f]`}>
-        <Providers attribute="class" defaultTheme="system" enableSystem>
+      <body className={`${sonoma.className} bg-slate-50 dark:bg-[#0a0c0f]`}>
+        <Providers attribute="class" defaultTheme="white" enableSystem>
           <Navbar />
           <main>
             {children}
