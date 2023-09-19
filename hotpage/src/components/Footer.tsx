@@ -25,12 +25,12 @@ const FooterColumn = ({ title, links }: ColumnProps) => (
 
 export default function Footer() {
 	return (
-		<footer className="flexCenter footer m-auto">
-			<section className="flex flex-col gap-12 w-full">
+		<footer className="footer bg-white">
+			<section className="flex flex-col gap-12 w-4/5">
 				<div className="flex items-start flex-col">
 					<Image src="/logoNavbar.svg" width={115} height={38} alt="Pandora" />
 				</div>
-				<div className="flex flex-wrap gap-12">
+				<div className="flex flex-wrap gap-12 text-justify">
 					<FooterColumn
 						title={footerLinks[0].title}
 						links={footerLinks[0].links}
@@ -55,7 +55,7 @@ export default function Footer() {
 					</div>
 				</div>
 			</section>
-      <div className="w-full h-2 border-t-2 border-[#dedfe4]"></div>
+      <div className="w-11/12 h-2 border-t-2 mt-4 border-[#dedfe4]"></div>
 			<UnderFooter />
 		</footer>
 	);

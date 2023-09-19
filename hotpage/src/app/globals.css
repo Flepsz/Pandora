@@ -40,7 +40,7 @@ body {
 
 /* Footer */
 .footer {
-	@apply flex-col paddings w-2/3 gap-6;
+	@apply flexCenter flex-col bg-slate-100 paddings w-full gap-6;
 }
 
 .footer_copyright {

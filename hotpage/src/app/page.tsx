@@ -1,10 +1,9 @@
-import ThemeSwitcher from "./ThemeSwitcher";
+import MainPage from "@/components/MainPage";
 
 export default function Home() {
   return (
-    <main
-      className="relative flex flex-col justify-between w-full min-h-screen pt-32"
-    >
+    <main className="w-full min-h-screen pt-32">
+      <MainPage />
     </main>
   );
 }
