@@ -20,8 +20,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${sonoma.className} bg-slate-50 dark:bg-[#0a0c0f]`}>
-        <Providers attribute="class" defaultTheme="white" enableSystem>
+      <body className={`${sonoma.className} bg-zinc-50 dark:bg-[#0a0c0f]`}>
+        <Providers attribute="class">
           <Navbar />
           <main>
             {children}

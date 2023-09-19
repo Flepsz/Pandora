@@ -25,7 +25,7 @@ const FooterColumn = ({ title, links }: ColumnProps) => (
 
 export default function Footer() {
 	return (
-		<footer className="footer bg-white">
+		<footer className="footer bg-zinc-200">
 			<section className="flex flex-col gap-12 w-4/5">
 				<div className="flex items-start flex-col">
 					<Image src="/logoNavbar.svg" width={115} height={38} alt="Pandora" />

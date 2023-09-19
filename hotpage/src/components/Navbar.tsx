@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { navLinks } from "@/constants";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 export default function Navbar() {
   const [isScrolling, setIsScrolling] = useState<boolean>(false);
@@ -51,10 +52,12 @@ function NavbarFixed() {
       </div>
       <ul className="flex items-center text-black font-medium dark:text-white">
         {navLinks.map((link) => (
-          <li className="hidden flex-col px-5 text-xl font-normal overflow-hidden group relative md:flex">
+          <li
+            className="hidden flex-col px-5 text-xl font-normal overflow-hidden group relative md:flex"
+            key={link.key}
+          >
             <Link
               href={link.href}
-              key={link.key}
               className="relative after:bg-[#530082] after:absolute after:h-1 after:w-0 after:bottom-0 after:left-0 hover:after:w-full after:transition-all after:duration-300 cursor-pointer hover:text-zinc-700"
             >
               {link.text}
