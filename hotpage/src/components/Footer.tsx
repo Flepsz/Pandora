@@ -15,7 +15,7 @@ const FooterColumn = ({ title, links }: ColumnProps) => (
 		<h4 className="font-bold text-xl">{title}</h4>
 		<ul className="flex flex-col gap-2 font-normal text-base">
 			{links.map((link) => (
-				<Link href="/" key={link} className="hover:text-[#530082]">
+				<Link href="/" key={link} className="text-zinc-700 dark:text-zinc-200 hover:text-[#530082] dark:hover:text-[#530082]">
 					{link}
 				</Link>
 			))}
@@ -25,7 +25,7 @@ const FooterColumn = ({ title, links }: ColumnProps) => (
 
 export default function Footer() {
 	return (
-		<footer className="footer bg-zinc-200">
+		<footer className="footer bg-zinc-100 dark:bg-zinc-900">
 			<section className="flex flex-col gap-12 w-4/5">
 				<div className="flex items-start flex-col">
 					<Image src="/logoNavbar.svg" width={115} height={38} alt="Pandora" />

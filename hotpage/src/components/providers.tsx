@@ -13,5 +13,6 @@ export default function Providers({ children, ...props }: ThemeProviderProps) {
   if (!mounted) {
     return <>{children}</>;
   }
+  
   return <ThemeProvider attribute="class">{children}</ThemeProvider>;
 }

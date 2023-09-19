@@ -8,10 +8,6 @@
 	box-sizing: border-box;
 }
 
-body {
-	font-family: Inter;
-}
-
 .flexCenter {
 	@apply flex justify-center items-center;
 }
@@ -38,9 +34,14 @@ body {
 	border-radius: 12px;
 }
 
+::selection {
+	background: #afafaf6e;
+	color: #530082;
+}
+
 /* Footer */
 .footer {
-	@apply flexCenter flex-col bg-slate-100 paddings w-full gap-6;
+	@apply flexCenter flex-col paddings w-full gap-6;
 }
 
 .footer_copyright {
