@@ -23,7 +23,7 @@ export default function RootLayout({
 			<body className={`${sonoma.className} bg-zinc-50 dark:bg-[#0a0c0f]`}>
 				<Providers attribute="class" defaultTheme="light" enableSystem>
 					<Navbar />
-					<main>{children}</main>
+					{children}
 					<Footer />
 				</Providers>
 			</body>
