@@ -7,9 +7,7 @@ export default function Home() {
 		<main className="w-full min-h-screen pt-24">
 			<MainPage />
 			<AppShow />
-
-				<FeatureSwiper />
-
+			<FeatureSwiper />
 		</main>
 	);
 }
