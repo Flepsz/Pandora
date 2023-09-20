@@ -4,12 +4,10 @@ import Link from "next/link";
 import { motion, AnimatePresence, easeInOut } from "framer-motion";
 import Image from "next/image";
 import { navLinks } from "@/constants";
-import ThemeSwitcher from "./ThemeSwitcher";
 
-export default function Navbar() {
+export const isScrollingNavbar = () => {
 	const [isScrolling, setIsScrolling] = useState<boolean>(false);
 
-	
 	const handleScroll = () => {
 		if (window.scrollY >= 23) {
 			setIsScrolling(true);
@@ -24,6 +22,13 @@ export default function Navbar() {
 			window.removeEventListener("scroll", handleScroll);
 		};
 	}, []);
+
+	return isScrolling
+}
+
+export default function Navbar() {
+
+	const isScrolling = isScrollingNavbar()
 
 	return (
 		<>
@@ -50,7 +55,7 @@ function NavbarFixed() {
 			className="fixed z-10 flex justify-between w-full px-8 py-2 top-4 left-1/2"
 		>
 				<div className="flex items-center gap-2 text-black">
-					<Link href="/">
+					<Link href="/test">
 						<Image
 							alt="LogoPandora"
 							src="/logoNavbar.svg"
@@ -78,7 +83,7 @@ function NavbarFixed() {
 				<li className="px-6 py-3 ml-2 text-white bg-[#530082] border border-purple-800 rounded-full text-md group relative overflow-hidden">
 					<div className="absolute inset-0 w-0 bg-white transition-all duration-[250ms] ease-out group-hover:w-full"></div>
 					<Link
-						href={"/"}
+						href="#"
 						className="relative font-semibold text-white group-hover:text-[#530082]"
 					>
 						Open Box
@@ -120,13 +125,14 @@ function NavbarScroll({ isScrolling }: { isScrolling: boolean }) {
 				<li className="px-4 py-2 ml-2 text-white bg-[#530082] border border-purple-800 rounded-full text-md group relative overflow-hidden">
 					<div className="absolute inset-0 w-0 bg-white transition-all duration-[250ms] ease-out group-hover:w-full"></div>
 					<Link
-						href={""}
+						href="#"
 						className="relative font-semibold text-white group-hover:text-[#530082]"
 					>
 						Open Box
 					</Link>
 				</li>
 			</ul>
+			
 		</motion.nav>
 	);
 }
