@@ -13,7 +13,7 @@ export default function AppShow() {
           telemedicine, and much more. All of this without changing apps.
         </p>
       </div>
-      <Image src="./phoneapp.svg" alt="App Pandora" width="0" height="0" className="w-full sm:w-3/4 2xl:w-2/4" />
+      <Image src="./phoneapp.svg" alt="App Pandora" width="0" height="0" className="w-full sm:w-3/4 2xl:w-2/4 animate-float" />
     </section>
   );
 }
