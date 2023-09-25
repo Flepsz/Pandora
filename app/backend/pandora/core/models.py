@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class Client(models.Model):
+class Costumer(models.Model):
     full_name = models.CharField(max_length=100)
     social_name = models.CharField(max_length=100)
     birthdate = models.DateField()
@@ -14,21 +14,21 @@ class Client(models.Model):
         return self.full_name
 
 
-class ClientNP(Client):
-    idClient = models.OneToOneField(Client, on_delete=models.CASCADE, related_name="client_np")
+class CostumerNP(Costumer):
+    idCostumer = models.OneToOneField(Costumer, on_delete=models.CASCADE, related_name="costumer_np")
     cpf = models.CharField(max_length=11, unique=True)
     rg = models.CharField(max_length=9, unique=True)
 
 
-class ClientLP(Client):
-    idClient = models.OneToOneField(Client, on_delete=models.CASCADE, related_name="client_lp")
+class CostumerLP(Costumer):
+    idCostumer = models.OneToOneField(Costumer, on_delete=models.CASCADE, related_name="costumer_lp")
     cnpj = models.CharField(max_length=14, unique=True)
     state_registration = models.CharField(max_length=30)
     municipal_registration = models.CharField(max_length=30)
 
 
 class Account(models.Model):
-    client = models.ManyToManyField(Client)
+    costumer = models.ManyToManyField(Costumer)
     agency = models.CharField(max_length=10)
     number = models.CharField(max_length=25, unique=True)
     acc_type = models.CharField(max_length=20)
@@ -51,7 +51,7 @@ class Address(models.Model):
 
 
 class Contact(models.Model):
-    idClient = models.ForeignKey(Client, on_delete=models.CASCADE)
+    idCostumer = models.ForeignKey(Costumer, on_delete=models.CASCADE)
     number = models.CharField(max_length=11)
     email = models.EmailField(max_length=50, blank=True, null=True)
     observation = models.CharField(max_length=200, blank=True, null=True)
