@@ -60,7 +60,7 @@ const swiperItems = [
 			icon: <FaMoneyBill />,
 	},
 	{
-			title: "NuConsignado",
+			title: "Consigned",
 			content: "The consigned loan for federal public servants and soon for retirees and pensioners of INSS.",
 			icon: <FaHandshake />,
 	},
@@ -111,7 +111,7 @@ const swiperItems = [
 	},
 	{
 			title: "Purchase Installments",
-			content: "Split your in-store and online purchases directly in the Nubank app.",
+			content: "Split your in-store and online purchases directly in the Pandora app.",
 			icon: <FaCreditCardAlt />,
 	},
 	{

@@ -30,7 +30,6 @@ export default function RootLayout({
 						<Footer />
 				</Providers>
 			</body>
-			<Script src="/nprogress.js" />
 		</html>
 	);
 }

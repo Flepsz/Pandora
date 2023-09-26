@@ -9,8 +9,16 @@
 }
 
 img {
-	user-select: none
+	user-select: none;
+  user-drag: none;
+  -webkit-user-drag: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
 }
+
 
 .animate-float {
 	transform: translateY(0px);
@@ -22,16 +30,16 @@ img {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-15px); /* Ajuste a altura da flutuação aqui */
+    transform: translateY(-15px);
   }
 }
 
 .flexCenter {
-	@apply flex justify-center items-center;
+	@apply flex items-center justify-center;
 }
 
 .flexBetween {
-	@apply flex justify-between items-center;
+	@apply flex items-center justify-between;
 }
 
 .flexStart {
@@ -39,7 +47,7 @@ img {
 }
 
 .paddings {
-	@apply lg:px-20 py-6 px-5;
+	@apply px-5 py-6 lg:px-20;
 }
 
 ::-webkit-scrollbar {
@@ -59,15 +67,15 @@ img {
 
 /* Footer */
 .footer {
-	@apply flexCenter flex-col paddings w-full gap-6;
+	@apply flex-col w-full gap-6 flexCenter paddings;
 }
 
 .footer_copyright {
-	@apply max-sm:flex-col w-full text-sm font-normal;
+	@apply w-full text-sm font-normal max-sm:flex-col;
 }
 
 .footer_column {
-	@apply flex-1 flex flex-col gap-3 text-sm min-w-max;
+	@apply flex flex-col flex-1 gap-3 text-sm min-w-max;
 }
 
 .swiper-pagination {
