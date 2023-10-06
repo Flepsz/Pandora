@@ -1,10 +1,12 @@
 import { View } from "react-native";
-import Topbar from "../components/Topbar";
+import InputM from "../components/InputM";
+import { useState } from "react";
 
 export default function HomeScreen() {
+  const [test, setTest] = useState<string>("")
   return (
     <View>
-      <Topbar />
+      <InputM id="1" label="test" onChange={setTest} value={test} />
     </View>
   )
 }
