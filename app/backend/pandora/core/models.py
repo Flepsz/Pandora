@@ -1,4 +1,7 @@
 from django.db import models
+from random import randint
+import random
+from datetime import datetime, timedelta
 
 
 class Costumer(models.Model):
@@ -14,13 +17,13 @@ class Costumer(models.Model):
         return self.full_name
 
 
-class CostumerNP(Costumer):
+class CostumerNP(models.Model):
     idCostumer = models.OneToOneField(Costumer, on_delete=models.CASCADE, related_name="costumer_np")
     cpf = models.CharField(max_length=11, unique=True)
     rg = models.CharField(max_length=9, unique=True)
 
 
-class CostumerLP(Costumer):
+class CostumerLP(models.Model):
     idCostumer = models.OneToOneField(Costumer, on_delete=models.CASCADE, related_name="costumer_lp")
     cnpj = models.CharField(max_length=14, unique=True)
     state_registration = models.CharField(max_length=30)
@@ -28,12 +31,23 @@ class CostumerLP(Costumer):
 
 
 class Account(models.Model):
+    ACC_TYPES = [
+        ("SAVINGS", "Savings Account"),
+        ("CHECKING", "Checking Account"),
+    ]
+
     costumer = models.ManyToManyField(Costumer)
-    agency = models.CharField(max_length=10)
-    number = models.CharField(max_length=25, unique=True)
-    acc_type = models.CharField(max_length=20)
+    agency = models.CharField(max_length=4, blank=True)
+    number = models.CharField(max_length=10, unique=True, blank=True)
+    acc_type = models.CharField(max_length=20, choices=ACC_TYPES)
     limit = models.DecimalField(max_digits=10, decimal_places=2)
     active = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        if not self.id:  # Check if the instance is not saved to the database
+            self.agency = ''.join(str(random.randint(0, 9)) for _ in range(4))
+            self.number = ''.join(str(random.randint(0, 9)) for _ in range(10))
+        super(Account, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.acc_type} - {self.number}"
@@ -62,11 +76,51 @@ class Contact(models.Model):
 
 class Card(models.Model):
     idAccount = models.ForeignKey(Account, on_delete=models.CASCADE)
-    number = models.CharField(max_length=20)
-    cvv = models.CharField(max_length=3)
-    expiration_date = models.DateField()
-    flag = models.CharField(max_length=20)
+    number = models.CharField(max_length=16, blank=True)
+    cvv = models.CharField(max_length=3, blank=True)
+    expiration_date = models.DateField(blank=True)
+    flag = models.CharField(max_length=25, blank=True)
     active = models.BooleanField(default=True)
+
+    def determine_flag(self):
+        first_digit = int(self.number[0])
+        if first_digit == 2:
+            return "Mastercard"
+        if first_digit == 3:
+            return "American Express"
+        if first_digit == 4:
+            return "Visa"
+        if first_digit == 5:
+            return "MasterCard"
+        if first_digit == 6:
+            return "Elo"
+
+    @staticmethod
+    def generate_credit_card_number():
+        # 2 Mastercard, 3 American Express, 4 Visa, 5 MasterCard, 6 Elo
+        first_digit = random.choice([2, 3, 4, 5, 6])
+
+        other_digits = [random.randint(0, 9) for _ in range(15)]
+
+        total = first_digit
+        for i, digit in enumerate(other_digits):
+            if i % 2 == 0:
+                digit *= 2
+                if digit > 9:
+                    digit -= 9
+            total += digit
+
+        last_digit = (10 - (total % 10)) % 10
+
+        credit_card_number = [str(first_digit)] + [str(digit) for digit in other_digits] + [str(last_digit)]
+
+        return ''.join(credit_card_number)
+
+    def save(self, *args, **kwargs):
+        self.number = self.generate_credit_card_number()
+        self.cvv = str(randint(100, 999))
+        self.expiration_date = datetime.now() + timedelta(days=365)
+        self.flag = self.determine_flag()
 
     def __str__(self):
         return f"Card ending in {self.number[-4:]}"
