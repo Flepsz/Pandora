@@ -18,16 +18,24 @@ class Costumer(models.Model):
 
 
 class CostumerNP(models.Model):
-    idCostumer = models.OneToOneField(Costumer, on_delete=models.CASCADE, related_name="costumer_np")
+    idCostumer = models.OneToOneField(
+        Costumer, on_delete=models.CASCADE, related_name="costumer_np")
     cpf = models.CharField(max_length=11, unique=True)
     rg = models.CharField(max_length=9, unique=True)
 
+    def __str__(self):
+        return "NP - " + self.idCostumer
+
 
 class CostumerLP(models.Model):
-    idCostumer = models.OneToOneField(Costumer, on_delete=models.CASCADE, related_name="costumer_lp")
+    idCostumer = models.OneToOneField(
+        Costumer, on_delete=models.CASCADE, related_name="costumer_lp")
     cnpj = models.CharField(max_length=14, unique=True)
-    state_registration = models.CharField(max_length=30)
-    municipal_registration = models.CharField(max_length=30)
+    state_registration = models.CharField(max_length=9)
+    municipal_registration = models.CharField(max_length=11)
+
+    def __str__(self):
+        return "LP - " + self.idCostumer
 
 
 class Account(models.Model):
@@ -44,7 +52,7 @@ class Account(models.Model):
     active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
-        if not self.id:  # Check if the instance is not saved to the database
+        if not self.id:
             self.agency = ''.join(str(random.randint(0, 9)) for _ in range(4))
             self.number = ''.join(str(random.randint(0, 9)) for _ in range(10))
         super(Account, self).save(*args, **kwargs)
@@ -71,7 +79,9 @@ class Contact(models.Model):
     observation = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return self.number
+        if self.email:
+            return f"Number: {self.number}, Email: {self.email}"
+        return f"Number: {self.number}"
 
 
 class Card(models.Model):
@@ -112,7 +122,8 @@ class Card(models.Model):
 
         last_digit = (10 - (total % 10)) % 10
 
-        credit_card_number = [str(first_digit)] + [str(digit) for digit in other_digits] + [str(last_digit)]
+        credit_card_number = [str(first_digit)] + [str(digit)
+                                                   for digit in other_digits] + [str(last_digit)]
 
         return ''.join(credit_card_number)
 
@@ -129,19 +140,41 @@ class Card(models.Model):
 class Transaction(models.Model):
     idCard = models.ForeignKey(Card, on_delete=models.CASCADE)
     date_time = models.DateTimeField()
-    operation = models.CharField(max_length=20)
+
+    OPERATION_CHOICES = [
+        ('Deposit', 'Deposit'),
+        ('Withdrawal', 'Withdrawal'),
+        ('Payment', 'Payment'),
+        ('Transfer', 'Transfer')
+    ]
+
+    operation = models.CharField(max_length=20, choices=OPERATION_CHOICES)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.date_time} - {self.operation} - Card ending in {self.idCard.number[-4:]}"
 
 
 class Investment(models.Model):
     idAccount = models.ForeignKey(Account, on_delete=models.CASCADE)
-    inv_type = models.CharField(max_length=30)
+
+    INVESTMENT_TYPE_CHOICES = [
+        ('Stocks', 'Stocks'),
+        ('Bonds', 'Bonds'),
+        ('Mutual Funds', 'Mutual Funds'),
+        ('Real Estate', 'Real Estate')
+    ]
+
+    inv_type = models.CharField(max_length=30, choices=INVESTMENT_TYPE_CHOICES)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     management_fee = models.FloatField()
     term = models.DurationField()
     risk_rate = models.DecimalField(max_digits=5, decimal_places=2)
     profitability = models.DecimalField(max_digits=5, decimal_places=2)
     completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.inv_type} Investment - Amount: {self.amount}, Risk Rate: {self.risk_rate}%"
 
 
 class Loan(models.Model):
@@ -154,6 +187,9 @@ class Loan(models.Model):
     installment_number = models.IntegerField()
     observation = models.TextField(blank=True)
 
+    def __str__(self):
+        return f"Loan for Account: {self.idAccount.number} - Amount: {self.requested_amount}"
+
 
 class InstallmentLoan(models.Model):
     idLoan = models.ForeignKey(Loan, on_delete=models.CASCADE)
@@ -163,3 +199,6 @@ class InstallmentLoan(models.Model):
     payment_date = models.DateField(null=True, blank=True)
     paid_amount = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True)
+
+    def __str__(self):
+        return f"Installment for Loan #{self.idLoan.id} - Number: {self.number}, Due Date: {self.due_date}, Amount: {self.amount}"
