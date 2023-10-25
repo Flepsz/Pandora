@@ -17,25 +17,14 @@ class Costumer(models.Model):
         return self.full_name
 
 
-class CostumerNP(models.Model):
-    idCostumer = models.OneToOneField(
-        Costumer, on_delete=models.CASCADE, related_name="costumer_np")
+class CostumerNP(Costumer):
     cpf = models.CharField(max_length=11, unique=True)
     rg = models.CharField(max_length=9, unique=True)
 
-    def __str__(self):
-        return "NP - " + self.idCostumer
-
-
-class CostumerLP(models.Model):
-    idCostumer = models.OneToOneField(
-        Costumer, on_delete=models.CASCADE, related_name="costumer_lp")
+class CostumerLP(Costumer):
     cnpj = models.CharField(max_length=14, unique=True)
     state_registration = models.CharField(max_length=9)
     municipal_registration = models.CharField(max_length=11)
-
-    def __str__(self):
-        return "LP - " + self.idCostumer
 
 
 class Account(models.Model):
@@ -62,6 +51,7 @@ class Account(models.Model):
 
 
 class Address(models.Model):
+    costumer = models.ForeignKey(Costumer, on_delete=models.CASCADE, related_name='addresses')
     street = models.CharField(max_length=100)
     neighborhood = models.CharField(max_length=75)
     city = models.CharField(max_length=75)
@@ -126,12 +116,6 @@ class Card(models.Model):
                                                    for digit in other_digits] + [str(last_digit)]
 
         return ''.join(credit_card_number)
-
-    def save(self, *args, **kwargs):
-        self.number = self.generate_credit_card_number()
-        self.cvv = str(randint(100, 999))
-        self.expiration_date = datetime.now() + timedelta(days=365)
-        self.flag = self.determine_flag()
 
     def __str__(self):
         return f"Card ending in {self.number[-4:]}"
