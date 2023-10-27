@@ -1,6 +1,9 @@
 from datetime import date, timedelta
 import datetime
 import json
+from datetime import date, timedelta
+import datetime
+import json
 from faker import Faker
 import requests
 import os
@@ -47,27 +50,28 @@ class DateEncoder(json.JSONEncoder):
         if isinstance(obj, (date, datetime, timedelta)):
             return obj.isoformat()
         return super(DateEncoder, self).default(obj)
+    
+
+def date_to_iso_string(date_obj):
+    if isinstance(date_obj, (date, datetime, timedelta)):
+        return date_obj.isoformat()
+    return date_obj
 
 def populate_costumers(num_costumers=10):
     for _ in range(num_costumers):
-        customer_data = {
-            "full_name": fake.name(),
-            "social_name": fake.name(),
-            "birthdate": fake.date_of_birth(),
-            "username": fake.user_name(),
-            "password": fake.password(),
-        }
+        birthdate = fake.date_of_birth()
+        birthdate_iso = date_to_iso_string(birthdate)
 
-        customer_data_json = json.dumps(customer_data, cls=DateEncoder)
+        response = requests.post(populate_costumers_url,
+            json={
+                "full_name": fake.name(),
+                "social_name": fake.name(),
+                "birthdate": birthdate_iso,
+                "username": fake.user_name(),
+                "password": fake.password(),
+            })
 
-        response = requests.post(populate_costumers_url, data=customer_data_json,
-            headers={'Content-Type': 'application/json'})
-
-        if response.status_code == 201:
-            customer_id = response.json()["id"]
-            print(f"Cliente criado com sucesso. ID: {customer_id}")
-        else:
-            print("Erro ao criar o cliente.")
+        return response.json
 
 
 # def populate_costumer_np(num_costumers=10):
@@ -214,7 +218,7 @@ def populate_costumers(num_costumers=10):
 def main():
     data_base_creation(),
     # superuser_creation()
-    populate_costumers()
+    # populate_costumers()
     # populate_costumer_np()
     # populate_costumer_lp()
     run_server()

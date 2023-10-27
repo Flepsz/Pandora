@@ -4,7 +4,16 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Costumer, Account, Card, Transaction, Investment, Loan
-from .serializers import CostumerSerializer, AccountSerializer, CardSerializer, TransactionSerializer, InvestmentSerializer, LoanSerializer, AddressSerializer, ContactSerializer
+from .serializers import (
+    CostumerSerializer, 
+    AccountSerializer, 
+    CardSerializer, 
+    TransactionSerializer, 
+    InvestmentSerializer, 
+    LoanSerializer, 
+    AddressSerializer, 
+    ContactSerializer
+)
 
 class CostumerViewSet(viewsets.ModelViewSet):
     queryset = Costumer.objects.all()
@@ -35,6 +44,7 @@ class CostumerViewSet(viewsets.ModelViewSet):
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
+    lookup_field = 'id'
 
     @action(detail=True, methods=['get'])
     def card(self, request, pk=None):
@@ -68,6 +78,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
     serializer_class = CardSerializer
+    lookup_field = 'id'
 
     @action(detail=True, methods=['get'])
     def transaction(self, request, pk=None):
@@ -93,13 +104,16 @@ class CardViewSet(viewsets.ModelViewSet):
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+    lookup_field = 'id'
 
 
 class InvestmentViewSet(viewsets.ModelViewSet):
     queryset = Investment.objects.all()
     serializer_class = InvestmentSerializer
+    lookup_field = 'id'
 
 
 class LoanViewSet(viewsets.ModelViewSet):
     queryset = Loan.objects.all()
     serializer_class = LoanSerializer
+    lookup_field = 'id'

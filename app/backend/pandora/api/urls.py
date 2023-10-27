@@ -2,45 +2,18 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('costumers/', views.CostumerList.as_view(), name='costumer-list'),
-
-    path('costumers/<int:costumer_id>/',
-         views.CostumerDetail.as_view(), name='costumer-detail'),
-
-    path('costumers/<int:costumer_id>/address/',
-         views.CostumerAddressList.as_view(), name='costumer-address-list'),
-
-    path('costumers/<int:costumer_id>/contact/',
-         views.CostumerContactList.as_view(), name='costumer-contact-list'),
-
-    path('costumers/<int:costumer_id>/account/',
-         views.CostumerAccountList.as_view(), name='costumer-account-list'),
-
-    path('costumers/<int:costumer_id>/account/<int:account_id>/',
-         views.CostumerAccountDetail.as_view(), name='costumer-account-detail'),
-
-    path('costumers/<int:costumer_id>/account/<int:account_id>/card/',
-         views.CostumerCardList.as_view(), name='costumer-card-list'),
-
-    path('costumers/<int:costumer_id>/account/<int:account_id>/card/<int:card_id>/',
-         views.CostumerCardDetail.as_view(), name='costumer-card-detail'),
-
-    path('costumers/<int:costumer_id>/account/<int:account_id>/card/<int:card_id>/transaction/',
-         views.CostumerTransactionList.as_view(), name='costumer-transaction-list'),
-
-    path('costumers/<int:costumer_id>/account/<int:account_id>/card/<int:card_id>/transaction/<int:transaction_id>/',
-         views.CostumerTransactionDetail.as_view(), name='costumer-transaction-detail'),
-
-    path('costumers/<int:costumer_id>/account/<int:account_id>/investment/',
-         views.CostumerInvestmentList.as_view(), name='costumer-investment-list'),
-
-
-    path('costumers/<int:costumer_id>/account/<int:account_id>/investment/<int:investment_id>/',
-         views.CostumerInvestmentDetail.as_view(), name='costumer-investment-detail'),
-
-    path('costumers/<int:costumer_id>/account/<int:account_id>/loan/',
-         views.CostumerLoanList.as_view(), name='costumer-loan-list'),
-
-    path('costumers/<int:costumer_id>/account/<int:account_id>/loan/<int:loan_id>/',
-         views.CostumerLoanDetail.as_view(), name='costumer-loan-detail'),
+    path('costumers/', views.CostumerViewSet.as_view({'get': 'list'}), name='costumer-list'),
+    path('costumers/<int:pk>/', views.CostumerViewSet.as_view({'get': 'retrieve'}), name='costumer-detail'),
+    path('costumers/<int:pk>/address/', views.CostumerViewSet.as_view({'get': 'address'}), name='costumer-address-list'),
+    path('costumers/<int:pk>/contact/', views.CostumerViewSet.as_view({'get': 'contact'}), name='costumer-contact-list'),
+    path('costumers/<int:pk>/account/', views.CostumerViewSet.as_view({'get': 'account'}), name='costumer-account-list'),
+    path('costumers/<int:costumer_id>/account/<int:pk>/', views.AccountViewSet.as_view({'get': 'retrieve'}), name='costumer-account-detail'),
+    path('costumers/<int:costumer_id>/account/<int:account_id>/card/', views.AccountViewSet.as_view({'get': 'card'}), name='costumer-card-list'),
+    path('costumers/<int:costumer_id>/account/<int:account_id>/card/<int:pk>/', views.CardViewSet.as_view({'get': 'retrieve'}), name='costumer-card-detail'),
+    path('costumers/<int:costumer_id>/account/<int:account_id>/card/<int:card_id>/transaction/', views.CardViewSet.as_view({'get': 'transaction'}), name='costumer-transaction-list'),
+    path('costumers/<int:costumer_id>/account/<int:account_id>/card/<int:card_id>/transaction/<int:pk>/', views.TransactionViewSet.as_view({'get': 'retrieve'}), name='costumer-transaction-detail'),
+    path('costumers/<int:costumer_id>/account/<int:account_id>/investment/', views.AccountViewSet.as_view({'get': 'investment'}), name='costumer-investment-list'),
+    path('costumers/<int:costumer_id>/account/<int:account_id>/investment/<int:pk>/', views.InvestmentViewSet.as_view({'get': 'retrieve'}), name='costumer-investment-detail'),
+    path('costumers/<int:costumer_id>/account/<int:account_id>/loan/', views.AccountViewSet.as_view({'get': 'loan'}), name='costumer-loan-list'),
+    path('costumers/<int:costumer_id>/account/<int:account_id>/loan/<int:pk>/', views.LoanViewSet.as_view({'get': 'retrieve'}), name='costumer-loan-detail'),
 ]

@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-g-nx&zm7sao+apma(t)ie)ovt)drx)thad+tbrj^-4vrz-57vp'
@@ -17,10 +18,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
     'django_filters',
     'rest_framework',
-    'core',
+    'rest_framework.authtoken',
+    'api'
 ]
 
 MIDDLEWARE = [
@@ -100,7 +102,7 @@ REST_FRAMEWORK = {
     ),
 
     'DEFAULT_PERMISSION_CLASSES': ( 
-        'rest_framwork.permissions.IsAuthenticatedOrReadOnly', 
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly', 
     ) 
 }
 
