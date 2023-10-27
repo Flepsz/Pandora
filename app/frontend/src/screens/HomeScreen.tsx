@@ -1,12 +1,16 @@
 import { View } from "react-native";
 import InputM from "../components/InputM";
 import { useState } from "react";
+import { YStack } from "tamagui";
+import User from "../components/User";
 
 export default function HomeScreen() {
   const [test, setTest] = useState<string>("")
   return (
-    <View>
-      <InputM id="1" label="test" onChange={setTest} value={test} />
+    <View className="pt-10">
+      <YStack bg="#1C2023" p="$3">
+        <User />
+      </YStack>
     </View>
   )
 }

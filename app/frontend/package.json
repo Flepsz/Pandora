@@ -21,6 +21,7 @@
     "autoprefixer": "^10.4.15",
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "expo": "^49.0.9",
+    "expo-app-loading": "^2.1.1",
     "expo-font": "^11.6.0",
     "expo-status-bar": "~1.6.0",
     "nativewind": "^2.0.11",

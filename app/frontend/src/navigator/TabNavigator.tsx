@@ -15,7 +15,7 @@ export default function TabNavigator() {
   
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Home" component={HomeScreen} options={{headerShown: false}} />
     </Tab.Navigator>
   )
 }
