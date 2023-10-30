@@ -1,11 +1,16 @@
 import { Avatar, Text, XStack, YStack } from "tamagui";
 
-export default function User() {
+interface UserBarI {
+  avatar?: string;
+  name: string;
+}
+
+export default function UserBar({avatar, name}: UserBarI) {
   return (
-    <XStack space="$2">
+    <XStack space="$2" ai="center">
       <Avatar size="$4.5" circular>
         <Avatar.Image 
-          src="https://github.com/flepsz.png" 
+          src={avatar} 
         />
 
         <Avatar.Fallback backgroundColor="$gray5" />
@@ -16,7 +21,7 @@ export default function User() {
           Welcome
         </Text>
         <Text className="-mt-1 text-lg font-medium text-white">
-          Felipe
+          {name}
         </Text>
       </YStack>
     </XStack>
