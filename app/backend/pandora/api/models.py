@@ -12,7 +12,8 @@ class Costumer(models.Model):
         upload_to='user_photos/', blank=True, null=True)
     username = models.CharField(max_length=20, unique=True)
     password = models.CharField(max_length=128)
-    accounts = models.ManyToManyField('Account', related_name='customers', blank=True)
+    accounts = models.ManyToManyField(
+        'Account', related_name='customers', blank=True)
 
     def __str__(self):
         return self.full_name
@@ -21,6 +22,7 @@ class Costumer(models.Model):
 class CostumerNP(Costumer):
     cpf = models.CharField(max_length=11, unique=True)
     rg = models.CharField(max_length=9, unique=True)
+
 
 class CostumerLP(Costumer):
     cnpj = models.CharField(max_length=14, unique=True)
@@ -52,7 +54,8 @@ class Account(models.Model):
 
 
 class Address(models.Model):
-    costumer = models.ForeignKey(Costumer, on_delete=models.CASCADE, related_name='addresses')
+    costumer = models.ForeignKey(
+        Costumer, on_delete=models.CASCADE, related_name='addresses')
     street = models.CharField(max_length=100)
     neighborhood = models.CharField(max_length=75)
     city = models.CharField(max_length=75)
@@ -79,7 +82,7 @@ class Card(models.Model):
     idAccount = models.ForeignKey(Account, on_delete=models.CASCADE)
     number = models.CharField(max_length=16, blank=True)
     cvv = models.CharField(max_length=3, blank=True)
-    expiration_date = models.DateField(blank=True)
+    expiration_date = models.DateField(blank=True, null=True)
     flag = models.CharField(max_length=25, blank=True)
     active = models.BooleanField(default=True)
 
@@ -117,6 +120,13 @@ class Card(models.Model):
                                                    for digit in other_digits] + [str(last_digit)]
 
         return ''.join(credit_card_number)
+
+    def save(self, *args, **kwargs):
+        self.number = self.generate_credit_card_number()
+        self.cvv = str(randint(100, 999))
+        self.expiration_date = datetime.now() + timedelta(days=365)
+        self.flag = self.determine_flag()
+        super(Card, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"Card ending in {self.number[-4:]}"

@@ -63,3 +63,18 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         fields = '__all__'
+
+
+class CardTransationSerializer(serializers.ModelSerializer):
+    transaction = TransactionSerializer()
+    class Meta:
+        model = Card
+        fields = [
+            'idAccount',
+            'number',
+            'cvv',
+            'expiration_date',
+            'flag',
+            'active',
+            'transaction'
+        ]
