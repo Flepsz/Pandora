@@ -14,6 +14,9 @@ class ContactSerializer(serializers.ModelSerializer):
 class CostumerSerializer(serializers.ModelSerializer):
     addresses = AddressSerializer(many=True, read_only=True)
     contacts = ContactSerializer(many=True, read_only=True)
+    accounts = serializers.HyperlinkedRelatedField(
+        many=True, read_only=True, view_name='account-detail'
+    )
 
     class Meta:
         model = Costumer

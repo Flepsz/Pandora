@@ -5,7 +5,7 @@ from django.urls import reverse
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Costumer, Account, Card, Transaction, Investment, Loan
+from .models import Costumer, Account, Card, Transaction, Investment, Loan, Address, Contact
 from .serializers import (
     CostumerSerializer, 
     AccountSerializer, 
@@ -49,7 +49,6 @@ class CostumerViewSet(viewsets.ModelViewSet):
                 'password': costumer.password,
                 'address': [],
                 'contact': [],
-                'account_url': reverse('costumer-account-list', kwargs={'costumer_id': costumer.id}, request=request)
             }
 
             for address in costumer.addresses.all():
@@ -141,16 +140,29 @@ class CardViewSet(viewsets.ModelViewSet):
     serializer_class = CardSerializer
     lookup_field = 'id'
 
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return CardSerializer
+        return CardSerializer
+
+    def create(self, request):
+        idAccount = request.data.get("idAccount")
+        card = Card.objects.create(
+            idAccount=get_object_or_404(Account, pk=idAccount),
+            number=Card.generate_credit_card_number(),
+            cvv=str(randint(100, 999)),
+            expiration_date=datetime.now() + datetime.timedelta(days=365),
+            flag=Card.determine_flag(),
+            active=True
+        )
+        return Response(CardSerializer(card).data, status=201)
+
     # def transaction(self, request, pk=None):
     #     card = self.get_object()
     #     transactions = card.transactions.all()
     #     serializer = TransactionSerializer(transactions, many=True)
     #     return Response(serializer.data)
 
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return CardTransationSerializer
-        return CardSerializer
     
     # def create(self, request):
     #     serializer = CardSerializer(data=request.data)
@@ -194,3 +206,13 @@ class LoanViewSet(viewsets.ModelViewSet):
     queryset = Loan.objects.all()
     serializer_class = LoanSerializer
     lookup_field = 'id'
+
+
+class AddressViewSet(viewsets.ModelViewSet):
+    queryset = Address.objects.all()
+    serializer_class = AddressSerializer
+
+
+class ContactViewSet(viewsets.ModelViewSet):
+    queryset = Contact.objects.all()
+    serializer_class = ContactSerializer
