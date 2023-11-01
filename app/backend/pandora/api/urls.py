@@ -22,11 +22,11 @@ from . import views
 
 router = SimpleRouter()
 
-# Registre suas visualizações usando o roteador
 router.register(r'costumers', views.CostumerViewSet, basename='costumer')
 router.register(r'accounts', views.AccountViewSet, basename='account')
 router.register(r'addresses', views.AddressViewSet, basename='address')
 router.register(r'contacts', views.ContactViewSet, basename='contact')
 router.register(r'cards', views.CardViewSet, basename='card')
+router.register(r'transactions', views.TransactionViewSet, basename='transaction')
 router.register(r'investments', views.InvestmentViewSet, basename='investment')
 router.register(r'loans', views.LoanViewSet, basename='loan')
