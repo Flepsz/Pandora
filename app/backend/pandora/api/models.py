@@ -2,6 +2,11 @@ from django.db import models
 from random import randint
 import random
 from datetime import datetime, timedelta
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+
+
+class UserManager(BaseUserManager):
+    use_in_migrations = True
 
 
 class Costumer(models.Model):
@@ -10,8 +15,6 @@ class Costumer(models.Model):
     birthdate = models.DateField()
     photo_logo = models.ImageField(
         upload_to='user_photos/', blank=True, null=True)
-    username = models.CharField(max_length=20, unique=True)
-    password = models.CharField(max_length=128)
     accounts = models.ManyToManyField(
         'Account', related_name='customers', blank=True)
 
@@ -197,3 +200,4 @@ class InstallmentLoan(models.Model):
 
     def __str__(self):
         return f"Installment for Loan #{self.idLoan.id} - Number: {self.number}, Due Date: {self.due_date}, Amount: {self.amount}"
+
