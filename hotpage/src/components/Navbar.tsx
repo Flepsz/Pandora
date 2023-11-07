@@ -55,7 +55,7 @@ function NavbarFixed() {
 			className="fixed z-10 flex justify-between w-full px-8 py-2 top-4 left-1/2"
 		>
 				<div className="flex items-center gap-2 text-black">
-					<Link href="/test">
+					<Link href="/">
 						<Image
 							alt="LogoPandora"
 							src="/logoNavbar.svg"
@@ -64,10 +64,10 @@ function NavbarFixed() {
 						/>
 					</Link>
 				</div>
-				<ul className="flex items-center text-black font-medium dark:text-white">
+				<ul className="flex items-center font-medium text-black dark:text-white">
 					{navLinks.map((link) => (
 						<li
-							className="hidden flex-col px-5 text-xl font-normal overflow-hidden group relative md:flex"
+							className="relative flex-col hidden px-5 overflow-hidden text-xl font-normal group md:flex"
 							key={link.key}
 						>
 							<Link
@@ -80,15 +80,14 @@ function NavbarFixed() {
 					))}
 				</ul>
 				{/* <ThemeSwitcher /> */}
-				<li className="px-6 py-3 ml-2 text-white bg-[#530082] border border-purple-800 rounded-full text-md group relative overflow-hidden">
+				<Link href="/openbox" className="px-6 py-3 ml-2 text-white bg-[#530082] border border-purple-800 rounded-full text-md group relative overflow-hidden">
 					<div className="absolute inset-0 w-0 bg-white transition-all duration-[250ms] ease-out group-hover:w-full"></div>
-					<Link
-						href="#"
+					<div
 						className="relative font-semibold text-white group-hover:text-[#530082]"
 					>
 						Open Box
-					</Link>
-				</li>
+					</div>
+				</Link>
 		</motion.nav>
 	);
 }
@@ -106,12 +105,12 @@ function NavbarScroll({ isScrolling }: { isScrolling: boolean }) {
 				x: { duration: 1 },
 			}}
 			variants={NavAnimations}
-			className="fixed z-1 flex justify-between px-4 py-2 bg-slate-600 bg-opacity-80 rounded-full left-1/2 top-10 z-20"
+			className="fixed z-20 flex justify-between px-4 py-2 rounded-full z-1 bg-slate-600 bg-opacity-80 left-1/2 top-10"
 		>
 			<ul className="flex items-center">
 				{navLinks.map((link) => (
 						<li
-							className="hidden px-2 text-white font-medium text-md overflow-hidden group relative md:flex"
+							className="relative hidden px-2 overflow-hidden font-medium text-white text-md group md:flex"
 							key={link.key}
 						>
 							<Link

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --purple: #530082;
+}
+
 * {
 	margin: 0;
 	padding: 0;
