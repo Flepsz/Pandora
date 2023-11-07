@@ -140,11 +140,6 @@ class CardViewSet(viewsets.ModelViewSet):
     serializer_class = CardSerializer
     lookup_field = 'id'
 
-    def get_serializer_class(self):
-        if self.request.method == 'GET':
-            return CardSerializer
-        return CardSerializer
-
     def create(self, request):
         idAccount = request.data.get("idAccount")
         card = Card.objects.create(
@@ -162,32 +157,6 @@ class CardViewSet(viewsets.ModelViewSet):
     #     transactions = card.transactions.all()
     #     serializer = TransactionSerializer(transactions, many=True)
     #     return Response(serializer.data)
-
-    
-    # def create(self, request):
-    #     serializer = CardSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         card = serializer.save()
-            # card.number = card.generate_credit_card_number()
-            # card.cvv = str(randint(100, 999))
-            # card.expiration_date = datetime.now() + datetime.timedelta(days=365)
-            # card.flag = card.determine_flag()
-    #         card.save()
-    #         return Response(serializer.data, status=201)
-    #     return Response(serializer.errors, status=400)
-    
-    def create(self, request):
-        idAccount = request.data.get("idAccount")
-        card = Card.objects.create(
-            idAccount = get_object_or_404(Account, pk=idAccount),
-            number = Card.generate_credit_card_number(),
-            cvv = str(randint(100, 999)),
-            expiration_date = datetime.now() + datetime.timedelta(days=365),
-            flag = Card.determine_flag(),
-            active = True
-        )
-        return Response(card.data, status=201)
-
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
