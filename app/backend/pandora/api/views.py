@@ -1,13 +1,18 @@
 import datetime
+import random
+
+from .utilsM import determine_flag, generate_credit_card_number
+from .filters import filter_by_account, filter_by_user
 from random import randint
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
+from django.contrib.auth import get_user_model
 from rest_framework import viewsets
-from rest_framework.decorators import action
+from rest_framework import status
 from rest_framework.response import Response
-from .models import Costumer, Account, Card, Transaction, Investment, Loan, Address, Contact
+
+from .models import Customer, Account, Card, Transaction, Investment, Loan, Address, Contact, CustomerNP, CustomerLP
 from .serializers import (
-    CostumerSerializer, 
+    CustomerSerializer, 
     AccountSerializer, 
     CardSerializer, 
     TransactionSerializer, 
@@ -18,163 +23,209 @@ from .serializers import (
     CardTransationSerializer
 )
 
-class CostumerViewSet(viewsets.ModelViewSet):
-    queryset = Costumer.objects.all()
-    serializer_class = CostumerSerializer
+# class CustomerViewSet(viewsets.ModelViewSet):
+#     queryset = Customer.objects.all()
+#     serializer_class = CustomerSerializer
 
-    def list(self, request):
-        id_costumer = request.query_params.get('idCostumer')
-        if id_costumer is not None:
-            queryset = Costumer.objects.filter(id=id_costumer)
-        else:
-            queryset = Costumer.objects.all()
+#     def list(self, request):
+#         id_customer = request.query_params.get('idCustomer')
+#         if id_customer is not None:
+#             queryset = Customer.objects.filter(id=id_customer)
+#         else:
+#             queryset = Customer.objects.all()
 
-        serializer = CostumerSerializer(queryset, many=True)
-        return Response(serializer.data)
+#         serializer = CustomerSerializer(queryset, many=True)
+#         return Response(serializer.data)
 
 
-    @action(detail=False, methods=['get'])
-    def list_with_details(self, request):
-        costumers = Costumer.objects.all()
-        data = []
+#     @action(detail=False, methods=['get'])
+#     def list_with_details(self, request):
+#         customers = Customer.objects.all()
+#         data = []
 
-        for costumer in costumers:
-            costumer_data = {
-                'id': costumer.id,
-                'full_name': costumer.full_name,
-                'social_name': costumer.social_name,
-                'birthdate': costumer.birthdate,
-                'photo_logo': costumer.photo_logo.url if costumer.photo_logo else None,
-                'username': costumer.username,
-                'password': costumer.password,
-                'address': [],
-                'contact': [],
-            }
+#         for customer in customers:
+#             customer_data = {
+#                 'id': customer.id,
+#                 'full_name': customer.full_name,
+#                 'social_name': customer.social_name,
+#                 'birthdate': customer.birthdate,
+#                 'photo_logo': customer.photo_logo.url if customer.photo_logo else None,
+#                 'username': customer.username,
+#                 'password': customer.password,
+#                 'address': [],
+#                 'contact': [],
+#             }
 
-            for address in costumer.addresses.all():
-                costumer_data['address'].append({
-                    'street': address.street,
-                    'neighborhood': address.neighborhood,
-                    'city': address.city,
-                    'state': address.state,
-                    'zip_code': address.zip_code,
-                })
+#             for address in customer.addresses.all():
+#                 customer_data['address'].append({
+#                     'street': address.street,
+#                     'neighborhood': address.neighborhood,
+#                     'city': address.city,
+#                     'state': address.state,
+#                     'zip_code': address.zip_code,
+#                 })
 
-            for contact in costumer.contacts.all():
-                costumer_data['contact'].append({
-                    'number': contact.number,
-                    'email': contact.email,
-                    'observation': contact.observation,
-                })
+#             for contact in customer.contacts.all():
+#                 customer_data['contact'].append({
+#                     'number': contact.number,
+#                     'email': contact.email,
+#                     'observation': contact.observation,
+#                 })
 
-            data.append(costumer_data)
+#             data.append(customer_data)
 
-        return Response(data)
-    # @action(detail=True, methods=['get'])
-    # def address(self, request, pk=None):
-    #     costumer = self.get_object()
-    #     addresses = costumer.addresses.all()
-    #     serializer = AddressSerializer(addresses, many=True)
-    #     return Response(serializer.data)
+#         return Response(data)
 
-    # @action(detail=True, methods=['get'])
-    # def contact(self, request, pk=None):
-    #     costumer = self.get_object()
-    #     contacts = costumer.contacts.all()
-    #     serializer = ContactSerializer(contacts, many=True)
-    #     return Response(serializer.data)
 
-    # @action(detail=True, methods=['get'])
-    # def account(self, request, pk=None):
-    #     costumer = self.get_object()
-    #     accounts = costumer.accounts.all()
-    #     serializer = AccountSerializer(accounts, many=True)
-    #     return Response(serializer.data)
+class NaturalPersonViewSet(viewsets.ModelViewSet):
+    permission_classes = []
 
+    def get_queryset(self):
+        return filter_by_user(CustomerNP, self.request.user)
+
+    def create(self, request):
+        name = request.data.get('name')
+        social_name = request.data.get('social_name')
+        cpf = request.data.get('cpf')
+        rg = request.data.get('rg')
+        birthdate = request.data.get('birthdate')
+        password = request.data.get('password')
+        
+        customer = get_user_model().objects.create_user(
+            register_number=int(cpf),
+            password=password,
+            photo_logo='photo_path'
+        )
+
+        CustomerNP.objects.create(
+            customer=customer,
+            name=name,
+            social_name=social_name,
+            cpf=str(cpf),
+            rg=rg,
+            birthdate=birthdate
+        )
+
+        return Response({'status': 'Natural Person Created'}, status=status.HTTP_201_CREATED)
+    
+    
+
+class LegalPersonViewSet(viewsets.ModelViewSet):
+    permission_classes = []
+
+    def get_queryset(self):
+        return filter_by_user(CustomerLP, self.request.user)
+
+    def create(self, request):
+        fantasy_name = request.data.get('fantasy_name')
+        cnpj = request.data.get('cnpj')
+        establishment_date = request.data.get('establishment_date')
+        sr = request.data.get('sr')
+        mr = request.data.get('mr')
+        password = request.data.get('password')
+
+        customer = get_user_model().objects.create_user(
+            register_number=int(cnpj),
+            password=password,
+            photo_logo='photo_path'
+        )
+
+        CustomerLP.objects.create(
+            customer=customer,
+            cnpj=str(cnpj),
+            fantasy_name=fantasy_name,
+            establishment_date=establishment_date,
+            sr=sr,
+            mr=mr
+        )
+
+        return Response({'status': 'Legal Person Created'}, status=status.HTTP_201_CREATED)
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
     serializer_class = AccountSerializer
 
-    def list(self, request):
-        id_account = request.query_params.get('idAccount')
-        if id_account is not None:
-            queryset = Account.objects.filter(id=id_account)
-        else:
-            queryset = Account.objects.all()
+    def get_queryset(self):
+        return filter_by_user(Account, self.request.user)
 
-        serializer = AccountSerializer(queryset, many=True)
-        return Response(serializer.data)
+    def create(self, request):
+        customer = self.request.user.pk
+        agency = ''.join(str(random.randint(0, 9)) for _ in range(4))
+        acc_number = ''.join(str(random.randint(0, 9)) for _ in range(10))
+        acc_type = request.data.get('acc_type')
+        limit = random.choice([500, 1000])
+        balance = random.choice([500, 1000])
 
-    # @action(detail=True, methods=['get'])
-    # def card(self, request, pk=None):
-    #     account = self.get_object()
-    #     cards = account.cards.all()
-    #     serializer = CardSerializer(cards, many=True)
-    #     return Response(serializer.data)
+        card_number = generate_credit_card_number()
+        cvv = str(randint(100, 999))
+        expiration_date = datetime.now() + datetime.timedelta(days=365)
+        flag = self.determine_flag(int(card_number[0]))
+            
+        account = Account.objects.create(
+            number=acc_number,
+            agency=agency,
+            acc_type=acc_type,
+            limit=limit,
+            balance=balance,
+            active=True
+        )
+        account.customer.add(customer)
 
-    # @action(detail=True, methods=['get'])
-    # def transaction(self, request, pk=None):
-    #     account = self.get_object()
-    #     transactions = account.transactions.all()
-    #     serializer = TransactionSerializer(transactions, many=True)
-    #     return Response(serializer.data)
-
-    # @action(detail=True, methods=['get'])
-    # def investment(self, request, pk=None):
-    #     account = self.get_object()
-    #     investments = account.investments.all()
-    #     serializer = InvestmentSerializer(investments, many=True)
-    #     return Response(serializer.data)
-
-    # @action(detail=True, methods=['get'])
-    # def loan(self, request, pk=None):
-    #     account = self.get_object()
-    #     loans = account.loans.all()
-    #     serializer = LoanSerializer(loans, many=True)
-    #     return Response(serializer.data)
+        Card.objects.create(
+            account=account,
+            number=card_number,
+            cvv=cvv,
+            flag=flag,
+            expiration_date=expiration_date,
+            active=True
+        )
+            
+        return Response({'status': 'Account Created'}, status=status.HTTP_201_CREATED)
 
 
 class CardViewSet(viewsets.ModelViewSet):
-    queryset = Card.objects.all()
-    serializer_class = CardSerializer
-    lookup_field = 'id'
+    permission_classes = []
+
+    def get_queryset(self):
+        return filter_by_account(self)
 
     def create(self, request):
         idAccount = request.data.get("idAccount")
-        card = Card.objects.create(
-            idAccount=get_object_or_404(Account, pk=idAccount),
-            number=Card.generate_credit_card_number(),
-            cvv=str(randint(100, 999)),
-            expiration_date=datetime.now() + datetime.timedelta(days=365),
-            flag=Card.determine_flag(),
-            active=True
-        )
-        return Response(CardSerializer(card).data, status=201)
+        account = get_object_or_404(Account, pk=idAccount)
 
-    # def transaction(self, request, pk=None):
-    #     card = self.get_object()
-    #     transactions = card.transactions.all()
-    #     serializer = TransactionSerializer(transactions, many=True)
-    #     return Response(serializer.data)
+        card_number = generate_credit_card_number()
+        cvv = str(randint(100, 999))
+        expiration_date = datetime.now() + datetime.timedelta(days=365)
+        flag = determine_flag(int(card_number[0]))
+
+        if account.limit > 700:
+            Card.objects.create(
+                account=account,
+                number=card_number,
+                cvv=cvv,
+                flag=flag,
+                expiration_date=expiration_date,
+                active=True
+            )
+
+            return Response({'status': 'Card Created'}, status=status.HTTP_201_CREATED)
+        
+        return Response({'status': 'Account not meet the requirements to receive the card'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
-    lookup_field = 'id'
 
 
 class InvestmentViewSet(viewsets.ModelViewSet):
     queryset = Investment.objects.all()
     serializer_class = InvestmentSerializer
-    lookup_field = 'id'
 
 
 class LoanViewSet(viewsets.ModelViewSet):
     queryset = Loan.objects.all()
     serializer_class = LoanSerializer
-    lookup_field = 'id'
 
 
 class AddressViewSet(viewsets.ModelViewSet):
@@ -185,3 +236,9 @@ class AddressViewSet(viewsets.ModelViewSet):
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
+
+
+def filter_by_account(self):
+    customer = self.request.user
+    account = self.request.query_params.get('account')
+    return filter_by_account(Investment, account, customer)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Costumer, CostumerNP, CostumerLP, Account, Address, Contact, Card, Transaction, Investment, Loan, InstallmentLoan
+from .models import Customer, CustomerNP, CustomerLP, Account, Address, Contact, Card, Transaction, Investment, Loan, InstallmentLoan
 
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,7 +11,7 @@ class ContactSerializer(serializers.ModelSerializer):
         model = Contact
         fields = '__all__'
 
-class CostumerSerializer(serializers.ModelSerializer):
+class CustomerSerializer(serializers.ModelSerializer):
     addresses = AddressSerializer(many=True, read_only=True)
     contacts = ContactSerializer(many=True, read_only=True)
     accounts = serializers.HyperlinkedRelatedField(
@@ -19,23 +19,23 @@ class CostumerSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
-        model = Costumer
+        model = Customer
         fields = '__all__'
 
     def to_representation(self, instance):
-        if isinstance(instance, CostumerNP):
+        if isinstance(instance, CustomerNP):
             self.fields.update({
                 'cpf': serializers.CharField(),
                 'rg': serializers.CharField()
             })
-        elif isinstance(instance, CostumerLP):
+        elif isinstance(instance, CustomerLP):
             self.fields.update({
                 'cnpj': serializers.CharField(),
                 'state_registration': serializers.CharField(),
                 'municipal_registration': serializers.CharField()
             })
 
-        return super(CostumerSerializer, self).to_representation(instance)
+        return super(CustomerSerializer, self).to_representation(instance)
 
 class CardSerializer(serializers.ModelSerializer):
     class Meta:

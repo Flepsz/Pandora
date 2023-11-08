@@ -96,6 +96,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'global/static/')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'api.Customer'
+
 # DRF 
 REST_FRAMEWORK = { 
     'DEFAULT_AUTHENTICATION_CLASSES': ( 

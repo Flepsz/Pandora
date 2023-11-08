@@ -11,7 +11,7 @@ import subprocess
 
 BASE_URL = 'http://localhost:8000/api/v1/'
 
-populate_costumers_url = os.path.join(BASE_URL, 'costumers/')
+populate_customers_url = os.path.join(BASE_URL, 'customers/')
 
 fake = Faker()
 
@@ -57,12 +57,12 @@ def date_to_iso_string(date_obj):
         return date_obj.isoformat()
     return date_obj
 
-def populate_costumers(num_costumers=10):
-    for _ in range(num_costumers):
+def populate_customers(num_customers=10):
+    for _ in range(num_customers):
         birthdate = fake.date_of_birth()
         birthdate_iso = date_to_iso_string(birthdate)
 
-        response = requests.post(populate_costumers_url,
+        response = requests.post(populate_customers_url,
             json={
                 "full_name": fake.name(),
                 "social_name": fake.name(),
@@ -74,8 +74,8 @@ def populate_costumers(num_costumers=10):
         return response.json
 
 
-# def populate_costumer_np(num_costumers=10):
-#     for _ in range(num_costumers):
+# def populate_customer_np(num_customers=10):
+#     for _ in range(num_customers):
 #         response = requests.post(
 #             json={
 #                 "full_name": fake.name(),
@@ -89,8 +89,8 @@ def populate_costumers(num_costumers=10):
 #         return response.json()
 
 
-# def populate_costumer_lp(num_costumers=10):
-#     for _ in range(num_costumers):
+# def populate_customer_lp(num_customers=10):
+#     for _ in range(num_customers):
 #         response = requests.post(
 #             json={
 #                 "full_name": fake.name(),
@@ -109,7 +109,7 @@ def populate_costumers(num_costumers=10):
 
 
 # def populate_account(num_accounts=20):
-#     costumers = Costumer.objects.all()
+#     customers = Customer.objects.all()
 #     for _ in range(num_accounts):
 #         account = Account(
 #             acc_type=fake.random_element(elements=('SAVINGS', 'CHECKING')),
@@ -117,8 +117,8 @@ def populate_costumers(num_costumers=10):
 #             active=fake.boolean(chance_of_getting_true=90),
 #         )
 #         account.save()
-#         account.costumer.set(random.sample(
-#             list(costumers), random.randint(1, 3)))
+#         account.customer.set(random.sample(
+#             list(customers), random.randint(1, 3)))
 
 
 # def populate_address(num_addresses=30):
@@ -134,10 +134,10 @@ def populate_costumers(num_costumers=10):
 
 
 # def populate_contact():
-#     costumers = Costumer.objects.all()
-#     for costumer in costumers:
+#     customers = Customer.objects.all()
+#     for customer in customers:
 #         contact = Contact(
-#             idCostumer=costumer,
+#             idCustomer=customer,
 #             number=fake.phone_number(),
 #             email=fake.email(),
 #             observation=fake.text(max_nb_chars=200),
@@ -218,9 +218,9 @@ def populate_costumers(num_costumers=10):
 def main():
     data_base_creation(),
     # superuser_creation()
-    # populate_costumers()
-    # populate_costumer_np()
-    # populate_costumer_lp()
+    # populate_customers()
+    # populate_customer_np()
+    # populate_customer_lp()
     run_server()
 
 

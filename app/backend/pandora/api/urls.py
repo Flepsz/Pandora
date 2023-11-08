@@ -3,26 +3,27 @@ from rest_framework.routers import SimpleRouter
 from . import views
 
 # urlpatterns = [
-#     path('costumers/', views.CostumerViewSet.as_view({'get': 'list'}), name='costumer-list'),
-#     path('costumers/<int:pk>/', views.CostumerViewSet.as_view({'get': 'retrieve'}), name='costumer-detail'),
-#     path('costumers/<int:pk>/address/', views.CostumerViewSet.as_view({'get': 'address'}), name='costumer-address-list'),
-#     path('costumers/<int:pk>/contact/', views.CostumerViewSet.as_view({'get': 'contact'}), name='costumer-contact-list'),
-#     path('costumers/<int:pk>/account/', views.CostumerViewSet.as_view({'get': 'account'}), name='costumer-account-list'),
-#     path('costumers/<int:costumer_id>/account/<int:pk>/', views.AccountViewSet.as_view({'get': 'retrieve'}), name='costumer-account-detail'),
-#     path('costumers/<int:costumer_id>/account/<int:account_id>/card/', views.AccountViewSet.as_view({'get': 'card'}), name='costumer-card-list'),
-#     path('costumers/<int:costumer_id>/account/<int:account_id>/card/<int:pk>/', views.CardViewSet.as_view({'get': 'retrieve'}), name='costumer-card-detail'),
-#     path('costumers/<int:costumer_id>/account/<int:account_id>/card/<int:card_id>/transaction/', views.CardViewSet.as_view({'get': 'transaction'}), name='costumer-transaction-list'),
-#     path('costumers/<int:costumer_id>/account/<int:account_id>/card/<int:card_id>/transaction/<int:pk>/', views.TransactionViewSet.as_view({'get': 'retrieve'}), name='costumer-transaction-detail'),
-#     path('costumers/<int:costumer_id>/account/<int:account_id>/investment/', views.AccountViewSet.as_view({'get': 'investment'}), name='costumer-investment-list'),
-#     path('costumers/<int:costumer_id>/account/<int:account_id>/investment/<int:pk>/', views.InvestmentViewSet.as_view({'get': 'retrieve'}), name='costumer-investment-detail'),
-#     path('costumers/<int:costumer_id>/account/<int:account_id>/loan/', views.AccountViewSet.as_view({'get': 'loan'}), name='costumer-loan-list'),
-#     path('costumers/<int:costumer_id>/account/<int:account_id>/loan/<int:pk>/', views.LoanViewSet.as_view({'get': 'retrieve'}), name='costumer-loan-detail'),
+#     path('customers/', views.CustomerViewSet.as_view({'get': 'list'}), name='customer-list'),
+#     path('customers/<int:pk>/', views.CustomerViewSet.as_view({'get': 'retrieve'}), name='customer-detail'),
+#     path('customers/<int:pk>/address/', views.CustomerViewSet.as_view({'get': 'address'}), name='customer-address-list'),
+#     path('customers/<int:pk>/contact/', views.CustomerViewSet.as_view({'get': 'contact'}), name='customer-contact-list'),
+#     path('customers/<int:pk>/account/', views.CustomerViewSet.as_view({'get': 'account'}), name='customer-account-list'),
+#     path('customers/<int:customer_id>/account/<int:pk>/', views.AccountViewSet.as_view({'get': 'retrieve'}), name='customer-account-detail'),
+#     path('customers/<int:customer_id>/account/<int:account_id>/card/', views.AccountViewSet.as_view({'get': 'card'}), name='customer-card-list'),
+#     path('customers/<int:customer_id>/account/<int:account_id>/card/<int:pk>/', views.CardViewSet.as_view({'get': 'retrieve'}), name='customer-card-detail'),
+#     path('customers/<int:customer_id>/account/<int:account_id>/card/<int:card_id>/transaction/', views.CardViewSet.as_view({'get': 'transaction'}), name='customer-transaction-list'),
+#     path('customers/<int:customer_id>/account/<int:account_id>/card/<int:card_id>/transaction/<int:pk>/', views.TransactionViewSet.as_view({'get': 'retrieve'}), name='customer-transaction-detail'),
+#     path('customers/<int:customer_id>/account/<int:account_id>/investment/', views.AccountViewSet.as_view({'get': 'investment'}), name='customer-investment-list'),
+#     path('customers/<int:customer_id>/account/<int:account_id>/investment/<int:pk>/', views.InvestmentViewSet.as_view({'get': 'retrieve'}), name='customer-investment-detail'),
+#     path('customers/<int:customer_id>/account/<int:account_id>/loan/', views.AccountViewSet.as_view({'get': 'loan'}), name='customer-loan-list'),
+#     path('customers/<int:customer_id>/account/<int:account_id>/loan/<int:pk>/', views.LoanViewSet.as_view({'get': 'retrieve'}), name='customer-loan-detail'),
 # ]
 
 
 router = SimpleRouter()
 
-router.register(r'costumers', views.CostumerViewSet, basename='costumer')
+router.register(r'customersnp', views.NaturalPersonViewSet, basename='customerNP')
+router.register(r'customerslp', views.LegalPersonViewSet, basename='customerLP')
 router.register(r'accounts', views.AccountViewSet, basename='account')
 router.register(r'addresses', views.AddressViewSet, basename='address')
 router.register(r'contacts', views.ContactViewSet, basename='contact')
