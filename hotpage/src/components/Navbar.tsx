@@ -31,7 +31,7 @@ export default function Navbar() {
 	const isScrolling = isScrollingNavbar()
 
 	return (
-		<>
+		<header>
 			<AnimatePresence>
 				{isScrolling ? (
 					<NavbarScroll isScrolling={isScrolling} />
@@ -39,7 +39,7 @@ export default function Navbar() {
 					<NavbarFixed />
 				)}
 			</AnimatePresence>
-		</>
+		</header>
 	);
 }
 
@@ -92,7 +92,7 @@ function NavbarFixed() {
 	);
 }
 
-function NavbarScroll({ isScrolling }: { isScrolling: boolean }) {
+export function NavbarScroll({ isScrolling }: { isScrolling: boolean }) {
 	return (
 		<motion.nav
 			key={1}

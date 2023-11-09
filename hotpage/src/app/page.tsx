@@ -1,3 +1,4 @@
+import BottomAd from "@/components/BottomAd";
 import FeatureSwiper from "@/components/FeatureSwiper";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
@@ -6,12 +7,15 @@ import MainPage from "@/home/MainPage";
 
 export default function Home() {
 	return (
-		<main className="w-full min-h-screen pt-24">
+		<>
 			<Navbar />
-			<MainPage />
-			<AppShow />
-			<FeatureSwiper />
+			<main className="w-full min-h-screen pt-24">
+				<MainPage />
+				<AppShow />
+				<FeatureSwiper />
+				<BottomAd />
+			</main>
 			<Footer />
-		</main>
+		</>
 	);
 }

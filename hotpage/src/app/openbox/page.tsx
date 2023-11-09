@@ -5,17 +5,17 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-export default function page() {
+export default function OpenBoxPage() {
 	return (
 		<Reveal width="100%">
-			<div className="bg-[#1C2023] w-screen h-screen flex flex-col">
-				<h1 className="absolute font-bold transform -translate-x-1/2 -translate-y-1/2 top-1/4 left-1/2 text-[#FAF5ED] text-4xl">What you wanna do?</h1>
+			<div className="flex flex-col w-screen h-screen bg-blackp">
+				<h1 className="absolute text-4xl font-bold transform -translate-x-1/2 -translate-y-1/2 top-1/4 left-1/2 text-dough">What you wanna do?</h1>
 				<div className="w-screen h-screen flexCenter">
 					<div className="w-1/6 m-auto">
 						<ButtonWP text="Register" href="/register" />
 					</div>
 					<div className="w-1/6 m-auto">
-						<ButtonPW text="Login" href="/download" />
+						<ButtonPW text="Login" href="/login" />
 					</div>
 				</div>
         <Link href="/">

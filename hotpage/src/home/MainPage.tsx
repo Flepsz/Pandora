@@ -8,15 +8,15 @@ export default function MainPage() {
   const textP = "Transform your banking. Enter to Pandora and take control like never before"
   return (
     <section className="relative flex flex-col rounded-b-xl sm:flex-row ">
-      <div className="flexCenter flex-col py-28 gap-4 bg-[#1C2023] sm:w-1/2 sm:py-0 sm:rounded-bl-3xl">
-        <p className="text-3xl font-bold w-5/6 text-[#FAF5ED] md:text-4xl xl:text-5xl 2xl:text-6xl  ">
+      <div className="flex-col gap-4 flexCenter py-28 bg-blackp sm:w-1/2 sm:py-0 sm:rounded-bl-3xl">
+        <p className="w-5/6 text-3xl font-bold text-dough md:text-4xl xl:text-5xl 2xl:text-6xl ">
           <Typewriter text={textP} delay={50} />
         </p>
-        <div className="flexCenter gap-3 bg-[#FAF5ED] mt-4 py-2 px-6 rounded-lg cursor-pointer group relative overflow-hidden xl:py-3 xl:px-7 xl:scale-125">
+        <div className="relative gap-3 px-6 py-2 mt-4 overflow-hidden rounded-lg cursor-pointer flexCenter bg-dough group xl:py-3 xl:px-7 xl:scale-125">
           <div className="absolute inset-0 w-0 bg-[#530082] transition-all duration-[250ms] ease-out group-hover:w-full"></div>
           <Link
             href="/open-box"
-            className="relative text-[#530082] font-bold group-hover:text-[#FAF5ED]"
+            className="relative text-[#530082] font-bold group-hover:text-dough"
           >
             Open The Box
           </Link>
