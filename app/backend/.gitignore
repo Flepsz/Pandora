@@ -7,6 +7,9 @@ __pycache__
 db.sqlite3
 media
 
+rtmodels.py
+rtviews.py
+
 # Backup files # 
 *.bak 
 

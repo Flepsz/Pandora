@@ -12,76 +12,25 @@ from rest_framework.response import Response
 
 from .models import Customer, Account, Card, Transaction, Investment, Loan, Address, Contact, CustomerNP, CustomerLP
 from .serializers import (
-    CustomerSerializer, 
+    NaturalPersonSerializer,
+    LegalPersonSerializer,
     AccountSerializer, 
-    CardSerializer, 
+    CardGetSerializer, 
     TransactionSerializer, 
     InvestmentSerializer, 
     LoanSerializer, 
     AddressSerializer, 
     ContactSerializer,
-    CardTransationSerializer
 )
-
-# class CustomerViewSet(viewsets.ModelViewSet):
-#     queryset = Customer.objects.all()
-#     serializer_class = CustomerSerializer
-
-#     def list(self, request):
-#         id_customer = request.query_params.get('idCustomer')
-#         if id_customer is not None:
-#             queryset = Customer.objects.filter(id=id_customer)
-#         else:
-#             queryset = Customer.objects.all()
-
-#         serializer = CustomerSerializer(queryset, many=True)
-#         return Response(serializer.data)
-
-
-#     @action(detail=False, methods=['get'])
-#     def list_with_details(self, request):
-#         customers = Customer.objects.all()
-#         data = []
-
-#         for customer in customers:
-#             customer_data = {
-#                 'id': customer.id,
-#                 'full_name': customer.full_name,
-#                 'social_name': customer.social_name,
-#                 'birthdate': customer.birthdate,
-#                 'photo_logo': customer.photo_logo.url if customer.photo_logo else None,
-#                 'username': customer.username,
-#                 'password': customer.password,
-#                 'address': [],
-#                 'contact': [],
-#             }
-
-#             for address in customer.addresses.all():
-#                 customer_data['address'].append({
-#                     'street': address.street,
-#                     'neighborhood': address.neighborhood,
-#                     'city': address.city,
-#                     'state': address.state,
-#                     'zip_code': address.zip_code,
-#                 })
-
-#             for contact in customer.contacts.all():
-#                 customer_data['contact'].append({
-#                     'number': contact.number,
-#                     'email': contact.email,
-#                     'observation': contact.observation,
-#                 })
-
-#             data.append(customer_data)
-
-#         return Response(data)
-
 
 class NaturalPersonViewSet(viewsets.ModelViewSet):
     permission_classes = []
 
     def get_queryset(self):
         return filter_by_user(CustomerNP, self.request.user)
+    
+    def get_serializer_class(self):
+        return NaturalPersonSerializer
 
     def create(self, request):
         name = request.data.get('name')
@@ -116,6 +65,9 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return filter_by_user(CustomerLP, self.request.user)
 
+    def get_serializer_class(self):
+        return LegalPersonSerializer
+
     def create(self, request):
         fantasy_name = request.data.get('fantasy_name')
         cnpj = request.data.get('cnpj')
@@ -143,10 +95,15 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
-    serializer_class = AccountSerializer
 
     def get_queryset(self):
         return filter_by_user(Account, self.request.user)
+    
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return AccountSerializer
+        elif self.request.method in 'GET':
+            return AccountSerializer
 
     def create(self, request):
         customer = self.request.user.pk
@@ -188,6 +145,12 @@ class CardViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return filter_by_account(self)
+
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return CardGetSerializer
+        elif self.request.method in 'GET':
+            return CardGetSerializer
 
     def create(self, request):
         idAccount = request.data.get("idAccount")

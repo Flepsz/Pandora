@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+from datetime import timedelta
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,6 +24,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
+    'drf_yasg',
+    'rest_framework_swagger',
     'api'
 ]
 
@@ -106,11 +109,15 @@ REST_FRAMEWORK = {
 
     'DEFAULT_PERMISSION_CLASSES': ( 
         'rest_framework.permissions.IsAuthenticated', 
-    ) 
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
 SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
+    'USER_ID_FIELD': 'register_number',
+    'AUTH_HEADER_TYPES': ['Bearer'],
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=60),
 }
 
 JAZZMIN_SETTINGS = {

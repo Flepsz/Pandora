@@ -47,9 +47,9 @@ class Base(models.Model):
 
 class Customer(AbstractUser):
     register_number = models.IntegerField(
+        primary_key=True,
         validators=[MaxValueValidator(999999999999999999999999)],
         unique=True,
-        primary_key=True
     )
     password = models.CharField(max_length=100)
     photo_logo = models.ImageField(
