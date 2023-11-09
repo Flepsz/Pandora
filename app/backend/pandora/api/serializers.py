@@ -6,11 +6,24 @@ class NaturalPersonSerializer(serializers.ModelSerializer):
         model = CustomerNP
         fields = '__all__'
 
-
 class LegalPersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerLP
         fields = '__all__'
+        
+
+class AccountGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = '__all__'
+        
+class AccountPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Account
+        fields = (
+            'customer',
+            'acc_type'
+        )
         
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,6 +39,13 @@ class CardGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
         fields = '__all__'
+        
+class CardPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Card
+        fields = (
+            'account',
+        )
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -47,11 +67,6 @@ class InstallmentLoanSerializer(serializers.ModelSerializer):
         model = InstallmentLoan
         fields = '__all__'
 
-class AccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Account
-        fields = '__all__'
-
 
 class CardTransationSerializer(serializers.ModelSerializer):
     transaction = TransactionSerializer()
@@ -66,3 +81,5 @@ class CardTransationSerializer(serializers.ModelSerializer):
             'active',
             'transaction'
         ]
+        
+    

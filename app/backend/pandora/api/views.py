@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timedelta
 import random
 
 from .utilsM import determine_flag, generate_credit_card_number
@@ -14,8 +14,10 @@ from .models import Customer, Account, Card, Transaction, Investment, Loan, Addr
 from .serializers import (
     NaturalPersonSerializer,
     LegalPersonSerializer,
-    AccountSerializer, 
+    AccountGetSerializer, 
+    AccountPostSerializer, 
     CardGetSerializer, 
+    CardPostSerializer, 
     TransactionSerializer, 
     InvestmentSerializer, 
     LoanSerializer, 
@@ -101,9 +103,9 @@ class AccountViewSet(viewsets.ModelViewSet):
     
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
-            return AccountSerializer
+            return AccountPostSerializer
         elif self.request.method in 'GET':
-            return AccountSerializer
+            return AccountGetSerializer
 
     def create(self, request):
         customer = self.request.user.pk
@@ -115,8 +117,8 @@ class AccountViewSet(viewsets.ModelViewSet):
 
         card_number = generate_credit_card_number()
         cvv = str(randint(100, 999))
-        expiration_date = datetime.now() + datetime.timedelta(days=365)
-        flag = self.determine_flag(int(card_number[0]))
+        expiration_date = datetime.now() + timedelta(days=365)
+        flag = determine_flag(int(card_number[0]))
             
         account = Account.objects.create(
             number=acc_number,
@@ -144,11 +146,11 @@ class CardViewSet(viewsets.ModelViewSet):
     permission_classes = []
 
     def get_queryset(self):
-        return filter_by_account(self)
+        return filter_by_account(Card, self.request.query_params.get('account'), self.request.user)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
-            return CardGetSerializer
+            return CardPostSerializer
         elif self.request.method in 'GET':
             return CardGetSerializer
 
@@ -158,10 +160,10 @@ class CardViewSet(viewsets.ModelViewSet):
 
         card_number = generate_credit_card_number()
         cvv = str(randint(100, 999))
-        expiration_date = datetime.now() + datetime.timedelta(days=365)
+        expiration_date = datetime.now() + timedelta(days=365)
         flag = determine_flag(int(card_number[0]))
 
-        if account.limit > 700:
+        if account.limit >= 500:
             Card.objects.create(
                 account=account,
                 number=card_number,
@@ -199,9 +201,3 @@ class AddressViewSet(viewsets.ModelViewSet):
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
     serializer_class = ContactSerializer
-
-
-def filter_by_account(self):
-    customer = self.request.user
-    account = self.request.query_params.get('account')
-    return filter_by_account(Investment, account, customer)

@@ -111,8 +111,8 @@ class Account(Base):
     ]
 
     customer = models.ManyToManyField(Customer)
-    agency = models.CharField(max_length=4, blank=True)
-    number = models.CharField(max_length=10, unique=True, blank=True)
+    agency = models.CharField(max_length=4)
+    number = models.CharField(max_length=10, unique=True)
     acc_type = models.CharField(max_length=20, choices=ACC_TYPES)
     balance = models.DecimalField(decimal_places=2, max_digits=9)
     limit = models.DecimalField(max_digits=10, decimal_places=2)
@@ -161,58 +161,16 @@ class Contact(Base):
 
 
 class Card(Base):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    number = models.CharField(max_length=16, blank=True)
-    cvv = models.CharField(max_length=3, blank=True)
-    expiration_date = models.DateField(blank=True, null=True)
-    flag = models.CharField(max_length=25, blank=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, to_field='number')
+    number = models.CharField(max_length=16)
+    cvv = models.CharField(max_length=3)
+    expiration_date = models.DateField()
+    flag = models.CharField(max_length=25)
     active = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Card'
         verbose_name_plural = 'Cards'
-
-    def determine_flag(self):
-        first_digit = int(self.number[0])
-        if first_digit == 2:
-            return "Mastercard"
-        if first_digit == 3:
-            return "American Express"
-        if first_digit == 4:
-            return "Visa"
-        if first_digit == 5:
-            return "MasterCard"
-        if first_digit == 6:
-            return "Elo"
-
-    @staticmethod
-    def generate_credit_card_number():
-        # 2 Mastercard, 3 American Express, 4 Visa, 5 MasterCard, 6 Elo
-        first_digit = random.choice([2, 3, 4, 5, 6])
-
-        other_digits = [random.randint(0, 9) for _ in range(15)]
-
-        total = first_digit
-        for i, digit in enumerate(other_digits):
-            if i % 2 == 0:
-                digit *= 2
-                if digit > 9:
-                    digit -= 9
-            total += digit
-
-        last_digit = (10 - (total % 10)) % 10
-
-        credit_card_number = [str(first_digit)] + [str(digit)
-                                                   for digit in other_digits] + [str(last_digit)]
-
-        return ''.join(credit_card_number)
-
-    def save(self, *args, **kwargs):
-        self.number = self.generate_credit_card_number()
-        self.cvv = str(randint(100, 999))
-        self.expiration_date = datetime.now() + timedelta(days=365)
-        self.flag = self.determine_flag()
-        super(Card, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"Card ending in {self.number[-4:]}"
@@ -294,9 +252,9 @@ class InstallmentLoan(Base):
     number = models.IntegerField()
     due_date = models.DateField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_date = models.DateField(null=True, blank=True)
+    payment_date = models.DateField(null=True)
     paid_amount = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True)
+        max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f"Installment for Loan #{self.idLoan.id} - Number: {self.number}, Due Date: {self.due_date}, Amount: {self.amount}"

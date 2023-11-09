@@ -11,10 +11,9 @@ def filter_by_user(model, user):
 
 def filter_by_account(model, account, user):
     queryset = model.objects.all()
-
     if account:
-        account_o = model.objects.get(number=account)
+        account_o = model.objects.get(account=account)
         if (user.is_authenticated and user.is_superuser) or user in account_o.user.all():
-            queryset = queryset.filter(id_account=account)
+            queryset = queryset.filter(account=account).get()
             return queryset
     return []
