@@ -26,10 +26,10 @@ def determine_flag(first_digit):
     if first_digit == 2:
         return "Mastercard"
     if first_digit == 3:
-        return "American Express"
+        return "AmericanExpress"
     if first_digit == 4:
         return "Visa"
     if first_digit == 5:
-        return "MasterCard"
+        return "Mastercard"
     if first_digit == 6:
         return "Elo"
