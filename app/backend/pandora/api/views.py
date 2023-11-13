@@ -10,29 +10,38 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
 
-from .models import Customer, Account, Card, Transaction, Investment, Loan, Address, Contact, CustomerNP, CustomerLP
+from .models import Account, Card, Transaction, Investment, Loan, Address, Contact, CustomerNP, CustomerLP
 from .serializers import (
-    NaturalPersonSerializer,
-    LegalPersonSerializer,
-    AccountGetSerializer, 
-    AccountPostSerializer, 
-    CardGetSerializer, 
-    CardPostSerializer, 
-    TransactionSerializer, 
-    InvestmentSerializer, 
-    LoanSerializer, 
-    AddressSerializer, 
-    ContactSerializer,
+    NaturalGetPersonSerializer,
+    NaturalPostPersonSerializer,
+    LegalGetPersonSerializer,
+    LegalPostPersonSerializer,
+    AccountGetSerializer,
+    AccountPostSerializer,
+    CardGetSerializer,
+    CardPostSerializer,
+    TransactionGetSerializer,
+    TransactionPostSerializer,
+    InvestmentSerializer,
+    LoanSerializer,
+    AddressGetSerializer,
+    AddressPostSerializer,
+    ContactsGetSerializer,
+    ContactsPostSerializer,
 )
+
 
 class NaturalPersonViewSet(viewsets.ModelViewSet):
     permission_classes = []
 
     def get_queryset(self):
         return filter_by_user(CustomerNP, self.request.user)
-    
+
     def get_serializer_class(self):
-        return NaturalPersonSerializer
+        if self.request.method in 'POST PATCH':
+            return NaturalPostPersonSerializer
+        elif self.request.method in 'GET':
+            return NaturalGetPersonSerializer
 
     def create(self, request):
         name = request.data.get('name')
@@ -41,7 +50,7 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
         rg = request.data.get('rg')
         birthdate = request.data.get('birthdate')
         password = request.data.get('password')
-        
+
         customer = get_user_model().objects.create_user(
             register_number=int(cpf),
             password=password,
@@ -58,8 +67,7 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
         )
 
         return Response({'status': 'Natural Person Created'}, status=status.HTTP_201_CREATED)
-    
-    
+
 
 class LegalPersonViewSet(viewsets.ModelViewSet):
     permission_classes = []
@@ -68,7 +76,10 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
         return filter_by_user(CustomerLP, self.request.user)
 
     def get_serializer_class(self):
-        return LegalPersonSerializer
+        if self.request.method in 'POST PATCH':
+            return LegalPostPersonSerializer
+        elif self.request.method in 'GET':
+            return LegalGetPersonSerializer
 
     def create(self, request):
         fantasy_name = request.data.get('fantasy_name')
@@ -95,12 +106,13 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
 
         return Response({'status': 'Legal Person Created'}, status=status.HTTP_201_CREATED)
 
+
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
 
     def get_queryset(self):
         return filter_by_user(Account, self.request.user)
-    
+
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
             return AccountPostSerializer
@@ -119,7 +131,7 @@ class AccountViewSet(viewsets.ModelViewSet):
         cvv = str(randint(100, 999))
         expiration_date = datetime.now() + timedelta(days=365)
         flag = determine_flag(int(card_number[0]))
-            
+
         account = Account.objects.create(
             number=acc_number,
             agency=agency,
@@ -138,7 +150,7 @@ class AccountViewSet(viewsets.ModelViewSet):
             expiration_date=expiration_date,
             active=True
         )
-            
+
         return Response({'status': 'Account Created'}, status=status.HTTP_201_CREATED)
 
 
@@ -174,13 +186,18 @@ class CardViewSet(viewsets.ModelViewSet):
             )
 
             return Response({'status': 'Card Created'}, status=status.HTTP_201_CREATED)
-        
+
         return Response({'status': 'Account not meet the requirements to receive the card'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = Transaction.objects.all()
-    serializer_class = TransactionSerializer
+
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return TransactionPostSerializer
+        elif self.request.method in 'GET':
+            return TransactionGetSerializer
 
 
 class InvestmentViewSet(viewsets.ModelViewSet):
@@ -195,9 +212,19 @@ class LoanViewSet(viewsets.ModelViewSet):
 
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
-    serializer_class = AddressSerializer
+
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return AddressPostSerializer
+        elif self.request.method in 'GET':
+            return AddressGetSerializer
 
 
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
-    serializer_class = ContactSerializer
+
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return ContactsPostSerializer
+        elif self.request.method in 'GET':
+            return ContactsGetSerializer

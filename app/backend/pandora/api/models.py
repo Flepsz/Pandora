@@ -93,8 +93,8 @@ class CustomerLP(Base):
     fantasy_name = models.CharField(max_length=100)
     cnpj = models.CharField(max_length=14, unique=True)
     establishment_date = models.DateField()
-    sr = models.CharField(max_length=9) # State Registration
-    mr = models.CharField(max_length=11) # Municipal Registration
+    sr = models.CharField(max_length=9)  # State Registration
+    mr = models.CharField(max_length=11)  # Municipal Registration
 
     class Meta:
         verbose_name = 'Legal Person'
@@ -110,14 +110,13 @@ class Account(Base):
         ("cheking", "cheking"),
     ]
 
+    number = models.CharField(max_length=10, unique=True, primary_key=True)
     customer = models.ManyToManyField(Customer)
     agency = models.CharField(max_length=4)
-    number = models.CharField(max_length=10, unique=True)
     acc_type = models.CharField(max_length=20, choices=ACC_TYPES)
     balance = models.DecimalField(decimal_places=2, max_digits=9)
     limit = models.DecimalField(max_digits=10, decimal_places=2)
     active = models.BooleanField(default=True)
-
 
     class Meta:
         verbose_name = 'Account'
@@ -145,7 +144,8 @@ class Address(Base):
 
 
 class Contact(Base):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='email_customer')
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, related_name='email_customer')
     number = models.CharField(max_length=11)
     email = models.EmailField(max_length=50, blank=True, null=True)
     observation = models.CharField(max_length=200, blank=True, null=True)
@@ -161,7 +161,8 @@ class Contact(Base):
 
 
 class Card(Base):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, to_field='number')
+    account = models.ForeignKey(
+        Account, on_delete=models.CASCADE, to_field='number')
     number = models.CharField(max_length=16)
     cvv = models.CharField(max_length=3)
     expiration_date = models.DateField()
@@ -197,7 +198,7 @@ class Transaction(Base):
 
 
 class Investment(Base):
-    idAccount = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
     INVESTMENT_TYPE_CHOICES = [
         ('Stocks', 'Stocks'),
@@ -230,7 +231,7 @@ class Investment(Base):
 
 
 class Loan(Base):
-    idAccount = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
     request_date = models.DateField()
     requested_amount = models.DecimalField(max_digits=10, decimal_places=2)
     interest_rate = models.DecimalField(max_digits=5, decimal_places=2)
@@ -258,4 +259,3 @@ class InstallmentLoan(Base):
 
     def __str__(self):
         return f"Installment for Loan #{self.idLoan.id} - Number: {self.number}, Due Date: {self.due_date}, Amount: {self.amount}"
-
