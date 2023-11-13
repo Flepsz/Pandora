@@ -15,7 +15,7 @@ export default function MainPage() {
         <div className="relative gap-3 px-6 py-2 mt-4 overflow-hidden rounded-lg cursor-pointer flexCenter bg-dough group xl:py-3 xl:px-7 xl:scale-125">
           <div className="absolute inset-0 w-0 bg-[#530082] transition-all duration-[250ms] ease-out group-hover:w-full"></div>
           <Link
-            href="/open-box"
+            href="/openbox"
             className="relative text-[#530082] font-bold group-hover:text-dough"
           >
             Open The Box
@@ -26,7 +26,7 @@ export default function MainPage() {
       <div className="sm:w-1/2">
         <Image
           alt="Woman Pandora"
-          src="/womanpic.svg"
+          src="/womanpic.png"
           width="0"
           height="0"
           sizes="100vw"
