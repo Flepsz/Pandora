@@ -6,23 +6,25 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator
 
-
+# Custom User Manager for creating and managing users
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
 
+    # Function to create a user with a register number and password
     def _create_user(self, register_number, password, **extra_fields):
         if not register_number:
             raise ValueError('Register Number is required')
-        user = self.model(register_number=register_number,
-                          username=register_number, **extra_fields)
+        user = self.model(register_number=register_number, username=register_number, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
+    # Function to create a regular user
     def create_user(self, register_number, password=None, **extra_fields):
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(register_number, password, **extra_fields)
 
+    # Function to create a superuser
     def create_superuser(self, register_number, password, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
@@ -35,7 +37,7 @@ class CustomUserManager(BaseUserManager):
 
         return self._create_user(register_number, password, **extra_fields)
 
-
+# Base model with created, modified, and active fields
 class Base(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -44,7 +46,7 @@ class Base(models.Model):
     class Meta:
         abstract = True
 
-
+# Custom User model extending AbstractUser
 class Customer(AbstractUser):
     register_number = models.IntegerField(
         primary_key=True,
@@ -71,7 +73,7 @@ class Customer(AbstractUser):
 
     objects = CustomUserManager()
 
-
+# Natural Person model with customer details
 class CustomerNP(Base):
     customer = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -87,7 +89,7 @@ class CustomerNP(Base):
     def __str__(self):
         return f'{self.name}'
 
-
+# Legal Person model with customer details
 class CustomerLP(Base):
     customer = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     fantasy_name = models.CharField(max_length=100)
@@ -103,11 +105,11 @@ class CustomerLP(Base):
     def _str_(self):
         return f'{self.fantasy_name}'
 
-
+# Account model with account details
 class Account(Base):
     ACC_TYPES = [
         ("savings", "savings"),
-        ("cheking", "cheking"),
+        ("checking", "checking"),
     ]
 
     number = models.CharField(max_length=10, unique=True, primary_key=True)
@@ -125,7 +127,7 @@ class Account(Base):
     def __str__(self):
         return f"{self.acc_type} - {self.number}"
 
-
+# Address model with customer address details
 class Address(Base):
     customer = models.ForeignKey(
         Customer, on_delete=models.CASCADE, related_name='addresses')
@@ -142,7 +144,7 @@ class Address(Base):
     def __str__(self):
         return f"{self.street}, {self.city}, {self.state}"
 
-
+# Contact model with customer contact details
 class Contact(Base):
     customer = models.ForeignKey(
         Customer, on_delete=models.CASCADE, related_name='email_customer')
@@ -159,7 +161,7 @@ class Contact(Base):
             return f"Number: {self.number}, Email: {self.email}"
         return f"Number: {self.number}"
 
-
+# Card model with card details
 class Card(Base):
     number = models.CharField(max_length=16, primary_key=True)
     account = models.ForeignKey(
@@ -176,7 +178,7 @@ class Card(Base):
     def __str__(self):
         return f"Card ending in {self.number[-4:]}"
 
-
+# Transaction model with transaction details
 class Transaction(Base):
     OPERATION_CHOICES = [
         ('Deposit', 'Deposit'),
@@ -196,7 +198,7 @@ class Transaction(Base):
     def __str__(self):
         return f"{self.operation}"
 
-
+# PandoraManager model with bank statement details
 class PandoraManager(Base):
     OPTIONS = [
         ('Received', 'Received'),
@@ -215,7 +217,7 @@ class PandoraManager(Base):
     def _str_(self):
         return f'{self.transaction_action}'
 
-
+# Investment model with investment details
 class Investment(Base):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
 
@@ -248,7 +250,7 @@ class Investment(Base):
     def __str__(self):
         return f"{self.inv_type} Investment - Amount: {self.amount}, Risk Rate: {self.risk_rate}%"
 
-
+# Loan model with loan details
 class Loan(Base):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     requested_amount = models.DecimalField(max_digits=10, decimal_places=2)
@@ -274,7 +276,7 @@ class Loan(Base):
     def __str__(self):
         return f"Loan for Account: {self.account.number} - Amount: {self.requested_amount}"
 
-
+# InstallmentLoan model with installment details
 class InstallmentLoan(Base):
     number = models.IntegerField(primary_key=True)
     loan = models.ForeignKey(Loan, on_delete=models.CASCADE)
