@@ -161,9 +161,9 @@ class Contact(Base):
 
 
 class Card(Base):
+    number = models.CharField(max_length=16, primary_key=True)
     account = models.ForeignKey(
         Account, on_delete=models.CASCADE, to_field='number')
-    number = models.CharField(max_length=16)
     cvv = models.CharField(max_length=3)
     expiration_date = models.DateField()
     flag = models.CharField(max_length=25)
@@ -178,16 +178,16 @@ class Card(Base):
 
 
 class Transaction(Base):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-
     OPERATION_CHOICES = [
         ('Deposit', 'Deposit'),
         ('Withdrawal', 'Withdrawal'),
     ]
 
-    operation = models.CharField(max_length=20, choices=OPERATION_CHOICES)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    account_balance = models.DecimalField(decimal_places=2, max_digits=9)
+    card = models.ForeignKey(Card, on_delete=models.CASCADE, to_field='number')
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    receiver = models.CharField(max_length=10)
+    operation = models.CharField(choices=OPERATION_CHOICES, max_length=6)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'Transaction'
@@ -195,6 +195,25 @@ class Transaction(Base):
 
     def __str__(self):
         return f"{self.operation}"
+
+
+class PandoraManager(Base):
+    OPTIONS = [
+        ('Received', 'Received'),
+        ('Sent', 'Sent')
+    ]
+
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    transaction_action = models.CharField(choices=OPTIONS, max_length=8)
+    amount = models.FloatField()
+    account_balance = models.DecimalField(decimal_places=2, max_digits=9)
+
+    class Meta:
+        verbose_name = 'BankStatement'
+        verbose_name_plural = 'BankStatements'
+
+    def _str_(self):
+        return f'{self.transaction_action}'
 
 
 class Investment(Base):
@@ -232,12 +251,20 @@ class Investment(Base):
 
 class Loan(Base):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    request_date = models.DateField()
     requested_amount = models.DecimalField(max_digits=10, decimal_places=2)
     interest_rate = models.DecimalField(max_digits=5, decimal_places=2)
-    approved = models.BooleanField(default=False)
-    approval_date = models.DateField(null=True)
-    installment_number = models.IntegerField()
+    paidout = models.BooleanField(default=False)
+    installment_number = models.IntegerField(default=1,
+                                             validators=[
+                                                 MaxValueValidator(24)
+                                             ])
+    paid_installment_number = models.IntegerField(default=1,
+                                                  validators=[
+                                                      MaxValueValidator(24)
+                                                  ])
+    request_date = models.DateField()
+    approval_date = models.DateField()
+    is_approved = models.BooleanField(default=False)
     observation = models.TextField(blank=True)
 
     class Meta:
@@ -245,17 +272,18 @@ class Loan(Base):
         verbose_name_plural = 'Loans'
 
     def __str__(self):
-        return f"Loan for Account: {self.idAccount.number} - Amount: {self.requested_amount}"
+        return f"Loan for Account: {self.account.number} - Amount: {self.requested_amount}"
 
 
 class InstallmentLoan(Base):
+    number = models.IntegerField(primary_key=True)
     loan = models.ForeignKey(Loan, on_delete=models.CASCADE)
-    number = models.IntegerField()
-    due_date = models.DateField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+    due_date = models.DateField()
     payment_date = models.DateField(null=True)
     paid_amount = models.DecimalField(
         max_digits=10, decimal_places=2)
+    is_paid = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"Installment for Loan #{self.idLoan.id} - Number: {self.number}, Due Date: {self.due_date}, Amount: {self.amount}"
+        return f"Installment for Loan #{self.loan.id} - Number: {self.number}, Due Date: {self.due_date}, Amount: {self.amount}"

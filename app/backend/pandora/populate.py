@@ -68,26 +68,28 @@ def create_headers(register_number, password):
     return headers
 
 
-def create_natural_person(headers, register_number, name, birth_date, rg, social_name):
+def create_natural_person(headers, register_number, name, social_name, cpf, rg, birthdate):
     response = requests.post(natural_person_url, headers=headers,
                              json={
                                  'customer': register_number,
                                  'name': name,
                                  'social_name': social_name,
-                                 'cpf': str(register_number),
+                                 'cpf': cpf,
                                  'rg': rg,
-                                 'birth_date': birth_date
+                                 'birthdate': birthdate
                              })
+    print(response)
     return response.json()
 
 
-def create_legal_person(headers, register_number, fantasy_name, establishment_date, municipal_registration, state_registration):
+def create_legal_person(headers, register_number, fantasy_name, establishment_date, cnpj, state_registration, municipal_registration
+                        ):
     response = requests.post(legal_person_url, headers=headers,
                              json={
                                  'customer': register_number,
                                  'fantasy_name': fantasy_name,
                                  'establishment_date': establishment_date,
-                                 'cnpj': str(register_number),
+                                 'cnpj': cnpj,
                                  'sr': state_registration,
                                  'mr': municipal_registration,
                              })
@@ -116,7 +118,7 @@ def create_contact(headers, register_number, number, email):
     return response.json()
 
 
-def create_account(headers, acc_type, register_number):
+def create_account(headers, register_number, acc_type):
     response = requests.post(account_url, headers=headers, json={
         'customer': [register_number],
         'acc_type': acc_type
@@ -125,10 +127,10 @@ def create_account(headers, acc_type, register_number):
 
 
 def create_card(headers, number_account):
-	response = requests.post(card_url, headers=headers, json={
-		'account': number_account
-	})
-	return response.json()
+    response = requests.post(card_url, headers=headers, json={
+        'account': number_account
+    })
+    return response.json()
 
 
 def main():
@@ -137,37 +139,39 @@ def main():
     server_process.start()
     sleep(1)
 
-    superuser_creation()
-    super_user_header = create_headers(123,'123')
+    # superuser_creation()
+    # super_user_header = create_headers(123, '123')
 
-    # NATURAL PERSON REGISTRASTION
-    print(user_create(123456, "test@test"))
+    print("Inicio do populate")
+
+    # NATURAL PERSON REGISTRATION
+    print(user_create("a", "b", 123456, "test@test"))
     headers_1 = create_headers(123456, "test@test")
     print(headers_1)
-    print(create_natural_person(headers_1, 123456, 'Luís', '2005-11-03', '222222', 'Felipe'))
- 
-    print(user_create(1234567, "test@test"))
+    print(create_natural_person(headers_1, 123456, 'Luís', 'Felipe', '28345407056', '241767738', '2005-11-03'))
+
+    print(user_create("c", "d", 1234567, "test@test"))
     headers_2 = create_headers(1234567, "test@test")
-    print(create_natural_person(headers_2, 1234567, 'Luís', '2005-11-03', '222222', 'Felipe'))
+    print(create_natural_person(headers_2, 1234567, 'Felipe', 'Pereira', '42921996049', '337994134', '2005-11-03'))
 
-	# LEGAL PERSON REGISTRASTION
-    print(user_create(654321, "test@test"))
+    # LEGAL PERSON REGISTRATION
+    print(user_create("e", "f", 654321, "test@test"))
     headers_3 = create_headers(654321, "test@test")
-    print(create_legal_person(headers_3, 654321, 'Fantasy', '2023-06-19', '1234', '4321', 'Cars'))
- 
-    print(user_create(7654321, "test@test"))
+    print(create_legal_person(headers_3, 654321, 'Fantasy', '2023-06-19', '40205420000129', '1234', '4321'))
+
+    print(user_create("g", "h", 7654321, "test@test"))
     headers_4 = create_headers(7654321, "test@test")
-    print(create_legal_person(headers_4, 7654321, 'Fantasy', '2023-06-19', '1234', '4321', 'Cars'))
+    print(create_legal_person(headers_4, 7654321, 'Fantasy', '2023-06-19', '05213978000155',  '1234', '4321'))
 
-    # ADDRESS REGISTRASTION
-    print(create_address(headers_1, 123456, 'Rua Jones', '69', 'LeWhite Green', 'Varsóvia', 'Polônia', '12564789'))
+    # ADDRESS REGISTRATION
+    print(create_address(headers_1, 123456, 'Rua Carlo', '69', 'Litle Inf', 'Valinhos', 'SP', '12564789'))
 
-    # ACCOUNT REGISTRASTION
-    print(create_account(headers_1, 'Savings'))
-    print(create_account(headers_3, 'Current'))	
+    # ACCOUNT REGISTRATION
+    print(create_account(headers_1, 123456, 'savings'))
+    print(create_account(headers_3, 654321, 'cheking'))
 
-    print(create_card(headers_1, 1111))
-
+    print("Fim do populate")
+    # print(create_card(headers_1, 1111))
 
 
 if __name__ == '__main__':
