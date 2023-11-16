@@ -17,7 +17,6 @@ interface CardPropsI {
 export const XStackCard = styled(XStack, {
 	acceptsClassName: true,
 	height: "$14",
-	borderRadius: "$7",
 	padding: "$4",
 
 	variants: {
@@ -41,7 +40,7 @@ export default function Card({ color, last_numbers, balance, exp_date, owner, fl
   
   
 	return (
-		<XStackCard bgColor={color}>
+		<XStackCard bgColor={color} className="w-[10rem] mr-4 rounded-3xl">
 			<YStack className="flex flex-col justify-between">
 				<XStack className="flex justify-between">
 					<XStack className="flex flex-col">
