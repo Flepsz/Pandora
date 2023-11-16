@@ -150,25 +150,19 @@ def main():
     print(headers_1)
     print(create_natural_person(headers_1, 123456, 'Luís', 'Felipe', '28345407056', '241767738', '2005-11-03'))
 
-    print(user_create("c", "d", 1234567, "test@test"))
-    headers_2 = create_headers(1234567, "test@test")
-    print(create_natural_person(headers_2, 1234567, 'Felipe', 'Pereira', '42921996049', '337994134', '2005-11-03'))
+    print(create_natural_person(headers_1, 1234567, 'Felipe', 'Pereira', '42921996049', '337994134', '2005-11-03'))
 
     # LEGAL PERSON REGISTRATION
-    print(user_create("e", "f", 654321, "test@test"))
-    headers_3 = create_headers(654321, "test@test")
-    print(create_legal_person(headers_3, 654321, 'Fantasy', '2023-06-19', '40205420000129', '1234', '4321'))
+    print(create_legal_person(headers_1, 654321, 'Fantasy', '2023-06-19', '40205420000129', '1234', '4321'))
 
-    print(user_create("g", "h", 7654321, "test@test"))
-    headers_4 = create_headers(7654321, "test@test")
-    print(create_legal_person(headers_4, 7654321, 'Fantasy', '2023-06-19', '05213978000155',  '1234', '4321'))
+    print(create_legal_person(headers_1, 7654321, 'Fantasy', '2023-06-19', '05213978000155',  '1234', '4321'))
 
     # ADDRESS REGISTRATION
     print(create_address(headers_1, 123456, 'Rua Carlo', '69', 'Litle Inf', 'Valinhos', 'SP', '12564789'))
 
     # ACCOUNT REGISTRATION
     print(create_account(headers_1, 123456, 'savings'))
-    print(create_account(headers_3, 654321, 'cheking'))
+    print(create_account(headers_1, 654321, 'checking'))
 
     print("Fim do populate")
     # print(create_card(headers_1, 1111))

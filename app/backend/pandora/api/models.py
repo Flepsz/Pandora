@@ -188,7 +188,7 @@ class Transaction(Base):
     card = models.ForeignKey(Card, on_delete=models.CASCADE, to_field='number')
     amount = models.DecimalField(max_digits=7, decimal_places=2)
     receiver = models.CharField(max_length=10)
-    operation = models.CharField(choices=OPERATION_CHOICES, max_length=6)
+    operation = models.CharField(choices=OPERATION_CHOICES, max_length=10)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -207,6 +207,7 @@ class PandoraManager(Base):
 
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     transaction_action = models.CharField(choices=OPTIONS, max_length=8)
+    source = models.CharField(max_length=15)
     amount = models.FloatField()
     account_balance = models.DecimalField(decimal_places=2, max_digits=9)
 

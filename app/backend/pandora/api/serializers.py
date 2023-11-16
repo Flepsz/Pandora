@@ -135,8 +135,10 @@ class TransactionPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = (
+            'card',
+            'amount',
             'operation',
-            'amount'
+            'receiver'
         )
 
 

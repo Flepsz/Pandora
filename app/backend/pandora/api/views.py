@@ -14,6 +14,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 # Import models and serializers from local modules
+from decimal import Decimal
 from .models import Account, Card, Transaction, Investment, Loan, Address, Contact, CustomerNP, CustomerLP, PandoraManager, InstallmentLoan
 from .serializers import (
     NaturalGetPersonSerializer,
@@ -197,7 +198,7 @@ class CardViewSet(viewsets.ModelViewSet):
 
     # Custom create method for creating a card
     def create(self, request):
-        idAccount = request.data.get("idAccount")
+        idAccount = request.data.get("account")
         account = get_object_or_404(Account, pk=idAccount)
 
         # Generate credit card details
@@ -238,7 +239,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
     def create(self, request):
         id_card = request.data.get('card')
         card = get_object_or_404(Card, pk=id_card)
-        amount = request.data.get('amount')
+        amount = Decimal(request.data.get('amount'))
         operation = request.data.get('operation')
         account = card.account
 
