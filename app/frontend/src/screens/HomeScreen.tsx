@@ -4,6 +4,16 @@ import { Text, XStack, YStack, ScrollView, Button } from "tamagui";
 import User from "../components/User";
 import Card, { XStackCard } from "../components/Card";
 import { ArrowLeftRight, Download  } from '@tamagui/lucide-icons';
+import { CompositeNavigationProp } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { TabStackParamList } from "../navigator/TabNavigator";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../navigator/RootNavigator";
+
+export type HomeScreenNavigatioProp = CompositeNavigationProp<
+	BottomTabNavigationProp<TabStackParamList, "Home">,
+	NativeStackNavigationProp<RootStackParamList>
+>
 
 export default function HomeScreen() {
 	const [test, setTest] = useState<string>("");

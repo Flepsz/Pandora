@@ -40,7 +40,7 @@ export default function Card({ color, last_numbers, balance, exp_date, owner, fl
   
   
 	return (
-		<XStackCard bgColor={color} className="w-[10rem] mr-4 rounded-3xl">
+		<XStackCard bgColor={color} className="mr-4 rounded-3xl">
 			<YStack className="flex flex-col justify-between">
 				<XStack className="flex justify-between">
 					<XStack className="flex flex-col">
@@ -76,7 +76,7 @@ export default function Card({ color, last_numbers, balance, exp_date, owner, fl
             <Text className="text-xs font-semibold text-white">Exp: {exp_date}</Text>
             <Text className="text-xs font-light text-white">{owner}</Text>
           </XStack>
-          <Image source={imgFlagSrc} className="w-12 h-7" contentFit="fill"/>
+          <Image source={imgFlagSrc} className="w-12 h-7" contentFit="fill" />
         </XStack>
 			</YStack>
 		</XStackCard>

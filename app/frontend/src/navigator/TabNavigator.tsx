@@ -4,7 +4,11 @@ import { useLayoutEffect } from "react";
 import HomeScreen from "../screens/HomeScreen";
 import { StyleSheet } from "react-native";
 
-const Tab = createBottomTabNavigator();
+export type TabStackParamList = {
+	Home: undefined;
+};
+
+const Tab = createBottomTabNavigator<TabStackParamList>();
 
 export default function TabNavigator() {
   const navigation = useNavigation();
@@ -27,5 +31,8 @@ const styles = StyleSheet.create({
   tabBarStyle: {
     backgroundColor: "#2B2F32",
     borderBlockColor: "#2B2F32",
+    borderRadius: 10,
+    margin: 10,
+    height: 50
   }
 })
