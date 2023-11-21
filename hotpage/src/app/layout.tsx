@@ -19,10 +19,10 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={`${sonoma.className} bg-zinc-50 dark:bg-[#0a0c0f]`}>
-				<Providers attribute="class" defaultTheme="light" enableSystem>
+				{/* <Providers attribute="class" defaultTheme="light" enableSystem> */}
 						<ScrollTop />
 						{children}
-				</Providers>
+				{/* </Providers> */}
 			</body>
 		</html>
 	);

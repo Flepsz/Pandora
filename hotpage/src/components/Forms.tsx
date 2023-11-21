@@ -1,13 +1,29 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import ButtonPW from "./ButtonPW";
 import Link from "next/link";
+import Input from "./Input";
 
 interface FormsI {
 	isRegister?: boolean;
+	isCustomerNP?: boolean;
 }
 
-export default function Forms({ isRegister }: FormsI) {
+export default function Forms({ isRegister, isCustomerNP }: FormsI) {
+	const [password, setPassword] = useState("");
+
+	const [name, setName] = useState("");
+	const [socialName, setSocialName] = useState("");
+	const [cpf, setCpf] = useState("");
+	const [rg, setRg] = useState("");
+	const [birthdate, setBirthdate] = useState("");
+
+	const [cnpj, setCnpj] = useState("");
+	const [fantasyName, setFantasyName] = useState("");
+	const [stateRegistration, setStateRegistration] = useState("");
+	const [municipalRegistration, setMunicipalRegistration] = useState("");
+	const [establishmentDate, setEstablishmentDate] = useState("");
+
 	return (
 		<div className="h-full gradient-form bg-neutral-200 dark:bg-neutral-700">
 			<div className="h-full p-14">
@@ -33,37 +49,83 @@ export default function Forms({ isRegister }: FormsI) {
 													? "Please register for an account"
 													: "Please login to your account"}
 											</p>
-											<div className="relative mb-4" data-te-input-wrapper-init>
-												<input
-													type="text"
-													className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-													id="exampleFormControlInput1"
-													placeholder={
-														isRegister ? "Register Number" : "Username"
-													}
-												/>
-												<label
-													htmlFor="exampleFormControlInput1"
-													className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-												>
-													Register Number
-												</label>
-											</div>
 
-											<div className="relative mb-4" data-te-input-wrapper-init>
-												<input
-													type="password"
-													className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-													id="exampleFormControlInput11"
-													placeholder="Password"
-												/>
-												<label
-													htmlFor="exampleFormControlInput11"
-													className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-												>
-													Password
-												</label>
-											</div>
+											<Input
+												placeholder={isCustomerNP ? "CPF" : "CNPJ"}
+												label={isCustomerNP ? "CPF" : "CNPJ"}
+												type="text"
+												onChange={isCustomerNP ? setCpf : setCnpj}
+												value={isCustomerNP ? cpf : cnpj}
+											/>
+
+											<Input
+												placeholder="Password"
+												label="Password"
+												type="password"
+												onChange={setPassword}
+												value={password}
+											/>
+
+											{isCustomerNP ? (
+												<>
+													<Input
+														placeholder="Name"
+														label="Name"
+														onChange={setName}
+														value={name}
+													/>
+													<Input
+														placeholder="Social Name"
+														label="Social Name"
+														onChange={setSocialName}
+														value={socialName}
+													/>
+													<Input
+														placeholder="RG"
+														label="RG"
+														onChange={setRg}
+														value={rg}
+													/>
+													<Input
+														placeholder="Birthdate"
+														label="Birthdate"
+														type="date"
+														onChange={setBirthdate}
+														value={birthdate}
+													/>
+												</>
+											) : (
+												<>
+													<Input
+														placeholder="Fantasy Name"
+														label="Fantasy Name"
+														type="text"
+														onChange={setFantasyName}
+														value={fantasyName}
+													/>
+													<Input
+														placeholder="State Registration"
+														label="State Registration"
+														type="text"
+														onChange={setStateRegistration}
+														value={stateRegistration}
+													/>
+													<Input
+														placeholder="Municipal Registration"
+														label="Municipal Registration"
+														type="text"
+														onChange={setMunicipalRegistration}
+														value={municipalRegistration}
+													/>
+													<Input
+														placeholder="Establishment Date"
+														label="Establishment Date"
+														type="date"
+														onChange={setEstablishmentDate}
+														value={establishmentDate}
+													/>
+												</>
+											)}
 
 											<div className="flex flex-col flex-wrap w-56 gap-3 pt-1 pb-1 mx-auto mb-12 text-center md:w-72">
 												<ButtonPW
