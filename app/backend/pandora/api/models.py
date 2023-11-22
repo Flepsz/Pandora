@@ -284,8 +284,6 @@ class InstallmentLoan(Base):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     due_date = models.DateField()
     payment_date = models.DateField(null=True)
-    paid_amount = models.DecimalField(
-        max_digits=10, decimal_places=2)
     is_paid = models.BooleanField(default=False)
 
     def __str__(self):

@@ -1,6 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
-from .models import Customer, CustomerNP, CustomerLP, Account, Address, Contact, Card, Transaction, Investment, Loan, InstallmentLoan
+from .models import Customer, CustomerNP, CustomerLP, Account, Address, Contact, Card, Transaction, Investment, Loan, InstallmentLoan, PandoraManager
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -142,16 +142,32 @@ class TransactionPostSerializer(serializers.ModelSerializer):
         )
 
 
-class InvestmentSerializer(serializers.ModelSerializer):
+class InvestmentGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Investment
         fields = '__all__'
 
+class InvestmentPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Investment
+        fields = [
+            'inv_type',
+            'amount',
+        ]
 
-class LoanSerializer(serializers.ModelSerializer):
+
+class LoanGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Loan
         fields = '__all__'
+
+
+class LoanPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Loan
+        fields = [
+            ''
+        ]
 
 
 class InstallmentLoanSerializer(serializers.ModelSerializer):

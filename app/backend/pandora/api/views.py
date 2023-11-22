@@ -14,7 +14,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 # Import models and serializers from local modules
-from decimal import Decimal
+from .permissions import IsSuperUser, UserGet, UserGetPost, UserPost, UserPostPatch, UserGetPostPatch
 from .models import Account, Card, Transaction, Investment, Loan, Address, Contact, CustomerNP, CustomerLP, PandoraManager, InstallmentLoan
 from .serializers import (
     NaturalGetPersonSerializer,
@@ -27,8 +27,9 @@ from .serializers import (
     CardPostSerializer,
     TransactionGetSerializer,
     TransactionPostSerializer,
-    InvestmentSerializer,
-    LoanSerializer,
+    InvestmentGetSerializer,
+    LoanGetSerializer,
+    LoanPostSerializer,
     AddressGetSerializer,
     AddressPostSerializer,
     ContactsGetSerializer,
@@ -38,7 +39,7 @@ from .serializers import (
 
 # Define a view set for handling natural persons
 class NaturalPersonViewSet(viewsets.ModelViewSet):
-    permission_classes = []
+    permission_classes = [UserGetPostPatch]
 
     # Define queryset for NaturalPersonViewSet
     def get_queryset(self):
@@ -83,7 +84,7 @@ class NaturalPersonViewSet(viewsets.ModelViewSet):
 
 # Define a view set for handling legal persons
 class LegalPersonViewSet(viewsets.ModelViewSet):
-    permission_classes = []
+    permission_classes = [UserGetPostPatch]
 
     # Define queryset for LegalPersonViewSet
     def get_queryset(self):
@@ -128,6 +129,7 @@ class LegalPersonViewSet(viewsets.ModelViewSet):
 
 # Define a view set for handling accounts
 class AccountViewSet(viewsets.ModelViewSet):
+    permission_classes = [UserGetPostPatch]
     queryset = Account.objects.all()
 
     # Define queryset for AccountViewSet
@@ -183,7 +185,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
 # Define a view set for handling cards
 class CardViewSet(viewsets.ModelViewSet):
-    permission_classes = []
+    permission_classes = [UserGetPostPatch]
 
     # Define queryset for CardViewSet
     def get_queryset(self):
@@ -225,6 +227,8 @@ class CardViewSet(viewsets.ModelViewSet):
 
 # Define a view set for handling transactions
 class TransactionViewSet(viewsets.ModelViewSet):
+    permission_classes = [UserGetPost]
+
     def get_queryset(self):
         return filter_by_account(self)
 
@@ -248,32 +252,42 @@ class TransactionViewSet(viewsets.ModelViewSet):
 
         # Check if there is enough balance in the account to make the transaction
         if account.balance >= amount:
-            # Create a transaction
-            Transaction.objects.create(
-                card=card,
-                amount=amount,
-                receiver=receiver,
-                operation=operation
-            )
+            if account.limit >= amount:
 
-            # Update PandoraManager for sender and receiver
-            create_pandoramanager(account, 'Sent', 'Transaction', amount)
-            create_pandoramanager(receiver, 'Received', 'Transaction', amount)
+                # Create a transaction
+                Transaction.objects.create(
+                    card=card,
+                    amount=amount,
+                    receiver=receiver,
+                    operation=operation
+                )
 
-            return Response({'status': 'Transaction Created With Successfully'}, status=status.HTTP_201_CREATED)
+                # Update PandoraManager for sender and receiver
+                create_pandoramanager(account, 'Sent', 'Transaction', amount)
+                create_pandoramanager(
+                    receiver, 'Received', 'Transaction', amount)
+
+                return Response({'status': 'Transaction Created With Successfully'}, status=status.HTTP_201_CREATED)
+            return Response({'status': 'Not enough limit for this transaction'})
         return Response({'status': 'Not enough balance to make the transaction'}, status=status.HTTP_403_FORBIDDEN)
 
 
 # Define a view set for handling investments
 class InvestmentViewSet(viewsets.ModelViewSet):
     queryset = Investment.objects.all()
-    serializer_class = InvestmentSerializer
+    serializer_class = InvestmentGetSerializer
+    permission_classes = [UserGetPost]
 
 
 # Define a view set for handling loans
 class LoanViewSet(viewsets.ModelViewSet):
+    permission_classes = [UserGetPost]
     queryset = Loan.objects.all()
-    serializer_class = LoanSerializer
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return LoanPostSerializer
+        elif self.request.method in 'GET':
+            return LoanGetSerializer
 
     # Define queryset for LoanViewSet
     def get_queryset(self):
@@ -283,9 +297,9 @@ class LoanViewSet(viewsets.ModelViewSet):
     def create(self, request):
         id_account = request.data.get('account')
         account = get_object_or_404(Account, pk=id_account)
-        requested_amout = request.data.get('requested_amout')
-        interest_rate = request.data.get('interest_rate')
-        paidout = request.data.get('paidout')
+        requested_amount = request.data.get('requested_amount')
+        interest_rate = 10.0
+        paidout = False
         installment_number = request.data.get('installment_number')
         approval_date = datetime.now().strftime('%Y-%m-%d')
         observation = request.data.get('observation')
@@ -293,7 +307,7 @@ class LoanViewSet(viewsets.ModelViewSet):
         def create_loan(is_approved):
             loan = Loan.objects.create(
                 account=account,
-                requested_amout=requested_amout,
+                requested_amount=requested_amount,
                 interest_rate=interest_rate,
                 paidout=paidout,
                 installment_number=installment_number,
@@ -301,9 +315,10 @@ class LoanViewSet(viewsets.ModelViewSet):
                 is_approved=is_approved,
                 observation=observation
             )
+            
             return loan
 
-        payment_amount = round((requested_amout / installment_number), 2)
+        payment_amount = round((requested_amount / installment_number), 2)
         consignable_margin = account.balance * Decimal(0.35)
 
         # Check if the account is eligible to receive the loan
@@ -326,7 +341,7 @@ class LoanViewSet(viewsets.ModelViewSet):
                 )
 
             # Update PandoraManager for the received loan amount
-            create_pandoramanager(account, 'Received', 'Loan', requested_amout)
+            create_pandoramanager(account, 'Received', 'Loan', requested_amount)
 
             return Response({'status': 'Loan Created With Successfully'}, status=status.HTTP_201_CREATED)
 
@@ -338,15 +353,32 @@ class LoanViewSet(viewsets.ModelViewSet):
 # Define a view set for handling loan installments
 class InstallmentLoanViewSet(viewsets.ModelViewSet):
     serializer_class = InstallmentLoan
+    permission_classes = [UserGetPostPatch]
 
     # Define queryset for InstallmentLoanViewSet
     def get_queryset(self):
-        return filter_by_account(self)
+        user = self.request.user
+        account = self.request.query_params.get('account')
+        return filter_by_account(InstallmentLoan, account, user)
+
+    def partial_update(self, request, *args, **kwargs):
+        installment = self.get_object()
+        loan = installment.loan
+        account = loan.account
+        if account.balance >= installment.amount:
+            account.balance -= installment.amount
+            account.save()
+            installment.is_paid = True
+            installment.save()
+            create_pandoramanager(account, 'Sent', 'Installment', installment)
+            return Response({'Successfully paid': 'success'}, status=status.HTTP_202_ACCEPTED)
+        return Response({'status': 'Not enough balance to pay the installment'}, status=status.HTTP_403_FORBIDDEN)
 
 
 # Define a view set for handling addresses
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = Address.objects.all()
+    permission_classes = [UserGetPostPatch]
 
     # Define serializer class based on the HTTP method
     def get_serializer_class(self):
@@ -359,6 +391,7 @@ class AddressViewSet(viewsets.ModelViewSet):
 # Define a view set for handling contacts
 class ContactViewSet(viewsets.ModelViewSet):
     queryset = Contact.objects.all()
+    permission_classes = [UserGetPostPatch]
 
     # Define serializer class based on the HTTP method
     def get_serializer_class(self):
@@ -366,6 +399,18 @@ class ContactViewSet(viewsets.ModelViewSet):
             return ContactsPostSerializer
         elif self.request.method in 'GET':
             return ContactsGetSerializer
+
+
+class PandoraManagerViewSet(viewsets.ModelViewSet):
+    serializer_class = PandoraManager
+    permission_classes = [
+        UserGet
+    ]
+
+    def get_queryset(self):
+        user = self.request.user
+        account = self.request.query_params.get('account')
+        return filter_by_account(PandoraManager, account, user)
 
 
 # Function to update the account balance and create a PandoraManager record
