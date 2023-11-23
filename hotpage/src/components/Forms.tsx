@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import ButtonPW from "./ButtonPW";
 import Link from "next/link";
 import Input from "./Input";
@@ -23,6 +23,8 @@ export default function Forms({ isRegister, isCustomerNP }: FormsI) {
 	const [stateRegistration, setStateRegistration] = useState("");
 	const [municipalRegistration, setMunicipalRegistration] = useState("");
 	const [establishmentDate, setEstablishmentDate] = useState("");
+
+	const registerAccount = useCallback(async () => {}, [])
 
 	return (
 		<div className="h-full gradient-form bg-neutral-200 dark:bg-neutral-700">
@@ -50,87 +52,88 @@ export default function Forms({ isRegister, isCustomerNP }: FormsI) {
 													: "Please login to your account"}
 											</p>
 
-											<Input
-												placeholder={isCustomerNP ? "CPF" : "CNPJ"}
-												label={isCustomerNP ? "CPF" : "CNPJ"}
-												type="text"
-												onChange={isCustomerNP ? setCpf : setCnpj}
-												value={isCustomerNP ? cpf : cnpj}
-											/>
+											<div className="grid grid-cols-2 gap-5">
+												<Input
+													placeholder={isCustomerNP ? "CPF" : "CNPJ"}
+													label={isCustomerNP ? "CPF" : "CNPJ"}
+													onChange={isCustomerNP ? setCpf : setCnpj}
+													value={isCustomerNP ? cpf : cnpj}
+												/>
 
-											<Input
-												placeholder="Password"
-												label="Password"
-												type="password"
-												onChange={setPassword}
-												value={password}
-											/>
+												<Input
+													placeholder="Password"
+													label="Password"
+													type="password"
+													onChange={setPassword}
+													value={password}
+												/>
+												{isRegister &&
+													(isCustomerNP ? (
+														<>
+															<Input
+																placeholder="Name"
+																label="Name"
+																onChange={setName}
+																value={name}
+															/>
+															<Input
+																placeholder="Social Name"
+																label="Social Name"
+																onChange={setSocialName}
+																value={socialName}
+															/>
+															<Input
+																placeholder="RG"
+																label="RG"
+																onChange={setRg}
+																value={rg}
+															/>
+															<Input
+																placeholder="Birthdate"
+																label="Birthdate"
+																type="date"
+																onChange={setBirthdate}
+																value={birthdate}
+															/>
+														</>
+													) : (
+														<>
+															<Input
+																placeholder="Fantasy Name"
+																label="Fantasy Name"
+																type="text"
+																onChange={setFantasyName}
+																value={fantasyName}
+															/>
+															<Input
+																placeholder="State Registration"
+																label="State Registration"
+																type="text"
+																onChange={setStateRegistration}
+																value={stateRegistration}
+															/>
+															<Input
+																placeholder="Municipal Registration"
+																label="Municipal Registration"
+																type="text"
+																onChange={setMunicipalRegistration}
+																value={municipalRegistration}
+															/>
+															<Input
+																placeholder="Establishment Date"
+																label="Establishment Date"
+																type="date"
+																onChange={setEstablishmentDate}
+																value={establishmentDate}
+															/>
+														</>
+													))}
+											</div>
 
-											{isCustomerNP ? (
-												<>
-													<Input
-														placeholder="Name"
-														label="Name"
-														onChange={setName}
-														value={name}
-													/>
-													<Input
-														placeholder="Social Name"
-														label="Social Name"
-														onChange={setSocialName}
-														value={socialName}
-													/>
-													<Input
-														placeholder="RG"
-														label="RG"
-														onChange={setRg}
-														value={rg}
-													/>
-													<Input
-														placeholder="Birthdate"
-														label="Birthdate"
-														type="date"
-														onChange={setBirthdate}
-														value={birthdate}
-													/>
-												</>
-											) : (
-												<>
-													<Input
-														placeholder="Fantasy Name"
-														label="Fantasy Name"
-														type="text"
-														onChange={setFantasyName}
-														value={fantasyName}
-													/>
-													<Input
-														placeholder="State Registration"
-														label="State Registration"
-														type="text"
-														onChange={setStateRegistration}
-														value={stateRegistration}
-													/>
-													<Input
-														placeholder="Municipal Registration"
-														label="Municipal Registration"
-														type="text"
-														onChange={setMunicipalRegistration}
-														value={municipalRegistration}
-													/>
-													<Input
-														placeholder="Establishment Date"
-														label="Establishment Date"
-														type="date"
-														onChange={setEstablishmentDate}
-														value={establishmentDate}
-													/>
-												</>
-											)}
-
-											<div className="flex flex-col flex-wrap w-56 gap-3 pt-1 pb-1 mx-auto mb-12 text-center md:w-72">
+											<div className="flex flex-col flex-wrap w-56 gap-3 pt-1 pb-1 mx-auto mt-5 mb-12 text-center md:w-72">
 												<ButtonPW
 													text={isRegister ? "Register" : "Log In"}
-													href={isRegister ? "/login" : "/login"}
+													href={isCustomerNP ? "/login/customernp" : "/login/customerlp"}
 												/>
 												{isRegister ? null : <a href="#!">Forgot password?</a>}
 											</div>
@@ -141,7 +144,7 @@ export default function Forms({ isRegister, isCustomerNP }: FormsI) {
 														? "Already have an account?"
 														: "Don't have an account?"}
 												</p>
-												<Link href={isRegister ? "/login" : "/register"}>
+												<Link href={isRegister ? (isCustomerNP ? "/login/customernp" : "/login/customerlp") : (isCustomerNP ? "/register/customernp" : "/register/customerlp")}>
 													<button
 														type="button"
 														className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-danger-600 focus:border-danger-600 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import React from "react";
 import ButtonWP from "./ButtonWP";
@@ -6,10 +6,14 @@ import ButtonPW from "./ButtonPW";
 import Forms from "./Forms";
 
 interface RegisterLoginPageI {
-  isRegister?: boolean;
+	isRegister?: boolean;
+	isCustomerNP?: boolean;
 }
 
-export default function RegisterLoginPage({ isRegister }: RegisterLoginPageI) {
+export default function RegisterLoginPage({
+	isRegister,
+	isCustomerNP,
+}: RegisterLoginPageI) {
 	return (
 		<div className="flex h-[calc(100vh-6rem)] bg-blackp">
 			<section className="w-[45%] h-full hidden md:block">
@@ -24,8 +28,7 @@ export default function RegisterLoginPage({ isRegister }: RegisterLoginPageI) {
 				</div>
 			</section>
 			<section className="w-full">
-				{isRegister ? <Forms isRegister /> : <Forms />}
-				
+				<Forms isRegister={isRegister} isCustomerNP={isCustomerNP} />
 			</section>
 		</div>
 	);
