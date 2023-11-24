@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { Avatar, Text, XStack, YStack } from "tamagui";
 import { RootStackParamList } from "../navigator/RootNavigator";
-import { HomeScreenNavigatioProp } from "../screens/HomeScreen";
+import { HomeScreenNavigatioProp } from "../screens/Home";
 
 interface UserBarI {
 	avatar?: string;
@@ -20,7 +20,7 @@ export default function UserBar({ avatar, name }: UserBarI) {
 			space="$2"
 			ai="center"
 		>
-			<Avatar size="$4.5" circular>
+			<Avatar size="$4" circular>
 				<Avatar.Image src={avatar} />
 
 				<Avatar.Fallback backgroundColor="$gray5" />

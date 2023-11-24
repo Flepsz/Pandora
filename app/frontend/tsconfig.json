@@ -6,5 +6,5 @@
   "include": [
     "**/*.ts",
     "**/*.tsx"
-, "src/hooks/useFonts.js"  ]
+, "src/hooks/useFonts.js", "src/utils/formatCurrency.js"  ]
 }
