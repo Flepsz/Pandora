@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 
 interface InputPropsI {
@@ -16,7 +16,7 @@ export default function Input({
 	label,
 	onChange,
 	value,
-	objectzod
+	objectzod,
 }: InputPropsI) {
 	return (
 		<div className="relative" data-te-input-wrapper-init>

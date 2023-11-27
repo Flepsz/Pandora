@@ -7,273 +7,289 @@ import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  RegisterCustomerSchemaI,
-  registerCustomerSchema,
+	RegisterCustomerSchemaI,
+	registerCustomerSchema,
 } from "@/schemas/register";
+import { log } from "console";
 
 interface FormsI {
-  isRegister?: boolean;
-  isCustomerNP?: boolean;
+	isRegister?: boolean;
+	isCustomerNP?: boolean;
 }
 
 export const axiosInstance = axios.create({
-  baseURL: "http://127.0.0.1:8056/api/v1/",
+	baseURL: "http://127.0.0.1:8056/api/v1/",
 });
 
 export default function Forms({ isRegister, isCustomerNP }: FormsI) {
-  const [registerNumber, setRegisterNumber] = useState("");
-  const [password, setPassword] = useState("");
+	const [registerNumber, setRegisterNumber] = useState("");
+	const [password, setPassword] = useState("");
 
-  const [name, setName] = useState("");
-  const [socialName, setSocialName] = useState("");
-  const [rg, setRg] = useState("");
-  const [birthdate, setBirthdate] = useState("");
+	const [name, setName] = useState("");
+	const [socialName, setSocialName] = useState("");
+	const [rg, setRg] = useState("");
+	const [birthdate, setBirthdate] = useState("");
 
-  const [fantasyName, setFantasyName] = useState("");
-  const [stateRegistration, setStateRegistration] = useState("");
-  const [municipalRegistration, setMunicipalRegistration] = useState("");
-  const [establishmentDate, setEstablishmentDate] = useState("");
+	const [fantasyName, setFantasyName] = useState("");
+	const [stateRegistration, setStateRegistration] = useState("");
+	const [municipalRegistration, setMunicipalRegistration] = useState("");
+	const [establishmentDate, setEstablishmentDate] = useState("");
 
-  const registerAccount = useCallback(async () => {
-    try {
-      const createUser = await axiosInstance.post("auth/users/", {
-        register_number: registerNumber,
-        picture: "777",
-        password: password,
-      });
-      console.log(createUser);
-      if (createUser.status === 201) {
-        const jwtToken = await axiosInstance.post("auth/jwt/create/", {
-          register_number: registerNumber,
-          password: password,
-        });
-        console.log(jwtToken.data.access);
-        if (isCustomerNP) {
-          const createNP = await axiosInstance.post(
-            "customersnp/",
-            {
-              customer: registerNumber,
-              name: name,
-              social_name: socialName,
-              cpf: registerNumber,
-              rg: rg,
-              birthdate: birthdate,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${jwtToken.data.access}`,
-              },
-            }
-          );
-          console.log(createNP);
-        } else {
-          const createLP = await axiosInstance.post(
-            "customerslp/",
-            {
-              customer: registerNumber,
-              fantasy_name: fantasyName,
-              cnpj: registerNumber,
-              sr: stateRegistration,
-              mr: municipalRegistration,
-              establishment_date: establishmentDate,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${jwtToken.data.access}`,
-              },
-            }
-          );
-          console.log(createLP);
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }, [
-    registerNumber,
-    password,
-    isCustomerNP,
-    name,
-    socialName,
-    rg,
-    birthdate,
-    fantasyName,
-    stateRegistration,
-    municipalRegistration,
-    establishmentDate,
-  ]);
+	const registerAccount = useCallback(async () => {
+		try {
+			const createUser = await axiosInstance.post("auth/users/", {
+				register_number: registerNumber,
+				picture: "777",
+				password: password,
+			});
+			console.log(createUser);
+			if (createUser.status === 201) {
+				const jwtToken = await axiosInstance.post("auth/jwt/create/", {
+					register_number: registerNumber,
+					password: password,
+				});
+				console.log(jwtToken.data.access);
+				if (isCustomerNP) {
+					const createNP = await axiosInstance.post(
+						"customersnp/",
+						{
+							customer: registerNumber,
+							name: name,
+							social_name: socialName,
+							cpf: registerNumber,
+							rg: rg,
+							birthdate: birthdate,
+						},
+						{
+							headers: {
+								Authorization: `Bearer ${jwtToken.data.access}`,
+							},
+						}
+					);
+					console.log(createNP);
+				} else {
+					const createLP = await axiosInstance.post(
+						"customerslp/",
+						{
+							customer: registerNumber,
+							fantasy_name: fantasyName,
+							cnpj: registerNumber,
+							sr: stateRegistration,
+							mr: municipalRegistration,
+							establishment_date: establishmentDate,
+						},
+						{
+							headers: {
+								Authorization: `Bearer ${jwtToken.data.access}`,
+							},
+						}
+					);
+					console.log(createLP);
+				}
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	}, [
+		registerNumber,
+		password,
+		isCustomerNP,
+		name,
+		socialName,
+		rg,
+		birthdate,
+		fantasyName,
+		stateRegistration,
+		municipalRegistration,
+		establishmentDate,
+	]);
 
-  const { register, handleSubmit } = useForm<RegisterCustomerSchemaI>({
-    resolver: zodResolver(registerCustomerSchema),
-  });
+	const { register, handleSubmit } = useForm<RegisterCustomerSchemaI>({
+		resolver: zodResolver(registerCustomerSchema),
+	});
 
-  const submitData: SubmitHandler<RegisterCustomerSchemaI> = (data) => {
-    console.log("Form data is valid:", data);
-  };
+	const submitData: SubmitHandler<RegisterCustomerSchemaI> = (data) => {
+		console.log("Form data is valid:", data);
+	};
 
-  return (
-    <div className="h-full gradient-form bg-neutral-200 dark:bg-neutral-700">
-      <div className="h-full p-14">
-        <div className="flex flex-wrap items-center justify-center h-full g-6 text-neutral-800 dark:text-neutral-200">
-          <div className="w-full">
-            <div className="bg-white rounded-lg shadow-lg dark:bg-neutral-800">
-              <div className="g-0 lg:flex lg:flex-wrap">
-                <div className="w-full px-4 md:px-0">
-                  <div className="md:mx-6 md:p-12">
-                    <div className="text-center">
-                      <Image
-                        className="w-48 mx-auto"
-                        src="/content/pandora-logofull.png"
-                        width={500}
-                        height={500}
-                        alt="logo"
-                      />
-                    </div>
+	return (
+		<div className="h-full gradient-form bg-neutral-200 dark:bg-neutral-700">
+			<div className="h-full p-14">
+				<div className="flex flex-wrap items-center justify-center h-full g-6 text-neutral-800 dark:text-neutral-200">
+					<div className="w-full">
+						<div className="bg-white rounded-lg shadow-lg dark:bg-neutral-800">
+							<div className="g-0 lg:flex lg:flex-wrap">
+								<div className="w-full px-4 md:px-0">
+									<div className="md:mx-6 md:p-12">
+										<div className="text-center">
+											<Image
+												className="w-48 mx-auto"
+												src="/content/pandora-logofull.png"
+												width={500}
+												height={500}
+												alt="logo"
+											/>
+										</div>
 
-                    <form className="mt-2" onSubmit={handleSubmit(submitData)}>
-                      <p className="mb-4">
-                        {isRegister
-                          ? "Please register for an account"
-                          : "Please login to your account"}
-                      </p>
+										<form className="mt-2" onSubmit={handleSubmit(submitData)}>
+											<p className="mb-4">
+												{isRegister
+													? "Please register for an account"
+													: "Please login to your account"}
+											</p>
 
-                      <div className="grid grid-cols-2 gap-5">
-                        <Input
-                          placeholder={isCustomerNP ? "CPF" : "CNPJ"}
-                          label={isCustomerNP ? "CPF" : "CNPJ"}
-                          onChange={
-                            isCustomerNP ? setRegisterNumber : setRegisterNumber
-                          }
-                          value={isCustomerNP ? registerNumber : registerNumber}
-                          objectzod={
-                            isCustomerNP ? register("cpf") : register("cnpj")
-                          }
-                        />
+											<div className="grid grid-cols-2 gap-5">
+												<Input
+													placeholder={isCustomerNP ? "CPF" : "CNPJ"}
+													label={isCustomerNP ? "CPF" : "CNPJ"}
+													onChange={
+														isCustomerNP ? setRegisterNumber : setRegisterNumber
+													}
+													value={isCustomerNP ? registerNumber : registerNumber}
+													objectzod={
+														isCustomerNP ? register("cpf") : register("cnpj")
+													}
+												/>
 
-                        <Input
-                          placeholder="Password"
-                          label="Password"
-                          type="password"
-                          onChange={setPassword}
-                          value={password}
-                          objectzod={register("password")}
-                        />
-                        {isRegister &&
-                          (isCustomerNP ? (
-                            <>
-                              <Input
-                                placeholder="Name"
-                                label="Name"
-                                onChange={setName}
+												<Input
+													placeholder="Password"
+													label="Password"
+													type="password"
+													onChange={(value: string) => setPassword(value)}
+													value={password}
+													objectzod={register("password")}
+												/>
+												{isRegister &&
+													(isCustomerNP ? (
+														<>
+															<Input
+																placeholder="Name"
+																label="Name"
+																onChange={setName}
                                 value={name}
-                                objectzod={register("name")}
-                              />
-                              <Input
-                                placeholder="Social Name"
-                                label="Social Name"
-                                onChange={setSocialName}
-                                value={socialName}
-                                objectzod={register("socialName")}
-                              />
-                              <Input
-                                placeholder="RG"
-                                label="RG"
-                                onChange={setRg}
-                                value={rg}
-                                objectzod={register("rg")}
-                              />
-                              <Input
-                                placeholder="Birthdate"
-                                label="Birthdate"
-                                type="date"
-                                onChange={setBirthdate}
-                                value={birthdate}
-                                objectzod={register("birthDate")}
-                              />
-                            </>
-                          ) : (
-                            <>
-                              <Input
-                                placeholder="Fantasy Name"
-                                label="Fantasy Name"
-                                onChange={setFantasyName}
-                                value={fantasyName}
-                                objectzod={register("fantasyName")}
-                              />
-                              <Input
-                                placeholder="State Registration"
-                                label="State Registration"
-                                onChange={setStateRegistration}
-                                value={stateRegistration}
-                                objectzod={register("stateRegistration")}
-                              />
-                              <Input
-                                placeholder="Municipal Registration"
-                                label="Municipal Registration"
-                                onChange={setMunicipalRegistration}
-                                value={municipalRegistration}
-                                objectzod={register("municipalRegistration")}
-                              />
-                              <Input
-                                placeholder="Establishment Date"
-                                label="Establishment Date"
-                                type="date"
-                                onChange={setEstablishmentDate}
-                                value={establishmentDate}
-                                objectzod={register("establishmentDate")}
-                              />
-                            </>
-                          ))}
-                      </div>
+																type="text"
+																objectzod={register("name")}
+															/>
+															<Input
+																placeholder="Social Name"
+																label="Social Name"
+																onChange={(
+																	e: React.ChangeEvent<HTMLInputElement>
+																) => {
+																	setSocialName(e.target.value);
+																	console.log(e.target.value);
+																}}
+																value={socialName}
+																objectzod={register("socialName")}
+															/>
+															<Input
+																placeholder="RG"
+																label="RG"
+																onChange={setRg}
+																value={rg}
+																objectzod={register("rg")}
+															/>
+															<Input
+																placeholder="Birthdate"
+																label="Birthdate"
+																type="date"
+																onChange={setBirthdate}
+																value={birthdate}
+																objectzod={register("birthDate")}
+															/>
+														</>
+													) : (
+														<>
+															<Input
+																placeholder="Fantasy Name"
+																label="Fantasy Name"
+																onChange={setFantasyName}
+																value={fantasyName}
+																objectzod={register("fantasyName")}
+															/>
+															<Input
+																placeholder="State Registration"
+																label="State Registration"
+																onChange={setStateRegistration}
+																value={stateRegistration}
+																objectzod={register("stateRegistration")}
+															/>
+															<Input
+																placeholder="Municipal Registration"
+																label="Municipal Registration"
+																onChange={setMunicipalRegistration}
+																value={municipalRegistration}
+																objectzod={register("municipalRegistration")}
+															/>
+															<Input
+																placeholder="Establishment Date"
+																label="Establishment Date"
+																type="date"
+																onChange={setEstablishmentDate}
+																value={establishmentDate}
+																objectzod={register("establishmentDate")}
+															/>
+														</>
+													))}
+											</div>
 
-                      <div className="flex flex-col flex-wrap w-56 gap-3 pt-1 pb-1 mx-auto mt-5 mb-12 text-center md:w-72">
-                        <ButtonPW
-                          text={isRegister ? "Register" : "Log In"}
-                          href={
-                            isCustomerNP
-                              ? "/login/customernp"
-                              : "/login/customerlp"
-                          }
-                        />
-                        {isRegister ? null : <a href="#!">Forgot password?</a>}
-                      </div>
+											<div className="flex flex-col flex-wrap w-56 gap-3 pt-1 pb-1 mx-auto mt-5 mb-12 text-center md:w-72">
+												<ButtonPW
+													text={isRegister ? "Register" : "Log In"}
+													href={
+														isCustomerNP
+															? "/login/customernp"
+															: "/login/customerlp"
+													}
+												/>
+												{isRegister ? null : <a href="#!">Forgot password?</a>}
+											</div>
 
-                      <div className="flex items-center justify-between pb-6">
-                        <p className="mb-0 mr-2">
-                          {isRegister
-                            ? "Already have an account?"
-                            : "Don't have an account?"}
-                        </p>
-                        <Link
-                          onClick={registerAccount}
-                          href={
-                            isRegister
-                              ? isCustomerNP
-                                ? "/login/customernp"
-                                : "/login/customerlp"
-                              : isCustomerNP
-                              ? "/register/customernp"
-                              : "/register/customerlp"
-                          }
-                        >
-                          <button
-                            type="button"
-                            className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-danger-600 focus:border-danger-600 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
-                            data-te-ripple-init
-                            data-te-ripple-color="light"
-                          >
-                            {isRegister ? "Log In" : "Register"}
-                          </button>
-                        </Link>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+											<div className="flex items-center justify-between pb-6">
+												<p className="mb-0 mr-2">
+													{isRegister
+														? "Already have an account?"
+														: "Don't have an account?"}
+												</p>
+												<Link
+													onClick={registerAccount}
+													href={
+														isRegister
+															? isCustomerNP
+																? "/login/customernp"
+																: "/login/customerlp"
+															: isCustomerNP
+															? "/register/customernp"
+															: "/register/customerlp"
+													}
+												>
+													<button
+														type="button"
+														className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-danger-600 focus:border-danger-600 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
+														data-te-ripple-init
+														data-te-ripple-color="light"
+													>
+														{isRegister ? "Log In" : "Register"}
+													</button>
+												</Link>
+												<button
+													onClick={() => console.log(socialName)}
+													type="button"
+													className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-danger-600 focus:border-danger-600 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
+													data-te-ripple-init
+													data-te-ripple-color="light"
+												>
+													{"bolsonaro"}
+												</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }
