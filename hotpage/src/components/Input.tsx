@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 
 interface InputPropsI {
@@ -6,6 +7,7 @@ interface InputPropsI {
 	onChange: any;
 	value: string;
 	type?: string;
+	objectzod: any;
 }
 
 export default function Input({
@@ -14,6 +16,7 @@ export default function Input({
 	label,
 	onChange,
 	value,
+	objectzod
 }: InputPropsI) {
 	return (
 		<div className="relative" data-te-input-wrapper-init>
@@ -23,6 +26,7 @@ export default function Input({
 				}}
 				type={type}
 				value={value}
+				{...objectzod}
 				className="peer p-3 block w-full border-gray-200 rounded-lg text-sm border border-zinc-200 placeholder:text-transparent focus:border-purple-d focus:ring-purple-d focus:outline-none disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
         focus:pt-6
         focus:pb-2
