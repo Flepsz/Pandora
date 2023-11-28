@@ -3,7 +3,7 @@ import Image from "next/image";
 import React from "react";
 import ButtonWP from "./ButtonWP";
 import ButtonPW from "./ButtonPW";
-import Forms from "./Forms";
+import Forms from "./forms/Forms";
 
 interface RegisterLoginPageI {
 	isRegister?: boolean;

@@ -165,9 +165,7 @@ class LoanGetSerializer(serializers.ModelSerializer):
 class LoanPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Loan
-        fields = [
-            ''
-        ]
+        fields = '__all__'
 
 
 class InstallmentLoanSerializer(serializers.ModelSerializer):

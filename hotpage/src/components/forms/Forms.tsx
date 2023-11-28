@@ -1,6 +1,7 @@
+"use client";
 import Image from "next/image";
-import React, { useCallback, useState } from "react";
-import ButtonPW from "./ButtonPW";
+import { useCallback, useState } from "react";
+import ButtonPW from "../ButtonPW";
 import Link from "next/link";
 import Input from "./Input";
 import axios from "axios";
@@ -10,7 +11,6 @@ import {
 	RegisterCustomerSchemaI,
 	registerCustomerSchema,
 } from "@/schemas/register";
-import { log } from "console";
 
 interface FormsI {
 	isRegister?: boolean;
@@ -155,7 +155,7 @@ export default function Forms({ isRegister, isCustomerNP }: FormsI) {
 													placeholder="Password"
 													label="Password"
 													type="password"
-													onChange={(value: string) => setPassword(value)}
+													onChange={setPassword}
 													value={password}
 													objectzod={register("password")}
 												/>
@@ -166,7 +166,7 @@ export default function Forms({ isRegister, isCustomerNP }: FormsI) {
 																placeholder="Name"
 																label="Name"
 																onChange={setName}
-                                value={name}
+																value={name}
 																type="text"
 																objectzod={register("name")}
 															/>
