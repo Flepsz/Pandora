@@ -45,13 +45,12 @@ def superuser_creation():
         print(e)
 
 
-def user_create(first_name, last_name, register_number, password, picture='a'):
+def user_create(first_name, last_name, register_number, password):
     response = requests.post(user_create_url,
                              json={
                                  "first_name": first_name,
                                  "last_name": last_name,
                                  "register_number": register_number,
-                                 "picture": picture,
                                  "password": password,
                              })
     return response.json()
@@ -134,10 +133,10 @@ def create_card(headers, number_account):
 
 
 def main():
-    data_base_creation()
-    server_process = multiprocessing.Process(target=run_server)
-    server_process.start()
-    sleep(1)
+    # data_base_creation()
+    # server_process = multiprocessing.Process(target=run_server)
+    # server_process.start()
+    # sleep(1)
 
     # superuser_creation()
     # super_user_header = create_headers(123, '123')

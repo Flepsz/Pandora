@@ -11,6 +11,7 @@ import {
 	RegisterCustomerSchemaI,
 	registerCustomerSchema,
 } from "@/schemas/register";
+import Input2 from "./Input2";
 
 interface FormsI {
 	isRegister?: boolean;
