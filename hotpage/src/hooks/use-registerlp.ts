@@ -1,11 +1,11 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { useRegisterMutation } from '@/redux/features/authApiSlice';
 import { toast } from 'react-toastify';
+import { useRegisterCLPMutation } from '@/redux/features/authApiSlice';
 
 export default function useRegisterLP() {
 	const router = useRouter();
-	const [register, { isLoading }] = useRegisterMutation();
+	const [registerCLP, { isLoading }] = useRegisterCLPMutation();
 
 	const [formData, setFormData] = useState({
 		customer: '',
@@ -26,8 +26,8 @@ export default function useRegisterLP() {
 
 	const onSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-
-		register({ customer, fantasy_name, cnpj, sr, mr, establishment_date })
+		
+		registerCLP({ customer, fantasy_name, cnpj, sr, mr, establishment_date })
 			.unwrap()
 			.then(() => {
 				toast.success('Register your Customer LP with Success');

@@ -7,6 +7,48 @@ interface User {
 	password: string;
 }
 
+interface Account {
+	number: string;
+	created: Date;
+	modified: Date;
+	agency: string;
+	acc_type: string;
+	balance: string;
+	limit: string;
+	active: boolean;
+	customer: number[];
+}
+
+interface Accounts {
+	accounts: Account[];
+}
+
+interface CustomerNP {
+	id: number;
+	created: Date;
+	modified: Date;
+	active: boolean;
+	name: string;
+	social_name: string;
+	cpf: string;
+	rg: string;
+	birthdate: Date;
+	customer: number;
+}
+
+interface CustomerLP {
+	id: number;
+	created: Date;
+	modified: Date;
+	active: boolean;
+	fantasy_name: string;
+	cnpj: string;
+	establishment_date: Date;
+	sr: string;
+	mr: string;
+	customer: number;
+}
+
 const authApiSlice = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		retrieveUser: builder.query<User, void>({
@@ -53,6 +95,15 @@ const authApiSlice = apiSlice.injectEndpoints({
 				body: { customer, fantasy_name, cnpj, sr, mr, establishment_date },
 			}),
 		}),
+		retrieveAccounts: builder.query<Accounts, void>({
+			query: () => "/accounts/",
+		}),
+		retrieveCNP: builder.query<CustomerNP, void>({
+			query: () => "/customersnp/",
+		}),
+		retrieveCLP: builder.query<CustomerLP, void>({
+			query: () => "/customerslp/",
+		}),
 	}),
 });
 
@@ -61,4 +112,7 @@ export const {
 	useLoginMutation,
 	useRegisterMutation,
 	useVerifyMutation,
+	useRetrieveAccountsQuery,
+	useRegisterCLPMutation,
+	useRegisterCNPMutation,
 } = authApiSlice;

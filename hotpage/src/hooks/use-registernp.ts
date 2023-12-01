@@ -1,11 +1,11 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import { useRegisterMutation } from '@/redux/features/authApiSlice';
+import { useRegisterCNPMutation } from '@/redux/features/authApiSlice';
 import { toast } from 'react-toastify';
 
 export default function useRegisterNP() {
 	const router = useRouter();
-	const [register, { isLoading }] = useRegisterMutation();
+	const [registerCNP, { isLoading }] = useRegisterCNPMutation();
 
 	const [formData, setFormData] = useState({
 		customer: '',
@@ -27,7 +27,7 @@ export default function useRegisterNP() {
 	const onSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		register({ customer, name, social_name, cpf, rg, birthdate })
+		registerCNP({ customer, name, social_name, cpf, rg, birthdate })
 			.unwrap()
 			.then(() => {
 				toast.success('Register your Customer NP with Success');

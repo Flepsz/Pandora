@@ -133,10 +133,10 @@ def create_card(headers, number_account):
 
 
 def main():
-    # data_base_creation()
-    # server_process = multiprocessing.Process(target=run_server)
-    # server_process.start()
-    # sleep(1)
+    data_base_creation()
+    server_process = multiprocessing.Process(target=run_server)
+    server_process.start()
+    sleep(1)
 
     # superuser_creation()
     # super_user_header = create_headers(123, '123')

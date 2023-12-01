@@ -8,8 +8,8 @@ export default function useRegister() {
 	const [register, { isLoading }] = useRegisterMutation();
 
 	const [formData, setFormData] = useState({
-		first_name: '',
-		last_name: '',
+		first_name: 'a',
+		last_name: 'a',
 		register_number: '',
 		password: '',
 	});

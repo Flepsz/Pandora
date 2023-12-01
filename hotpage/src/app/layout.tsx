@@ -1,10 +1,9 @@
 import { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import { sonoma } from "@/font/BRSonoma";
 import ScrollTop from "@/components/ScrollTop";
-import { Provider } from "react-redux";
-import CustomProvider from "@/redux/provider";
+import Provider from "@/redux/provider";
+import Setup from "@/components/utils/Setup";
 
 export const metadata: Metadata = {
 	title: "Pandora",
@@ -19,10 +18,11 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={`${sonoma.className} bg-zinc-50 dark:bg-[#0a0c0f]`}>
-				<CustomProvider>
+				<Provider>
+					<Setup />
 					<ScrollTop />
 					{children}
-				</CustomProvider>
+				</Provider>
 			</body>
 		</html>
 	);

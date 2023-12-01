@@ -2,7 +2,7 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/redux/hooks';
 import { useLoginMutation } from '@/redux/features/authApiSlice';
-import { setAuth } from '@/redux/features/authSlice';
+import { setAuth, setRegisterNumber } from '@/redux/features/authSlice';
 import { toast } from 'react-toastify';
 
 export default function useLogin() {
@@ -30,8 +30,9 @@ export default function useLogin() {
 			.unwrap()
 			.then(() => {
 				dispatch(setAuth());
+				dispatch(setRegisterNumber(register_number));
 				toast.success('Logged in');
-				router.push('/account');
+				router.push('/accounts');
 			})
 			.catch(() => {
 				toast.error('Failed to log in');
