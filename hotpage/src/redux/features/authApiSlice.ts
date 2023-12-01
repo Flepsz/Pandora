@@ -109,10 +109,12 @@ const authApiSlice = apiSlice.injectEndpoints({
 
 export const {
 	useRetrieveUserQuery,
+	useRetrieveCLPQuery,
+	useRetrieveCNPQuery,
+	useRetrieveAccountsQuery,
 	useLoginMutation,
 	useRegisterMutation,
 	useVerifyMutation,
-	useRetrieveAccountsQuery,
 	useRegisterCLPMutation,
 	useRegisterCNPMutation,
 } = authApiSlice;

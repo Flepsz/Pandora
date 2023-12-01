@@ -35,6 +35,7 @@ export default function useCombinedRegisterCLP() {
 
 	const onChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
+		
 		setFormData({ ...formData, [name]: value });
 	};
 

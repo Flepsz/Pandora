@@ -27,7 +27,7 @@ export default function Input({
 				type={type}
 				value={value}
 				{...objectzod}
-				className="peer p-3 block w-full border-gray-200 rounded-lg text-sm border border-zinc-200 placeholder:text-transparent focus:border-purple-d focus:ring-purple-d focus:outline-none disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
+				className="peer p-4 block w-full border-gray-200 rounded-lg text-sm border border-zinc-200 placeholder:text-transparent focus:border-purple-d focus:ring-purple-d focus:outline-none disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600
         focus:pt-6
         focus:pb-2
         [&:not(:placeholder-shown)]:pt-6

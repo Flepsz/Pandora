@@ -19,9 +19,9 @@ export default function RequireAuth({ children }: Props) {
 		);
 	}
 
-	if (!isAuthenticated) {
-		redirect('/openbox');
-	}
+	// if (!isAuthenticated) {
+	// 	redirect('/openbox');
+	// }
 
 	return <>{children}</>;
 }
