@@ -4,13 +4,22 @@ import type {
 	FetchArgs,
 	FetchBaseQueryError,
 } from "@reduxjs/toolkit/query";
-import { setAuth, logout } from "../features/authSlice";
+import { setOnlyAuth, logout } from "../features/authSlice";
 import { Mutex } from "async-mutex";
+import { RootState } from "../store";
 
 const mutex = new Mutex();
 const baseQuery = fetchBaseQuery({
-	baseUrl: `${process.env.NEXT_PUBLIC_HOST}:8000/api/v1`,
+	baseUrl: `http://127.0.0.1:8000/api/v1`,
 	credentials: "include",
+	prepareHeaders: (headers, { getState, endpoint }) => {
+		const user = (getState() as RootState).auth.token;
+
+		if (user && user.access) {
+			headers.set('Authorization', `Bearer ${user.access}`);
+		}
+		return headers;
+	},
 });
 
 const baseQueryWithReauth: BaseQueryFn<
@@ -34,7 +43,7 @@ const baseQueryWithReauth: BaseQueryFn<
 					extraOptions
 				);
 				if (refreshResult.data) {
-					api.dispatch(setAuth());
+					api.dispatch(setOnlyAuth());
 
 					result = await baseQuery(args, api, extraOptions);
 				} else {

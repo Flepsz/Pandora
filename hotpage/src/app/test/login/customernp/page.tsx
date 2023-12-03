@@ -1,53 +1,26 @@
 "use client";
 import React from "react";
 import Navbar from "@/components/Navbar";
-import useRegisterNP from "@/hooks/use-registernp";
 import Form from "@/components/forms/Form";
+import { useLogin } from "@/hooks";
+import Image from "next/image";
 
 export default function RegisterNPPage() {
-	const {customer, name, social_name, cpf, rg, birthdate, isLoading, onChange, onSubmit} = useRegisterNP();
+	const {register_number, password, isLoading, onChange, onSubmit} = useLogin();
 
 	const config = [
 		{
-			labelText: 'Customer',
-			labelId: 'customer',
-			type: 'text',
-			value: customer,
-			required: true,
-		},
-		{
-			labelText: 'Name',
-			labelId: 'name',
-			type: 'text',
-			value: name,
-			required: true,
-		},
-		{
-			labelText: 'Social name',
-			labelId: 'social_name',
-			type: 'text',
-			value: social_name,
-			required: true,
-		},
-		{
 			labelText: 'CPF',
-			labelId: 'cpf',
+			labelId: 'register_number',
 			type: 'text',
-			value: cpf,
+			value: register_number,
 			required: true,
 		},
 		{
-			labelText: 'RG',
-			labelId: 'rg',
+			labelText: 'Password',
+			labelId: 'password',
 			type: 'text',
-			value: rg,
-			required: true,
-		},
-		{
-			labelText: 'Birthdate',
-			labelId: 'birthdate',
-			type: 'text',
-			value: birthdate,
+			value: password,
 			required: true,
 		},
 	]
@@ -56,7 +29,22 @@ export default function RegisterNPPage() {
 		<>
 			<Navbar />
 			<main className="w-full pt-24">
-				<Form config={config} btnText="Log In" isLoading={isLoading} onChange={onChange} onSubmit={onSubmit} isCustomerNP />
+				<div className="flex h-[calc(100vh-6rem)] bg-blackp">
+					<section className="w-[45%] h-full hidden md:block">
+						<div className="h-full">
+							<Image
+								src="/neymar.svg"
+								width={500}
+								height={500}
+								alt="Neymar Jr"
+								className="object-cover w-full h-full"
+							/>
+						</div>
+					</section>
+					<section className="w-full">
+					<Form config={config} btnText="Log In" isLoading={isLoading} onChange={onChange} onSubmit={onSubmit} isCustomerNP />
+					</section>
+				</div>
 			</main>
 		</>
 	);

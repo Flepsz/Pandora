@@ -1,10 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
+import { RootState } from "../store";
 
 interface AuthState {
 	isAuthenticated: boolean;
 	isLoading: boolean;
 	registerNumber: string;
 	account: string;
+	token: {
+    access: string;
+    refresh: string;
+  };
 }
 
 const initialState = {
@@ -12,29 +17,50 @@ const initialState = {
 	isLoading: true,
 	registerNumber: "",
 	account: "",
+	token: {
+    access: "",
+    refresh: "",
+  },
 } as AuthState;
 
 const authSlice = createSlice({
 	name: "auth",
 	initialState,
 	reducers: {
-		setAuth: (state) => {
+		setAuth: (state, action: PayloadAction<{ access: string; refresh: string }>) => {
+      state.isAuthenticated = true;
+      state.token = action.payload;
+    },
+		setOnlyAuth: (state) => {
 			state.isAuthenticated = true;
 		},
-		logout: (state) => {
-			state.isAuthenticated = false;
-		},
-		finishInitialLoad: (state) => {
-			state.isLoading = false;
-		},
-		setRegisterNumber: (state, action) => {
-			state.registerNumber = action.payload;
-		},
-		setAccount: (state, action) => {
-			state.account = action.payload;
-		},
+    logout: (state) => {
+      state.isAuthenticated = false;
+      state.token = { access: "", refresh: "" };
+    },
+    finishInitialLoad: (state) => {
+      state.isLoading = false;
+    },
+    setRegisterNumber: (state, action: PayloadAction<string>) => {
+      state.registerNumber = action.payload;
+    },
+    setAccount: (state, action: PayloadAction<string>) => {
+      state.account = action.payload;
+    },
 	},
 });
 
-export const { setAuth, logout, finishInitialLoad, setRegisterNumber, setAccount } = authSlice.actions;
+const selectToken = (state: RootState) => state.auth.token;
+
+export const selectAccessToken = createSelector(
+  selectToken,
+  (token) => token.access
+);
+
+export const selectRefreshToken = createSelector(
+  selectToken,
+  (token) => token.refresh
+);
+
+export const { setAuth, setOnlyAuth, logout, finishInitialLoad, setRegisterNumber, setAccount } = authSlice.actions;
 export default authSlice.reducer;
