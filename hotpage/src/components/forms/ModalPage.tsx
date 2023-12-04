@@ -81,11 +81,11 @@ export default function ModalPage({
 													href={
 														isRegister
 															? isCustomerNP
-																? "/test/login/customernp"
-																: "/test/login/customerlp"
+																? "/login/customernp"
+																: "/login/customerlp"
 															: isCustomerNP
-															? "/test/register/customernp"
-															: "/test/register/customerlp"
+															? "/register/customernp"
+															: "/register/customerlp"
 													}
 												>
 													<button

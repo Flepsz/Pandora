@@ -5,7 +5,7 @@ import {
   useRegisterCNPMutation,
   useLoginMutation,
 } from "../redux/features/authApiSlice";
-import { Toast } from 'toastify-react-native'
+import Toast from 'react-native-toast-message';
 import { logout, setAuth, setRegisterNumber } from "../redux/features/authSlice";
 import { useAppDispatch } from "../redux/hooks";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -46,6 +46,7 @@ export default function useCombinedRegisterCNP() {
       .unwrap()
       .then(() => {
         Toast.success("User created with success");
+        Toast.show({type: "success", text1: ""});
 
 				console.log("Dados enviados para login:", { register_number, password });
 
@@ -55,6 +56,7 @@ export default function useCombinedRegisterCNP() {
             dispatch(setAuth({ access: data.access, refresh: data.refresh }));
             dispatch(setRegisterNumber(register_number));
             Toast.success("Logged in");
+            Toast.show({type: "success", text1: ""});
 
             registerCNP({
               customer: register_number,
@@ -66,21 +68,21 @@ export default function useCombinedRegisterCNP() {
             })
               .unwrap()
               .then(() => {
-                Toast.success("Register your Customer NP with Success");
+                Toast.show({type: "success", text1: "Register your Customer NP with Success"});
 								dispatch(logout())
                 navigation.navigate("LoginCNP");
               })
               .catch((cnpError) => {
-                Toast.error("Failed to register Customer NP", "top");
+                Toast.show({type: "error", text1: "Failed to register Customer NP"});
                 console.log(cnpError);
               });
           })
           .catch(() => {
-            Toast.error("Failed to log in", "top");
+            Toast.show({type: "error", text1: "Failed to log in"});
           });
       })
       .catch((error) => {
-        Toast.error("Failed to register user", "top");
+        Toast.show({type: "error", text1: "Failed to register user"});
         console.log(error);
       });
   };

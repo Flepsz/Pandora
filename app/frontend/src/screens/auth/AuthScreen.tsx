@@ -8,9 +8,9 @@ export default function AuthScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
-    <View className="flex flex-col gap-5 justify-center items-center">
-      <Text>Who you are?</Text>
-      <YStack>
+    <View className="flex flex-col items-center justify-center h-screen gap-5">
+      <Text className="text-xl font-bold text-white">Who you are?</Text>
+      <YStack className="flex flex-col" space="$3">
         <Button onPress={() => {navigation.navigate("RegisterCNP")}}>Natural Person</Button>
         <Button onPress={() => {navigation.navigate("LoginCLP")}}>Legal Person</Button>
       </YStack>

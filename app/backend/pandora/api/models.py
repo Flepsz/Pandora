@@ -53,20 +53,12 @@ class Customer(AbstractUser):
         validators=[MaxValueValidator(999999999999999999999999)],
         unique=True,
     )
-    password = models.CharField(max_length=100)
     photo_logo = models.ImageField(
         upload_to='user_photos/', blank=True, null=True)
-    accounts = models.ManyToManyField(
-        'Account', related_name='customers', blank=True)
     is_staff = models.BooleanField(default=False)
 
-    groups = models.ManyToManyField(
-        'auth.Group', related_name='customer_groups', blank=True)
-    user_permissions = models.ManyToManyField(
-        'auth.Permission', related_name='customer_user_permissions', blank=True)
-
-    REQUIRED_FIELDS = ['first_name', 'last_name']
     USERNAME_FIELD = 'register_number'
+    REQUIRED_FIELDS = ['photo_logo']
 
     def __str__(self):
         return f'{self.register_number}'

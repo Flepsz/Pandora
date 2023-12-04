@@ -6,7 +6,7 @@ import {
 	useLoginMutation,
 	useRegisterCLPMutation,
 } from "../redux/features/authApiSlice";
-import { Toast } from 'toastify-react-native'
+import Toast from 'react-native-toast-message';
 import { useAppDispatch } from "../redux/hooks";
 import { logout, setAuth, setRegisterNumber } from "../redux/features/authSlice";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -50,14 +50,15 @@ export default function useCombinedRegisterCLP() {
 		register({ first_name: fantasy_name, last_name, register_number, password })
 			.unwrap()
 			.then(() => {
-				Toast.success("User created with success");
+				Toast.show({type: "success", text1: "User created with success"});
+				Toast.show({type: "success", text1: ""});
 
 				login({ register_number, password })
           .unwrap()
           .then((data) => {
             dispatch(setAuth({ access: data.access, refresh: data.refresh }));
             dispatch(setRegisterNumber(register_number));
-            Toast.success("Logged in");						
+						Toast.show({type: "success", text1: "Logged in"});
 					
             registerCLP({
 							customer: register_number,
@@ -69,20 +70,20 @@ export default function useCombinedRegisterCLP() {
 						})
 							.unwrap()
 							.then(() => {
-								Toast.success("Register your Customer LP with Success");
+								Toast.show({type: "success", text1: "Register your Customer LP with Success"});
 								dispatch(logout())
 								navigation.navigate("LoginCLP");
 							})
 							.catch(() => {
-								Toast.error("Failed to register Customer LP", "top");
+								Toast.show({type: "error", text1: "Failed to register Customer LP"});
 							});
           })
           .catch(() => {
-            Toast.error("Failed to log in", "top");
+						Toast.show({type: "error", text1: "Failed to log in"});
           });
 			})
 			.catch(() => {
-				Toast.error("Failed to register user", "top");
+				Toast.show({type: "error", text1: "Failed to register user"});
 			});
 	};
 

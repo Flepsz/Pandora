@@ -9073,6 +9073,11 @@ react-native-svg@13.9.0:
     css-select "^5.1.0"
     css-tree "^1.1.3"
 
+react-native-toast-message@^2.1.7:
+  version "2.1.7"
+  resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-2.1.7.tgz#480ead6ea23e884f50ba467c818337d6830341e5"
+  integrity sha512-5zX3T5buVpg4bn9KZYVZ2VUQiLQZ1FHSM2AFQHVpgeKMYb+Gq+jt7wjhfPqhuMkJElQr7XNrnRw/rBCdD+7Q9w==
+
 react-native-vector-icons@^10.0.2:
   version "10.0.2"
   resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-10.0.2.tgz#44724e0787fb13899efce3510698d1ff69aceefb"
@@ -10345,11 +10350,6 @@ to-regex-range@^5.0.1:
   integrity sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==
   dependencies:
     is-number "^7.0.0"
-
-toastify-react-native@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/toastify-react-native/-/toastify-react-native-4.0.0.tgz#6019e72cd755ca3f619f5618143a98d713801729"
-  integrity sha512-c+9V1j39aANyASKglqwE4icQru9EBm8V8hYG6a1o7twT4Yk1OEEN0wRJJ8Ukrb7EBxm0M6WsQ7gEL5Ys6cTtew==
 
 toidentifier@1.0.1:
   version "1.0.1"

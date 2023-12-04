@@ -9,12 +9,6 @@ import React, { useState } from "react";
 
 export default function OpenBoxPage() {
 	const router = useRouter();
-  const [isCustomerNP, setIsCustomerNP] = useState(false);
-
-  const handleChoosePersonType = (isCustomerNP: boolean) => {
-    setIsCustomerNP(isCustomerNP);
-    router.push('/register');
-  };
 	
 	return (
 		<Reveal width="100%">
@@ -22,10 +16,10 @@ export default function OpenBoxPage() {
 				<h1 className="absolute text-4xl font-bold transform -translate-x-1/2 -translate-y-1/2 top-1/4 left-1/2 text-dough">What you are?</h1>
 				<div className="w-screen h-screen flexCenter">
 					<div className="w-1/6 m-auto">
-						<ButtonWP onClick={() => handleChoosePersonType(true)} text="Natural Person" href="/register/customernp" />
+						<ButtonWP onClick={() => router.push("/register/customernp")} text="Natural Person" href="/register/customernp" />
 					</div>
 					<div className="w-1/6 m-auto">
-						<ButtonPW onClick={() => handleChoosePersonType(false)} text="Legal Person" href="/register/customerlp" />
+						<ButtonPW onClick={() => router.push("register/customerlp")} text="Legal Person" href="/register/customerlp" />
 					</div>
 				</div>
         <Link href="/">

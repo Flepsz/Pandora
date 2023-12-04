@@ -19,7 +19,6 @@ export default function useCombinedRegisterCLP() {
 	const [login, { isLoading: loginLoading }] = useLoginMutation();
 
 	const [formData, setFormData] = useState({
-		last_name: "a",
 		register_number: "",
 		password: "",
 		fantasy_name: "",
@@ -30,7 +29,6 @@ export default function useCombinedRegisterCLP() {
 	});
 
 	const {
-		last_name,
 		register_number,
 		password,
 		fantasy_name,
@@ -49,7 +47,7 @@ export default function useCombinedRegisterCLP() {
 	const onSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		register({ first_name: fantasy_name, last_name, register_number, password })
+		register({ register_number, password })
 			.unwrap()
 			.then(() => {
 				toast.success("User created with success");
@@ -73,7 +71,7 @@ export default function useCombinedRegisterCLP() {
 							.then(() => {
 								toast.success("Register your Customer LP with Success");
 								dispatch(logout())
-								router.push("/test/login/customerlp");
+								router.push("/login/customerlp");
 							})
 							.catch(() => {
 								toast.error("Failed to register Customer LP");

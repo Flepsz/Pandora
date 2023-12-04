@@ -43,7 +43,7 @@ export default function useCombinedRegisterCNP() {
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    register({ first_name: name, last_name: social_name, register_number, password })
+    register({ register_number, password })
       .unwrap()
       .then(() => {
         toast.success("User created with success");
@@ -69,7 +69,7 @@ export default function useCombinedRegisterCNP() {
               .then(() => {
                 toast.success("Register your Customer NP with Success");
 								dispatch(logout())
-                router.push("/test/login/customernp");
+                router.push("/login/customernp");
               })
               .catch((cnpError) => {
                 toast.error("Failed to register Customer NP");

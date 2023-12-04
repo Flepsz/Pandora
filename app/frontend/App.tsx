@@ -4,6 +4,8 @@ import config from "./tamagui.config";
 
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import RootNavigator from "./src/navigator/RootNavigator";
+import Setup from "./src/components/utils/Setup";
+import CustomProvider from "./src/redux/provider";
 
 const MyTheme = {
 	...DefaultTheme,
@@ -16,9 +18,12 @@ const MyTheme = {
 export default function App() {
 	return (
 		<TamaguiProvider config={config}>
+			<CustomProvider>
+				<Setup />
 				<NavigationContainer theme={MyTheme}>
 					<RootNavigator />
 				</NavigationContainer>
+			</CustomProvider>
 		</TamaguiProvider>
 	);
 }

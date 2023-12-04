@@ -133,10 +133,10 @@ def create_card(headers, number_account):
 
 
 def main():
-    data_base_creation()
-    server_process = multiprocessing.Process(target=run_server)
-    server_process.start()
-    sleep(1)
+    # data_base_creation()
+    # server_process = multiprocessing.Process(target=run_server)
+    # server_process.start()
+    # sleep(1)
 
     # superuser_creation()
     # super_user_header = create_headers(123, '123')
@@ -146,22 +146,31 @@ def main():
     # NATURAL PERSON REGISTRATION
     print(user_create("a", "b", 123456, "test@test"))
     headers_1 = create_headers(123456, "test@test")
-    print(headers_1)
+
     print(create_natural_person(headers_1, 123456, 'Luís', 'Felipe', '28345407056', '241767738', '2005-11-03'))
 
-    print(create_natural_person(headers_1, 1234567, 'Felipe', 'Pereira', '42921996049', '337994134', '2005-11-03'))
+    print(user_create("a", "b", 1234567, "test@test"))
+    headers_2 = create_headers(1234567, "test@test")
+
+    print(create_natural_person(headers_2, 1234567, 'Felipe', 'Pereira', '42921996049', '337994134', '2005-11-03'))
 
     # LEGAL PERSON REGISTRATION
-    print(create_legal_person(headers_1, 654321, 'Fantasy', '2023-06-19', '40205420000129', '1234', '4321'))
+    print(user_create("a", "b", 654321, "test@test"))
+    headers_3 = create_headers(654321, "test@test")
 
-    print(create_legal_person(headers_1, 7654321, 'Fantasy', '2023-06-19', '05213978000155',  '1234', '4321'))
+    print(create_legal_person(headers_3, 654321, 'Fantasy', '2023-06-19', '40205420000129', '1234', '4321'))
+
+    print(user_create("a", "b", 7654321, "test@test"))
+    headers_4 = create_headers(7654321, "test@test")
+
+    print(create_legal_person(headers_4, 7654321, 'Fantasy', '2023-06-19', '05213978000155',  '1234', '4321'))
 
     # ADDRESS REGISTRATION
     print(create_address(headers_1, 123456, 'Rua Carlo', '69', 'Litle Inf', 'Valinhos', 'SP', '12564789'))
 
     # ACCOUNT REGISTRATION
     print(create_account(headers_1, 123456, 'savings'))
-    print(create_account(headers_1, 654321, 'checking'))
+    print(create_account(headers_3, 654321, 'checking'))
 
     print("Fim do populate")
     # print(create_card(headers_1, 1111))

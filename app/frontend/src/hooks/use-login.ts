@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useAppDispatch } from "../redux/hooks";
 import { useLoginMutation } from "../redux/features/authApiSlice";
 import { setAuth, setRegisterNumber } from "../redux/features/authSlice";
-import { Toast } from 'toastify-react-native'
+import Toast from 'react-native-toast-message';
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigator/RootNavigator";
 
@@ -29,13 +29,14 @@ export default function useLogin() {
       .then((data) => {
         dispatch(setAuth({ access: data.access, refresh: data.refresh }));
         dispatch(setRegisterNumber(register_number));
-        Toast.success("Logged in");
+
+        Toast.show({type: "success", text1: "Logged in"});
         navigation.navigate("Main");
       })
       .catch((error) => {
-        Toast.error("Failed to log in", "top");
+        Toast.show({type: "error", text1: "Failed to log in"});
+
         console.log(error);
-        
       });
   };
 

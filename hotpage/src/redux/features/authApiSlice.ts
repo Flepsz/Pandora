@@ -69,10 +69,10 @@ const authApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     register: builder.mutation({
-      query: ({ first_name, last_name, register_number, password }) => ({
+      query: ({ register_number, password }) => ({
         url: "/auth/users/",
         method: "POST",
-        body: { first_name, last_name, register_number, password },
+        body: { register_number, password },
       }),
     }),
     registerCNP: builder.mutation({

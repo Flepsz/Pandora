@@ -31,7 +31,7 @@ export default function AccountsPage() {
   return (
     <>
       <Navbar />
-      <main className="w-full h-screen pt-24 flex flex-col gap-5 justify-center items-center">
+      <main className="flex flex-col items-center justify-center w-full h-screen gap-5 pt-24">
         {accounts && <h1 className="text-3xl font-bold">My Accounts</h1>}
         <section className="flex gap-5">
           {accounts ? (
