@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { Avatar, Text, XStack, YStack } from "tamagui";
 import { RootStackParamList } from "../navigator/RootNavigator";
-import { HomeScreenNavigatioProp } from "../screens/Home";
+import { HomeScreenNavigatioProp } from "../screens/HomeScreen";
 
 interface UserBarI {
 	avatar?: string;

@@ -1,5 +1,4 @@
 import { View } from "react-native";
-import React, { useState } from "react";
 import { Text, XStack, YStack, ScrollView, Button } from "tamagui";
 import User from "../components/User";
 import Card, { XStackCard } from "../components/Card";
@@ -16,8 +15,7 @@ export type HomeScreenNavigatioProp = CompositeNavigationProp<
 	NativeStackNavigationProp<RootStackParamList>
 >;
 
-export default function Home() {
-	const [test, setTest] = useState<string>("");
+export default function HomeScreen() {
 	return (
 		<View className="flex flex-col gap-5 p-3 pt-12">
 			<YStack className="flex flex-col bg-primary">

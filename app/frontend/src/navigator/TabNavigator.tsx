@@ -4,7 +4,7 @@ import { useLayoutEffect } from "react";
 import * as IonIcon from "react-native-vector-icons/Ionicons";
 import * as MatIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import * as FTIcon from "react-native-vector-icons/FontAwesome";
-import Home from "../screens/Home";
+import Home from "../screens/HomeScreen";
 import { StyleSheet } from "react-native";
 import { ROUTES } from "../constants";
 
