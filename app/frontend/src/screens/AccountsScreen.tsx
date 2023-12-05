@@ -30,7 +30,7 @@ export default function AccountsScreen() {
 		<TopBrand />
 		<View className="flex flex-col items-center justify-center" space="$4">
 			<Text className="mx-auto text-xl text-white">
-				Which account you need to access?
+				Which account do you need to access?
 			</Text>
 			{accounts?.map((account: AccountProp) => (
 				<TouchableOpacity key={account.number}
