@@ -42,8 +42,8 @@ export default function useCombinedRegisterCLP() {
 		establishment_date,
 	} = formData;
 
-	const onChange = (name: string, value: string) => {
-    setFormData({ ...formData, [name]: value });
+	const onChange = (text: string, name: string) => {
+    setFormData({ ...formData, [name]: text });
   };
 
 	const onSubmit = () => {
@@ -51,7 +51,6 @@ export default function useCombinedRegisterCLP() {
 			.unwrap()
 			.then(() => {
 				Toast.show({type: "success", text1: "User created with success"});
-				Toast.show({type: "success", text1: ""});
 
 				login({ register_number, password })
           .unwrap()

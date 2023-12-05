@@ -20,25 +20,21 @@ export default function ModalPage({
   onSubmit,
 }: FormsI) {
   return (
-    <Form onSubmit={onSubmit}>
-      <Text className="mb-4">
+    <Form onSubmit={onSubmit} className="flex flex-col justify-center h-screen">
+      <Text className="mb-4 text-white">
         {isRegister
           ? "Please register for an account"
           : "Please login to your account"}
       </Text>
-      <View>{children}</View>
+      <View className="flex flex-col" space="$3">{children}</View>
       <View className="flex flex-col flex-wrap w-56 gap-3 pt-1 pb-1 mx-auto mt-5 mb-12 text-center md:w-72">
         <Button
           onPress={onSubmit}
           disabled={isLoading}
-          className="flexCenter gap-3 text-white bg-[#530082] py-2 px-6 rounded-lg cursor-pointer group relative overflow-hidden xl:py-3 xl:px-7 xl:scale-125"
+          className="flexCenter text-white bg-[#530082] py-2 px-6 rounded-lg cursor-pointer "
         >
-          <View className="absolute inset-0 w-0 bg-dough transition-all duration-[250ms] ease-out group-hover:w-full"></View>
-          <View className="relative font-bold text-white group-hover:text-[#530082]">
-            {isLoading ? <Spinner sm /> : `${btnText}`}
-          </View>
+            {isLoading ? <Spinner sm /> : <Text className="text-white font-bold text-xl">{btnText}</Text>}
         </Button>
-        {isRegister ? null : <a href="#!">Forgot password?</a>}
       </View>
     </Form>
   );

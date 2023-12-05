@@ -16,6 +16,7 @@ export default function LoginCLP() {
     {
       labelText: "Password",
       labelId: "password",
+      secureTextEntry: true,
       type: "text",
       value: password,
       required: true,

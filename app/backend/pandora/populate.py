@@ -1,7 +1,7 @@
 import requests, os, subprocess, multiprocessing
 from time import sleep
 
-BASE_URL = 'http://localhost:8000/api/v1/'
+BASE_URL = 'http://192.168.15.42:8080/api/v1/'
 
 user_create_url = os.path.join(BASE_URL, 'auth/users/')
 jwt_create_url = os.path.join(BASE_URL, 'auth/jwt/create/')
@@ -29,7 +29,7 @@ def data_base_creation():
 
 def run_server():
     try:
-        subprocess.run(['py', 'manage.py', 'runserver'], check=True)
+        subprocess.run(['py', 'manage.py', 'runserver', '192.168.15.42:8080'], check=True)
     except subprocess.CalledProcessError as e:
         print(e)
     except Exception as e:
@@ -133,10 +133,10 @@ def create_card(headers, number_account):
 
 
 def main():
-    # data_base_creation()
-    # server_process = multiprocessing.Process(target=run_server)
-    # server_process.start()
-    # sleep(1)
+    data_base_creation()
+    server_process = multiprocessing.Process(target=run_server)
+    server_process.start()
+    sleep(1)
 
     # superuser_creation()
     # super_user_header = create_headers(123, '123')

@@ -17,6 +17,7 @@ export default function LoginCNP() {
       labelText: "Password",
       labelId: "password",
       type: "text",
+      secureTextEntry: true,
       value: password,
       required: true,
     },

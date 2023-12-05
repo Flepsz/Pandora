@@ -5,6 +5,9 @@ interface Config {
 	labelText: string;
 	labelId: string;
 	value: string;
+	valueDate?: Date;
+	secureTextEntry?: boolean
+	date?: boolean
 }
 
 interface Props {
@@ -13,7 +16,7 @@ interface Props {
 	config: Config[];
 	isLoading: boolean;
 	btnText: string;
-	onChange: (name: string, value: string) => void;
+	onChange: (text: string, labelId: string) => void;
 	onSubmit: () => void;
 }
 
@@ -34,12 +37,16 @@ export default function Form({
 			isCustomerNP={isCustomerNP}
 			isRegister={isRegister}
 		>
+			
 			{config.map((input) => (
 				<InputC
 					key={input.labelId}
 					labelId={input.labelId}
-					onChange={(value) => onChange(input.labelId, input.value)}
+					onChange={(text) => onChange(text, input.labelId)}
 					value={input.value}
+					secureTextEntry={input.secureTextEntry}
+					date={input.date}
+					valueDate={input.valueDate}
 				>
 					{input.labelText}
 				</InputC>

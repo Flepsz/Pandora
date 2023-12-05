@@ -19,8 +19,8 @@ export default function useLogin() {
 
   const { register_number, password } = formData;
 
-  const onChange = (name: string, value: string) => {
-    setFormData({ ...formData, [name]: value });
+  const onChange = (text: string, name: string) => {
+    setFormData({ ...formData, [name]: text });
   };
 
   const onSubmit = () => {

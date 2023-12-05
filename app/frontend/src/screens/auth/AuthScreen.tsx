@@ -12,7 +12,7 @@ export default function AuthScreen() {
       <Text className="text-xl font-bold text-white">Who you are?</Text>
       <YStack className="flex flex-col" space="$3">
         <Button onPress={() => {navigation.navigate("RegisterCNP")}}>Natural Person</Button>
-        <Button onPress={() => {navigation.navigate("LoginCLP")}}>Legal Person</Button>
+        <Button onPress={() => {navigation.navigate("RegisterCLP")}}>Legal Person</Button>
       </YStack>
     </View>
   );

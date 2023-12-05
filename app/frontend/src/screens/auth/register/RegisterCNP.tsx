@@ -18,6 +18,7 @@ export default function RegisterCNP() {
 			labelId: 'password',
 			type: 'text',
 			value: password,
+			secureTextEntry: true,
 			required: true,
 		},
 		{
@@ -45,7 +46,8 @@ export default function RegisterCNP() {
 			labelText: 'Birthdate',
 			labelId: 'birthdate',
 			type: 'date',
-			value: birthdate,
+			valueDate: birthdate,
+			date: true,
 			required: true,
 		},
 	]

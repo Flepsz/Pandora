@@ -37,16 +37,15 @@ export default function useCombinedRegisterCNP() {
     birthdate,
   } = formData;
 
-  const onChange = (name: string, value: string) => {
-    setFormData({ ...formData, [name]: value });
+  const onChange = (text: string, name: string) => {
+    setFormData({ ...formData, [name]: text });
   };
 
   const onSubmit = () => {
     register({ first_name: name, last_name: social_name, register_number, password })
       .unwrap()
       .then(() => {
-        Toast.success("User created with success");
-        Toast.show({type: "success", text1: ""});
+        Toast.show({type: "success", text1: "User created with success"});
 
 				console.log("Dados enviados para login:", { register_number, password });
 
@@ -55,8 +54,7 @@ export default function useCombinedRegisterCNP() {
           .then((data) => {
             dispatch(setAuth({ access: data.access, refresh: data.refresh }));
             dispatch(setRegisterNumber(register_number));
-            Toast.success("Logged in");
-            Toast.show({type: "success", text1: ""});
+            Toast.show({type: "success", text1: "Logged in"});
 
             registerCNP({
               customer: register_number,
@@ -77,8 +75,9 @@ export default function useCombinedRegisterCNP() {
                 console.log(cnpError);
               });
           })
-          .catch(() => {
+          .catch((error) => {
             Toast.show({type: "error", text1: "Failed to log in"});
+            console.log(error);
           });
       })
       .catch((error) => {
