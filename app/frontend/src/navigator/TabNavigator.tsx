@@ -10,6 +10,10 @@ import { ROUTES } from "../constants";
 
 export type TabStackParamList = {
 	Home: undefined;
+	Transfers: undefined;
+	Loans: undefined;
+	Investments: undefined;
+	Settings: undefined;
 };
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
@@ -31,19 +35,19 @@ export default function TabNavigator() {
 				tabBarIcon: ({ color, size, focused }) => {
 					let iconName;
 
-					if (route.name === ROUTES.HOME) {
+					if (route.name === "Home") {
 						iconName = focused ? "home" : "home-outline";
 						return <IonIcon.default name={iconName} size={25} color={color} />;
-					} else if (route.name === ROUTES.INVESTMENTS) {
+					} else if (route.name === "Investments") {
 						iconName = "bank-plus";
 						return <MatIcon.default name={iconName} size={24} color={color} />;
-					} else if (route.name === ROUTES.LOANS) {
+					} else if (route.name === "Loans") {
 						iconName = focused ? "hand-coin" : "hand-coin-outline";
 						return <MatIcon.default name={iconName} size={26} color={color} />;
-					} else if (route.name === ROUTES.TRANSFERS) {
+					} else if (route.name === "Transfers") {
 						iconName = "bank-transfer";
 						return <MatIcon.default name={iconName} size={35} color={color} />;
-					} else if (route.name === ROUTES.SETTINGS) {
+					} else if (route.name === "Settings") {
 						iconName = focused ? "settings" : "settings-outline";
 						return <IonIcon.default name={iconName} size={25} color={color} />;
 					}
@@ -51,27 +55,27 @@ export default function TabNavigator() {
 			})}
 		>
 			<Tab.Screen
-				name={ROUTES.HOME}
+				name="Home"
 				component={Home}
 				options={{ headerShown: false }}
 			/>
 			<Tab.Screen
-				name={ROUTES.INVESTMENTS}
+				name="Investments"
 				component={Home}
 				options={{ headerShown: false }}
 			/>
 			<Tab.Screen
-				name={ROUTES.LOANS}
+				name="Loans"
 				component={Home}
 				options={{ headerShown: false }}
 			/>
 			<Tab.Screen
-				name={ROUTES.TRANSFERS}
+				name="Transfers"
 				component={Home}
 				options={{ headerShown: false }}
 			/>
 			<Tab.Screen
-				name={ROUTES.SETTINGS}
+				name="Settings"
 				component={Home}
 				options={{ headerShown: false }}
 			/>

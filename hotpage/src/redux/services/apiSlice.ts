@@ -10,7 +10,7 @@ import { RootState } from "../store";
 
 const mutex = new Mutex();
 const baseQuery = fetchBaseQuery({
-	baseUrl: `http://127.0.0.1:8000/api/v1`,
+	baseUrl: `http://10.109.71.9:8080/api/v1`,
 	credentials: "include",
 	prepareHeaders: (headers, { getState, endpoint }) => {
 		const user = (getState() as RootState).auth.token;

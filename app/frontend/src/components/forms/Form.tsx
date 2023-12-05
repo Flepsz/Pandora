@@ -5,9 +5,7 @@ interface Config {
 	labelText: string;
 	labelId: string;
 	value: string;
-	valueDate?: Date;
-	secureTextEntry?: boolean
-	date?: boolean
+	secureTextEntry?: boolean;
 }
 
 interface Props {
@@ -37,7 +35,6 @@ export default function Form({
 			isCustomerNP={isCustomerNP}
 			isRegister={isRegister}
 		>
-			
 			{config.map((input) => (
 				<InputC
 					key={input.labelId}
@@ -45,8 +42,6 @@ export default function Form({
 					onChange={(text) => onChange(text, input.labelId)}
 					value={input.value}
 					secureTextEntry={input.secureTextEntry}
-					date={input.date}
-					valueDate={input.valueDate}
 				>
 					{input.labelText}
 				</InputC>

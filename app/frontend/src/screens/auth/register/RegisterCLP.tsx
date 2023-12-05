@@ -55,7 +55,6 @@ export default function RegisterCLP() {
       labelText: "Establishment Date",
       labelId: "establishment_date",
       type: "date",
-      date: true,
       value: establishment_date,
       required: true,
     },

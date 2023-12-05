@@ -48,7 +48,7 @@ export default function useCombinedRegisterCNP() {
       .then(() => {
         toast.success("User created with success");
 
-				console.log("Dados enviados para login:", { register_number, password });
+				console.log("Dados enviados para login:", { birthdate, password });
 
         login({ register_number, password })
           .unwrap()

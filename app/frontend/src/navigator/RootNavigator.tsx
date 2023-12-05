@@ -8,7 +8,7 @@ import RegisterCNP from "../screens/auth/register/RegisterCNP";
 import RegisterCLP from "../screens/auth/register/RegisterCLP";
 import LoginCLP from "../screens/auth/login/LoginCLP";
 import LoginCNP from "../screens/auth/login/LoginCNP";
-import { useNavigation } from "@react-navigation/native";
+import AccountsScreen from "../screens/AccountsScreen";
 
 export type RootStackParamList = {
   UserProfile: { avatar?: string };
@@ -18,6 +18,7 @@ export type RootStackParamList = {
   RegisterCLP: undefined;
   LoginCNP: undefined;
   LoginCLP: undefined;
+  Accounts: undefined;
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -49,6 +50,11 @@ export default function RootNavigator() {
         <RootStack.Screen
           name="LoginCLP"
           component={LoginCLP}
+          options={{ headerShown: false }}
+        />
+        <RootStack.Screen
+          name="Accounts"
+          component={AccountsScreen}
           options={{ headerShown: false }}
         />
       </RootStack.Group>

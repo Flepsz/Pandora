@@ -46,8 +46,7 @@ export default function RegisterCNP() {
 			labelText: 'Birthdate',
 			labelId: 'birthdate',
 			type: 'date',
-			valueDate: birthdate,
-			date: true,
+			value: birthdate,
 			required: true,
 		},
 	]

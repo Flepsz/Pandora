@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import Spinner from '../common/Spinner';
 import { useAppSelector } from '../../redux/hooks';
-import { View } from 'tamagui';
+import { Text, View } from 'tamagui';
 import { useEffect } from 'react';
 import { RootStackParamList } from '../../navigator/RootNavigator';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -24,7 +23,7 @@ export default function RequireAuth({ children }: Props) {
 	if (isLoading) {
 		return (
 			<View className='flex justify-center my-8'>
-				<Spinner lg />
+				<Text>Loading</Text>
 			</View>
 		);
 	}

@@ -4,8 +4,8 @@ import { useAppDispatch } from "../redux/hooks";
 import { useLoginMutation } from "../redux/features/authApiSlice";
 import { setAuth, setRegisterNumber } from "../redux/features/authSlice";
 import Toast from 'react-native-toast-message';
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigator/RootNavigator";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 export default function useLogin() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
@@ -23,20 +23,22 @@ export default function useLogin() {
     setFormData({ ...formData, [name]: text });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     login({ register_number, password })
       .unwrap()
       .then((data) => {
         dispatch(setAuth({ access: data.access, refresh: data.refresh }));
         dispatch(setRegisterNumber(register_number));
-
+        navigation.navigate("Accounts")
+        
         Toast.show({type: "success", text1: "Logged in"});
-        navigation.navigate("Main");
+        return { success: true };
       })
       .catch((error) => {
         Toast.show({type: "error", text1: "Failed to log in"});
 
         console.log(error);
+        return { success: false, error };
       });
   };
 
