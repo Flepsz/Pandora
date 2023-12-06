@@ -50,8 +50,8 @@ export default function RegisterCLP() {
     {
       labelText: "Establishment Date",
       labelId: "establishment_date",
-      type: "datetime",
       value: establishment_date,
+      maxLength: 10
     },
   ];
 

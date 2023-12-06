@@ -2,16 +2,12 @@ import { Text, View, XStack, YStack, styled } from "tamagui";
 import { Image } from 'expo-image';
 import imgFlags from "../utils/imgFlags";
 
-type Colors = "purple" | "green";
-type Flag = "Mastercard" | "Elo" | "Visa" | "AmericanExpress";
-
 interface CardPropsI {
-	color: Colors | undefined;
+	color: string;
 	last_numbers?: string;
-	balance?: string;
-	exp_date?: string;
+	exp_date?: Date;
 	owner?: string;
-  flag: Flag;
+  flag: string;
 }
 
 export const XStackCard = styled(XStack, {
@@ -35,7 +31,7 @@ export const XStackCard = styled(XStack, {
 	},
 });
 
-export default function Card({ color, last_numbers, balance, exp_date, owner, flag }: CardPropsI) {
+export default function Card({ color, last_numbers, exp_date, owner, flag }: CardPropsI) {
   const imgFlagSrc = imgFlags[flag]
   
   
@@ -69,7 +65,7 @@ export default function Card({ color, last_numbers, balance, exp_date, owner, fl
 					</XStack>
 				</XStack>
         <XStack>
-          <Text className="text-3xl font-extrabold text-white">{balance} USD</Text>
+          <Text className="text-3xl font-extrabold text-white">My Card</Text>
         </XStack>
         <XStack className="flex justify-between">
           <XStack className="flex flex-col">

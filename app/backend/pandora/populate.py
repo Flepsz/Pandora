@@ -1,7 +1,7 @@
 import requests, os, subprocess, multiprocessing
 from time import sleep
 
-BASE_URL = 'http://192.168.15.42:8080/api/v1/'
+BASE_URL = 'http://10.109.71.9:8080/api/v1/'
 
 user_create_url = os.path.join(BASE_URL, 'auth/users/')
 jwt_create_url = os.path.join(BASE_URL, 'auth/jwt/create/')
@@ -29,7 +29,7 @@ def data_base_creation():
 
 def run_server():
     try:
-        subprocess.run(['py', 'manage.py', 'runserver', '192.168.15.42:8080'], check=True)
+        subprocess.run(['py', 'manage.py', 'runserver', '10.109.71.9:8080'], check=True)
     except subprocess.CalledProcessError as e:
         print(e)
     except Exception as e:
@@ -144,7 +144,7 @@ def main():
     print("Inicio do populate")
 
     # NATURAL PERSON REGISTRATION
-    print(user_create("a", "b", 123456, "test@test"))
+    print(user_create("Felipe", "Pereira", 123456, "test@test"))
     headers_1 = create_headers(123456, "test@test")
 
     print(create_natural_person(headers_1, 123456, 'Luís', 'Felipe', '28345407056', '241767738', '2005-11-03'))

@@ -11,13 +11,11 @@ import { useAppDispatch } from "../redux/hooks";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigator/RootNavigator";
 
-export default function useCombinedRegisterCNP() {
+export default function useTransaction() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const dispatch = useAppDispatch();
 
-  const [register, { isLoading: authLoading }] = useRegisterMutation();
-  const [registerCNP, { isLoading }] = useRegisterCNPMutation();
-  const [login, { isLoading: loginLoading }] = useLoginMutation();
+  const [register, { isLoading: authLoading }] = usereTrans();
 
   const [formData, setFormData] = useState({
     register_number: "",

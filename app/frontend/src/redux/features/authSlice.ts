@@ -6,6 +6,7 @@ interface AuthState {
 	isLoading: boolean;
 	registerNumber: string;
 	account: string;
+  name: string;
 	token: {
     access: string;
     refresh: string;
@@ -17,6 +18,7 @@ const initialState = {
 	isLoading: true,
 	registerNumber: "",
 	account: "",
+  name: "",
 	token: {
     access: "",
     refresh: "",
@@ -47,8 +49,14 @@ const authSlice = createSlice({
     setAccount: (state, action: PayloadAction<string>) => {
       state.account = action.payload;
     },
+    setName: (state, action: PayloadAction<string>) => {
+      state.name = action.payload;
+    },
 	},
 });
+
+export const selectAccount = (state: RootState) => state.auth.account;
+export const selectName = (state: RootState) => state.auth.name;
 
 const selectToken = (state: RootState) => state.auth.token;
 
@@ -62,5 +70,5 @@ export const selectRefreshToken = createSelector(
   (token) => token.refresh
 );
 
-export const { setAuth, setOnlyAuth, logout, finishInitialLoad, setRegisterNumber, setAccount } = authSlice.actions;
+export const { setAuth, setOnlyAuth, logout, finishInitialLoad, setRegisterNumber, setAccount, setName } = authSlice.actions;
 export default authSlice.reducer;

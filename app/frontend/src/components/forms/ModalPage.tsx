@@ -3,7 +3,7 @@ import { Button, Form, Text, View, XStack } from "tamagui";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigator/RootNavigator";
-import { Image } from "react-native";
+import { ActivityIndicator, Image } from "react-native";
 
 interface FormsI {
 	isRegister?: boolean;
@@ -49,7 +49,7 @@ export default function ModalPage({
 						className="flexCenter text-white bg-[#530082] w-56 rounded-lg"
 					>
 						{isLoading ? (
-							<Text>Loading</Text>
+							<ActivityIndicator color="#c1c1c1" />
 						) : (
 							<Text className="text-xl font-bold text-center text-white">{btnText}</Text>
 						)}

@@ -58,7 +58,7 @@ class Customer(AbstractUser):
     is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'register_number'
-    REQUIRED_FIELDS = ['photo_logo']
+    REQUIRED_FIELDS = ['photo_logo', 'first_name', 'last_name']
 
     def __str__(self):
         return f'{self.register_number}'
@@ -211,9 +211,7 @@ class PandoraManager(Base):
         return f'{self.transaction_action}'
 
 # Investment model with investment details
-class Investment(Base):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-
+class InvestmentType(Base):
     INVESTMENT_TYPE_CHOICES = [
         ('Stocks', 'Stocks'),
         ('Bonds', 'Bonds'),
@@ -234,14 +232,32 @@ class Investment(Base):
     risk_rate = models.CharField(
         choices=RISC_RATE, max_length=6)
     profitability = models.DecimalField(max_digits=5, decimal_places=2)
-    completed = models.BooleanField(default=False)
 
+    def __str__(self):
+        return f"{self.inv_type} Investment - Amount: {self.amount}, Risk Rate: {self.risk_rate}%"
+    
+
+class Investment(InvestmentType):
     class Meta:
         verbose_name = 'Investment'
         verbose_name_plural = 'Investments'
 
     def __str__(self):
-        return f"{self.inv_type} Investment - Amount: {self.amount}, Risk Rate: {self.risk_rate}%"
+        return f'{self.investment_type}'
+    
+
+class AccountInvestment(InvestmentType):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    income = models.DecimalField(
+        max_digits=7, decimal_places=2)
+
+    class Meta:
+        verbose_name = 'Account Investment'
+        verbose_name_plural = 'Account Investments'
+
+    def __str__(self):
+        return f'{self.investment_type}'
+
 
 # Loan model with loan details
 class Loan(Base):

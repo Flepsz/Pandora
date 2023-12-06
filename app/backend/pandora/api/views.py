@@ -15,7 +15,7 @@ from rest_framework.response import Response
 
 # Import models and serializers from local modules
 from .permissions import IsSuperUser, UserGet, UserGetPost, UserPost, UserPostPatch, UserGetPostPatch
-from .models import Account, Card, Transaction, Investment, Loan, Address, Contact, CustomerNP, CustomerLP, PandoraManager, InstallmentLoan
+from .models import Account, Card, Transaction, Investment, Loan, Address, Contact, CustomerNP, CustomerLP, PandoraManager, InstallmentLoan, AccountInvestment
 from .serializers import (
     NaturalGetPersonSerializer,
     NaturalPostPersonSerializer,
@@ -28,8 +28,12 @@ from .serializers import (
     TransactionGetSerializer,
     TransactionPostSerializer,
     InvestmentGetSerializer,
+    AccountInvestmentGetSerializer,
+    AccountInvestmentPostSerializer,
     LoanGetSerializer,
     LoanPostSerializer,
+    InstallmentLoanGetSerializer,
+    InstallmentLoanPostSerializer,
     AddressGetSerializer,
     AddressPostSerializer,
     ContactsGetSerializer,
@@ -244,6 +248,7 @@ class TransactionViewSet(viewsets.ModelViewSet):
     def create(self, request):
         id_card = request.data.get('card')
         card = get_object_or_404(Card, pk=id_card)
+        print(card)
         amount = Decimal(request.data.get('amount'))
         operation = request.data.get('operation')
         account = card.account
@@ -259,8 +264,8 @@ class TransactionViewSet(viewsets.ModelViewSet):
                 Transaction.objects.create(
                     card=card,
                     amount=amount,
-                    receiver=receiver,
-                    operation=operation
+                    operation=operation,
+                    receiver=id_receiver
                 )
 
                 # Update PandoraManager for sender and receiver
@@ -277,13 +282,60 @@ class TransactionViewSet(viewsets.ModelViewSet):
 class InvestmentViewSet(viewsets.ModelViewSet):
     queryset = Investment.objects.all()
     serializer_class = InvestmentGetSerializer
+    permission_classes = [UserGet]
+
+
+class AccountInvestmentViewSet(viewsets.ModelViewSet):
     permission_classes = [UserGetPost]
+
+    def get_queryset(self):
+        return filter_by_account(self, AccountInvestment)
+
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return AccountInvestmentPostSerializer
+        elif self.request.method in 'GET':
+            return AccountInvestmentGetSerializer
+
+    def create(self, request):
+        id_investment = request.data.get('id_investment')
+        investment = get_object_or_404(Investment, pk=id_investment)
+
+        account_id = request.data.get('id_account')
+        account = get_object_or_404(Account, pk=account_id)
+
+        if account.balance >= investment.amount:
+            inv_type = investment.inv_type
+            amount = investment.amount
+            income = 0.00
+            management_fee = investment.management_fee
+            term = investment.term
+            risk_rate = investment.risk_rate
+            profitability = investment.profitability
+
+            create_pandoramanager(account, 'Sent',
+                                  'Investment', amount)
+
+            AccountInvestment.objects.create(
+                account=account,
+                inv_type=inv_type,
+                amount=amount,
+                income=income,
+                management_fee=management_fee,
+                term=term,
+                risk_rate=risk_rate,
+                profitability=profitability
+            )
+
+            return Response({'status': 'Account Investment Succesfully Created'}, status=status.HTTP_201_CREATED)
+        return Response({'status': 'Not enough balance to make the investment'}, status=status.HTTP_403_FORBIDDEN)
 
 
 # Define a view set for handling loans
 class LoanViewSet(viewsets.ModelViewSet):
     permission_classes = [UserGetPost]
     queryset = Loan.objects.all()
+
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
             return LoanPostSerializer
@@ -316,7 +368,7 @@ class LoanViewSet(viewsets.ModelViewSet):
                 is_approved=is_approved,
                 observation=observation
             )
-            
+
             return loan
 
         payment_amount = round((requested_amount / installment_number), 2)
@@ -342,7 +394,8 @@ class LoanViewSet(viewsets.ModelViewSet):
                 )
 
             # Update PandoraManager for the received loan amount
-            create_pandoramanager(account, 'Received', 'Loan', requested_amount)
+            create_pandoramanager(account, 'Received',
+                                  'Loan', requested_amount)
 
             return Response({'status': 'Loan Created With Successfully'}, status=status.HTTP_201_CREATED)
 
@@ -353,8 +406,13 @@ class LoanViewSet(viewsets.ModelViewSet):
 
 # Define a view set for handling loan installments
 class InstallmentLoanViewSet(viewsets.ModelViewSet):
-    serializer_class = InstallmentLoan
     permission_classes = [UserGetPostPatch]
+
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return InstallmentLoanPostSerializer
+        elif self.request.method in 'GET':
+            return InstallmentLoanGetSerializer
 
     # Define queryset for InstallmentLoanViewSet
     def get_queryset(self):

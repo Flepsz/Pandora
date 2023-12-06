@@ -73,7 +73,7 @@ const authApiSlice = apiSlice.injectEndpoints({
     retrieveAccounts: builder.query<Accounts, void>({
       query: () => "/accounts/",
     }),
-    registerAddress: builder.query({
+    registerAddress: builder.mutation({
       query: ({ customer, street, neighborhood, city, state, zip_code }) => ({
         url: "/addresses/",
         method: "POST",
@@ -90,8 +90,12 @@ const authApiSlice = apiSlice.injectEndpoints({
         body: { account },
       }),
     }),
-    retrieveCards: builder.query<Cards, void>({
-      query: () => "/cards/",
+    retrieveCards: builder.query<Cards, { account?: string }>({
+      query: (options) => {
+        const { account, ...restOptions } = options;
+        const url = `/cards/${account ? `?account=${account}` : ""}`;
+        return url;
+      },
     }),
     registerContact: builder.query({
       query: ({ customer, number, email, observation }) => ({
@@ -109,6 +113,13 @@ const authApiSlice = apiSlice.injectEndpoints({
         const url = `/manager/${account ? `?account=${account}` : ""}`;
         return url;
       },
+    }),
+    registerTransaction: builder.mutation({
+      query: ({ card, amount, operation, receiver }) => ({
+        url: "/transactions/",
+        method: "POST",
+        body: { card, amount, operation, receiver },
+      }),
     }),
   }),
 });

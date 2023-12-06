@@ -1,6 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
-from .models import Customer, CustomerNP, CustomerLP, Account, Address, Contact, Card, Transaction, Investment, Loan, InstallmentLoan, PandoraManager
+from .models import Customer, CustomerNP, CustomerLP, Account, Address, Contact, Card, Transaction, Investment, AccountInvestment, Loan, InstallmentLoan, PandoraManager
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -147,12 +147,19 @@ class InvestmentGetSerializer(serializers.ModelSerializer):
         model = Investment
         fields = '__all__'
 
-class InvestmentPostSerializer(serializers.ModelSerializer):
+
+class AccountInvestmentGetSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Investment
+        model = AccountInvestment
+        fields = '__all__'
+
+
+class AccountInvestmentPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AccountInvestment
         fields = [
-            'inv_type',
-            'amount',
+            'id_investment',
+            'account',
         ]
 
 
@@ -165,14 +172,34 @@ class LoanGetSerializer(serializers.ModelSerializer):
 class LoanPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Loan
-        fields = '__all__'
+        fields = [
+            'id',
+            'account',
+            'requested_amount',
+            'interest_rate',
+            'paidout',
+            'installment_amount',
+            'observation'
+        ]
 
 
-class InstallmentLoanSerializer(serializers.ModelSerializer):
+class InstallmentLoanGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = InstallmentLoan
         fields = '__all__'
 
+
+class InstallmentLoanPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InstallmentLoan
+        fields = [
+            'id',
+            'number',
+            'amount',
+            'payment_date',
+            'due_date',
+            'is_paid'
+        ]
 
 class CardTransationSerializer(serializers.ModelSerializer):
     transaction = TransactionGetSerializer()

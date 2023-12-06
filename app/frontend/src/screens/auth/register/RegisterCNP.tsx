@@ -11,6 +11,7 @@ export default function RegisterCNP() {
 			labelId: 'register_number',
 			type: "only-numbers",
 			value: register_number,
+			maxLength: 11
 		},
 		{
 			labelText: 'Password',
@@ -39,6 +40,7 @@ export default function RegisterCNP() {
 			labelText: 'Birthdate',
 			labelId: 'birthdate',
 			value: birthdate,
+			maxLength: 10
 		},
 	]
 

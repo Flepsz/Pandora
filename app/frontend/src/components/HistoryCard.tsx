@@ -2,13 +2,10 @@ import { Text, View, XStack, YStack } from "tamagui";
 import { ArrowRightLeft, DollarSign } from "@tamagui/lucide-icons";
 import formatCurrency from "../utils/formatCurrency";
 
-type Source = "Transaction" | "Installment" | "Loan";
-type Action = "Sent" | "Received";
-
 interface HistoryCardPropsI {
 	amount: number;
-	action: Action;
-	source: Source;
+	action: string;
+	source: string;
 }
 
 export default function HistoryCard({

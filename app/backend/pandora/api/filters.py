@@ -22,7 +22,6 @@ def filter_by_account(model, account_number, user):
     if account_number:
         try:
             account_obj = Account.objects.get(pk=account_number)
-            print(account_obj)
         except model.DoesNotExist:
             return []
 

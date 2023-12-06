@@ -3,6 +3,7 @@ interface User {
   last_name: string;
   register_number: string;
   password: string;
+  photo_logo: string
 }
 
 interface Account {
@@ -84,6 +85,7 @@ export interface Card {
 }
 
 export interface Cards {
+  [x: string]: any;
   cards: Card[];
 }
 
@@ -115,6 +117,7 @@ export interface Manager {
 }
 
 export interface Managers {
+	[x: string]: any;
   Managers: Manager[];
 }
 
