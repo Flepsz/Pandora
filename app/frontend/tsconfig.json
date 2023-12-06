@@ -7,5 +7,5 @@
     "**/*.ts",
     "**/*.tsx",
     "src/utils/formatCurrency.js"
-  ]
+, "src/components/forms/Signfomrt.jsx"  ]
 }

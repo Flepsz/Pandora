@@ -1,30 +1,23 @@
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import Form from "../../../components/forms/Form";
+import Form, { Config } from "../../../components/forms/Form";
 import { useLogin } from "../../../hooks";
-import { RootStackParamList } from "../../../navigator/RootNavigator";
 
 export default function LoginCLP() {
-	const navigation =
-		useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 	const { register_number, password, isLoading, onChange, onSubmit } =
 		useLogin();
 
-	const config = [
+	const config: Config[] = [
 		{
 			labelText: "CNPJ",
 			labelId: "register_number",
-			type: "text",
+			type: "only-numbers",
 			value: register_number,
-			required: true,
+			maxLength: 14
 		},
 		{
 			labelText: "Password",
 			labelId: "password",
 			secureTextEntry: true,
-			type: "text",
 			value: password,
-			required: true,
 		},
 	];
 

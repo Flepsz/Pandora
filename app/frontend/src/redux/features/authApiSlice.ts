@@ -1,53 +1,14 @@
 import { apiSlice } from "../services/apiSlice";
-
-interface User {
-  first_name: string;
-  last_name: string;
-  register_number: string;
-  password: string;
-}
-
-interface Account {
-  number: string;
-  created: Date;
-  modified: Date;
-  agency: string;
-  acc_type: string;
-  balance: string;
-  limit: string;
-  active: boolean;
-  customer: number[];
-}
-
-interface Accounts {
-  accounts: Account[];
-}
-
-interface CustomerNP {
-  id: number;
-  created: Date;
-  modified: Date;
-  active: boolean;
-  name: string;
-  social_name: string;
-  cpf: string;
-  rg: string;
-  birthdate: Date;
-  customer: number;
-}
-
-interface CustomerLP {
-  id: number;
-  created: Date;
-  modified: Date;
-  active: boolean;
-  fantasy_name: string;
-  cnpj: string;
-  establishment_date: Date;
-  sr: string;
-  mr: string;
-  customer: number;
-}
+import {
+  Accounts,
+  Addresses,
+  Cards,
+  Contacts,
+  CustomersLP,
+  CustomersNP,
+  Managers,
+  User,
+} from "./types";
 
 const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -82,6 +43,9 @@ const authApiSlice = apiSlice.injectEndpoints({
         body: { customer, name, social_name, cpf, rg, birthdate },
       }),
     }),
+    retrieveCNP: builder.query<CustomersNP, void>({
+      query: () => "/customersnp/",
+    }),
     registerCLP: builder.mutation({
       query: ({
         customer,
@@ -96,14 +60,55 @@ const authApiSlice = apiSlice.injectEndpoints({
         body: { customer, fantasy_name, cnpj, sr, mr, establishment_date },
       }),
     }),
+    retrieveCLP: builder.query<CustomersLP, void>({
+      query: () => "/customerslp/",
+    }),
+    registerAccount: builder.query({
+      query: ({ customer, acc_type }) => ({
+        url: "/accounts/",
+        method: "POST",
+        body: { customer, acc_type },
+      }),
+    }),
     retrieveAccounts: builder.query<Accounts, void>({
       query: () => "/accounts/",
     }),
-    retrieveCNP: builder.query<CustomerNP, void>({
-      query: () => "/customersnp/",
+    registerAddress: builder.query({
+      query: ({ customer, street, neighborhood, city, state, zip_code }) => ({
+        url: "/addresses/",
+        method: "POST",
+        body: { customer, street, neighborhood, city, state, zip_code },
+      }),
     }),
-    retrieveCLP: builder.query<CustomerLP, void>({
-      query: () => "/customerslp/",
+    retrieveAddresses: builder.query<Addresses, void>({
+      query: () => "/addresses/",
+    }),
+    registerCard: builder.query({
+      query: ({ account }) => ({
+        url: "/cards/",
+        method: "POST",
+        body: { account },
+      }),
+    }),
+    retrieveCards: builder.query<Cards, void>({
+      query: () => "/cards/",
+    }),
+    registerContact: builder.query({
+      query: ({ customer, number, email, observation }) => ({
+        url: "/contacts/",
+        method: "POST",
+        body: { customer, number, email, observation },
+      }),
+    }),
+    retrieveContacts: builder.query<Contacts, void>({
+      query: () => "/cards/",
+    }),
+    retrieveManager: builder.query<Managers, { account?: string }>({
+      query: (options) => {
+        const { account, ...restOptions } = options;
+        const url = `/manager/${account ? `?account=${account}` : ""}`;
+        return url;
+      },
     }),
   }),
 });
@@ -118,4 +123,12 @@ export const {
   useVerifyMutation,
   useRegisterCLPMutation,
   useRegisterCNPMutation,
+  useRegisterAccountQuery,
+  useRegisterAddressQuery,
+  useRegisterCardQuery,
+  useRegisterContactQuery,
+  useRetrieveAddressesQuery,
+  useRetrieveCardsQuery,
+  useRetrieveContactsQuery,
+  useRetrieveManagerQuery
 } = authApiSlice;

@@ -1,4 +1,4 @@
-import Form from "../../../components/forms/Form";
+import Form, { Config } from "../../../components/forms/Form";
 import useCombinedRegisterCLP from "../../../hooks/use-combinedregisterlp";
 
 export default function RegisterCLP() {
@@ -14,49 +14,44 @@ export default function RegisterCLP() {
     onSubmit,
   } = useCombinedRegisterCLP();
 
-  const config = [
+  const config: Config[] = [
     {
       labelText: "CNPJ",
       labelId: "register_number",
-      type: "text",
+      type: "only-numbers",
       value: register_number,
-      required: true,
+      maxLength: 14
     },
     {
       labelText: "Password",
       labelId: "password",
-      type: "text",
       value: password,
       secureTextEntry: true,
-      required: true,
     },
     {
       labelText: "Fantasy Name",
       labelId: "fantasy_name",
-      type: "text",
       value: fantasy_name,
-      required: true,
     },
     {
       labelText: "State Registration",
       labelId: "sr",
-      type: "text",
+      type: "only-numbers",
       value: sr,
-      required: true,
+      maxLength: 9
     },
     {
       labelText: "Municipal Registration",
       labelId: "mr",
-      type: "text",
+      type: "only-numbers",
       value: mr,
-      required: true,
+      maxLength: 11
     },
     {
       labelText: "Establishment Date",
       labelId: "establishment_date",
-      type: "date",
+      type: "datetime",
       value: establishment_date,
-      required: true,
     },
   ];
 

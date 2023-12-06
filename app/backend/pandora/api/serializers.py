@@ -188,3 +188,8 @@ class CardTransationSerializer(serializers.ModelSerializer):
             'active',
             'transaction'
         ]
+
+class PandoraManagerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PandoraManager
+        fields = "__all__"

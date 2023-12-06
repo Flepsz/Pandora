@@ -1,11 +1,14 @@
+import { TextInputMaskTypeProp } from "react-native-masked-text";
 import InputC from "./Input";
 import ModalPage from "./ModalPage";
 
-interface Config {
+export interface Config {
 	labelText: string;
 	labelId: string;
 	value: string;
+	type?: TextInputMaskTypeProp;
 	secureTextEntry?: boolean;
+	maxLength?: number
 }
 
 interface Props {
@@ -37,11 +40,14 @@ export default function Form({
 		>
 			{config.map((input) => (
 				<InputC
+					labelText={input.labelText}
 					key={input.labelId}
 					labelId={input.labelId}
 					onChange={(text) => onChange(text, input.labelId)}
 					value={input.value}
+					type={input.type}
 					secureTextEntry={input.secureTextEntry}
+					maxLength={input.maxLength}
 				>
 					{input.labelText}
 				</InputC>

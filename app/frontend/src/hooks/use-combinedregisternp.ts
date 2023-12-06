@@ -42,12 +42,13 @@ export default function useCombinedRegisterCNP() {
   };
 
   const onSubmit = () => {
+    console.log("Dados enviados para login:", { register_number, birthdate, password });
     register({ first_name: name, last_name: social_name, register_number, password })
       .unwrap()
       .then(() => {
         Toast.show({type: "success", text1: "User created with success"});
 
-				console.log("Dados enviados para login:", { register_number, password });
+				
 
         login({ register_number, password })
           .unwrap()

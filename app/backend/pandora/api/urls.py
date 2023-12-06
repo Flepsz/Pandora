@@ -15,5 +15,5 @@ router.register(r'transactions', views.TransactionViewSet, basename='transaction
 router.register(r'investments', views.InvestmentViewSet, basename='investment')
 router.register(r'loans', views.LoanViewSet, basename='loan')
 router.register(r'installments', views.InstallmentLoanViewSet, basename='installment')
-router.register(r'manager', views.LoanViewSet, basename='loan')
+router.register(r'manager', views.PandoraManagerViewSet, basename='loan')
 

@@ -34,6 +34,7 @@ from .serializers import (
     AddressPostSerializer,
     ContactsGetSerializer,
     ContactsPostSerializer,
+    PandoraManagerSerializer
 )
 
 
@@ -402,7 +403,7 @@ class ContactViewSet(viewsets.ModelViewSet):
 
 
 class PandoraManagerViewSet(viewsets.ModelViewSet):
-    serializer_class = PandoraManager
+    serializer_class = PandoraManagerSerializer
     permission_classes = [
         UserGet
     ]

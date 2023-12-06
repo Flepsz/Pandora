@@ -1,53 +1,44 @@
 import { View } from "tamagui";
 import useCombinedRegisterCNP from "../../../hooks/use-combinedregisternp";
-import Form from "../../../components/forms/Form";
+import Form, { Config } from "../../../components/forms/Form";
 
 export default function RegisterCNP() {
   const { name, social_name, register_number, password, rg, birthdate, isLoading, onChange, onSubmit} = useCombinedRegisterCNP();
 
-	const config = [
+	const config: Config[] = [
 		{
 			labelText: 'CPF',
 			labelId: 'register_number',
-			type: 'text',
+			type: "only-numbers",
 			value: register_number,
-			required: true,
 		},
 		{
 			labelText: 'Password',
 			labelId: 'password',
-			type: 'text',
 			value: password,
 			secureTextEntry: true,
-			required: true,
 		},
 		{
 			labelText: 'Name',
 			labelId: 'name',
-			type: 'text',
 			value: name,
-			required: true,
 		},
 		{
 			labelText: 'Social name',
 			labelId: 'social_name',
-			type: 'text',
 			value: social_name,
-			required: true,
 		},
 		{
 			labelText: 'RG',
 			labelId: 'rg',
-			type: 'text',
+			type: 'only-numbers',
 			value: rg,
-			required: true,
+			maxLength: 9
 		},
 		{
 			labelText: 'Birthdate',
 			labelId: 'birthdate',
-			type: 'date',
 			value: birthdate,
-			required: true,
 		},
 	]
 
