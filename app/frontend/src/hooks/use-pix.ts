@@ -15,15 +15,15 @@ interface UseRegisterTransactionProps {
   initialCard?: string;
 }
 
-export default function useRegisterPix({
-  initialCard = "",
-}: UseRegisterTransactionProps = {}) {
+export default function useRegisterPix() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const [register, { isLoading }] = useRegisterPixMutation();
 
   const accountd = useSelector(selectAccount);
+  console.log(accountd);
+  
 
   const [formData, setFormData] = useState({
     account: accountd,
@@ -38,6 +38,8 @@ export default function useRegisterPix({
   };
 
   const onSubmit = () => {
+    console.log({ account, amount, receiver });
+    
     register({ account, amount, receiver })
       .unwrap()
       .then(() => {
@@ -49,8 +51,12 @@ export default function useRegisterPix({
         navigation.navigate("Main");
       })
       .catch((error) => {
-        Toast.show({ type: "error", text1: "Failed to do Pix" });
-        console.log(error);
+        const errorMessage = error.data.status;
+				Toast.show({
+					type: "error",
+					text1: "Failed to do Pix",
+					text2: errorMessage,
+				});
       });
   };
 

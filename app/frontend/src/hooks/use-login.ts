@@ -5,7 +5,11 @@ import {
 	useLoginMutation,
 	useRetrieveUserQuery,
 } from "../redux/features/authApiSlice";
-import { setAuth, setName, setRegisterNumber } from "../redux/features/authSlice";
+import {
+	setAuth,
+	setName,
+	setRegisterNumber,
+} from "../redux/features/authSlice";
 import Toast from "react-native-toast-message";
 import { RootStackParamList } from "../navigator/RootNavigator";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -40,9 +44,29 @@ export default function useLogin() {
 				return { success: true };
 			})
 			.catch((error) => {
-				Toast.show({ type: "error", text1: "Failed to log in" });
+				let errorMessage;
 
-				console.log(error);
+				if (error instanceof Object) {
+					if (error.data) {
+						if (error.data.status) {
+							errorMessage = error.data.status;
+						}
+					}
+				}
+
+				if (error.status === 429) {
+					Toast.show({
+						type: "error", 
+						text1: "Too Many Requests",
+						text2: "Please try again later.",
+					});
+				} else {
+					Toast.show({
+						type: "error",
+						text1: "Failed to log in, check your credentials",
+						text2: errorMessage || "Unknown error",
+					});
+				}
 				return { success: false, error };
 			});
 	};

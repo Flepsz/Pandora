@@ -42,8 +42,12 @@ export default function useRegisterTransaction({
         navigation.navigate("Main")
       })
       .catch((error) => {
-        Toast.show({ type: "error", text1: "Failed to do transfer" });
-        console.log(error);
+        const errorMessage = error.data.status;
+				Toast.show({
+					type: "error",
+					text1: "Failed to do transfer",
+					text2: errorMessage,
+				});
       });
   };
 

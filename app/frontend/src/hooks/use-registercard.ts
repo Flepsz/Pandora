@@ -18,8 +18,12 @@ export default function useRegisterCard() {
         Toast.show({ type: "success", text1: "Card created with success" });
       })
       .catch((error) => {
-        Toast.show({ type: "error", text1: "Failed to register card" });
-        console.log(error);
+        const errorMessage = error.data.status;
+				Toast.show({
+					type: "error",
+					text1: "Failed to register card",
+					text2: errorMessage,
+				});
       });
   };
 

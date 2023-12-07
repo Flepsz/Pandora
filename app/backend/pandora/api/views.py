@@ -332,7 +332,7 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
     permission_classes = [UserGetPost]
 
     def get_queryset(self):
-        return filter_by_account(self, AccountInvestment)
+        return filter_by_account(AccountInvestment, self.request.query_params.get('account'), self.request.user)
 
     def get_serializer_class(self):
         if self.request.method in 'POST PATCH':
@@ -341,10 +341,10 @@ class AccountInvestmentViewSet(viewsets.ModelViewSet):
             return AccountInvestmentGetSerializer
 
     def create(self, request):
-        id_investment = request.data.get('id_investment')
+        id_investment = request.data.get('investment')
         investment = get_object_or_404(Investment, pk=id_investment)
 
-        account_id = request.data.get('id_account')
+        account_id = request.data.get('account')
         account = get_object_or_404(Account, pk=account_id)
 
         if account.balance >= investment.amount:
@@ -387,16 +387,18 @@ class LoanViewSet(viewsets.ModelViewSet):
 
     # Define queryset for LoanViewSet
     def get_queryset(self):
-        return filter_by_account(self)
+        user = self.request.user
+        account = self.request.query_params.get('account')
+        return filter_by_account(Loan, account, user)
 
     # Custom create method for creating a loan
     def create(self, request):
         id_account = request.data.get('account')
         account = get_object_or_404(Account, pk=id_account)
-        requested_amount = request.data.get('requested_amount')
+        requested_amount = Decimal(request.data.get('requested_amount'))
         interest_rate = 10.0
         paidout = False
-        installment_number = request.data.get('installment_number')
+        installment_number = int(request.data.get('installment_number'))
         approval_date = datetime.now().strftime('%Y-%m-%d')
         observation = request.data.get('observation')
 
@@ -413,6 +415,7 @@ class LoanViewSet(viewsets.ModelViewSet):
             )
 
             return loan
+
 
         payment_amount = round((requested_amount / installment_number), 2)
         consignable_margin = account.balance * Decimal(0.35)
@@ -431,8 +434,8 @@ class LoanViewSet(viewsets.ModelViewSet):
                 InstallmentLoan.objects.create(
                     loan=loan,
                     number=number,
-                    payment_amount=payment_amount,
-                    expiration_date=expiration_date,
+                    amount=payment_amount,
+                    due_date=expiration_date,
                     is_paid=False
                 )
 

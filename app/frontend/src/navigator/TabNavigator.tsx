@@ -6,13 +6,12 @@ import * as MatIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Home from "../screens/HomeScreen";
 import { StyleSheet } from "react-native";
 import TransactionScreen from "../screens/TransactionScreen";
+import LoanScreen from "../screens/LoanScreen";
 
 export type TabStackParamList = {
 	Home: undefined;
 	Transfers: undefined;
 	Loans: undefined;
-	Investments: undefined;
-	Settings: undefined;
 };
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
@@ -37,18 +36,12 @@ export default function TabNavigator() {
 					if (route.name === "Home") {
 						iconName = focused ? "home" : "home-outline";
 						return <IonIcon.default name={iconName} size={25} color={color} />;
-					} else if (route.name === "Investments") {
-						iconName = "bank-plus";
-						return <MatIcon.default name={iconName} size={24} color={color} />;
 					} else if (route.name === "Loans") {
 						iconName = focused ? "hand-coin" : "hand-coin-outline";
 						return <MatIcon.default name={iconName} size={26} color={color} />;
 					} else if (route.name === "Transfers") {
 						iconName = "bank-transfer";
 						return <MatIcon.default name={iconName} size={35} color={color} />;
-					} else if (route.name === "Settings") {
-						iconName = focused ? "settings" : "settings-outline";
-						return <IonIcon.default name={iconName} size={25} color={color} />;
 					}
 				},
 			})}
@@ -59,23 +52,13 @@ export default function TabNavigator() {
 				options={{ headerShown: false }}
 			/>
 			<Tab.Screen
-				name="Investments"
-				component={Home}
-				options={{ headerShown: false }}
-			/>
-			<Tab.Screen
-				name="Loans"
-				component={Home}
-				options={{ headerShown: false }}
-			/>
-			<Tab.Screen
 				name="Transfers"
 				component={TransactionScreen}
 				options={{ headerShown: false }}
 			/>
 			<Tab.Screen
-				name="Settings"
-				component={Home}
+				name="Loans"
+				component={LoanScreen}
 				options={{ headerShown: false }}
 			/>
 		</Tab.Navigator>

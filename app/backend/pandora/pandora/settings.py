@@ -96,10 +96,12 @@ USE_TZ = True
 USE_L10N = False
 
 
-
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'global/static/')]
+
+MEDIA_URL = 'user_photos/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'user_photos')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -120,7 +122,7 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '20/min',
+        'anon': '10/min',
         'user': '100/min'
     }
 }

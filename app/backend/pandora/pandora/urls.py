@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import permissions
+from django.conf.urls.static import static
+from django.conf import settings
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from api.urls import router
 
@@ -10,7 +12,7 @@ urlpatterns = [
     path('api/v1/', include(router.urls)),
     path('admin/', admin.site.urls),
     path('auth/', include('rest_framework.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Djoser urls for user authentication
 urlpatterns += [

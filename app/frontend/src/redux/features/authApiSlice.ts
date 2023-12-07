@@ -8,6 +8,7 @@ import {
   Contacts,
   CustomersLP,
   CustomersNP,
+  Loans,
   Managers,
   User,
 } from "./types";
@@ -16,6 +17,13 @@ const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     retrieveUser: builder.query<User, void>({
       query: () => "/auth/users/me/",
+    }),
+    updateUserPhoto: builder.mutation({
+      query: ({ photo_logo }) => ({
+        url: "/auth/users/me",
+        method: "PUT",
+        body: { photo_logo },
+      }),
     }),
     login: builder.mutation({
       query: ({ register_number, password }) => ({
@@ -132,7 +140,7 @@ const authApiSlice = apiSlice.injectEndpoints({
     }),
     registerPix: builder.mutation({
       query: ({ account, amount, receiver }) => ({
-        url: "/transactions/",
+        url: "/pix/",
         method: "POST",
         body: { account, amount, receiver },
       }),
@@ -176,9 +184,12 @@ export const {
   useRegisterContactMutation,
   useRegisterTransactionMutation,
   useRegisterPixMutation,
+  useRegisterLoansMutation,
   useRetrieveAddressesQuery,
   useRetrieveCardsQuery,
   useRetrieveOneAccountQuery,
   useRetrieveContactsQuery,
-  useRetrieveManagerQuery
+  useRetrieveManagerQuery,
+  useRetrieveLoansQuery,
+  useUpdateUserPhotoMutation
 } = authApiSlice;

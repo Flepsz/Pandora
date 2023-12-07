@@ -11,6 +11,7 @@ import LoginCNP from "../screens/auth/login/LoginCNP";
 import AccountsScreen from "../screens/AccountsScreen";
 import CardTransferScreen from "../screens/CardTransferScreen";
 import CardsChooseScreen from "../screens/CardsChooseScreen";
+import PixScreen from "../screens/PixScreen";
 
 export type RootStackParamList = {
   UserProfile: { avatar?: string };
@@ -81,6 +82,11 @@ export default function RootNavigator() {
           name="CardsChoose"
           options={{ headerShown: false }}
           component={CardsChooseScreen}
+        />
+        <RootStack.Screen
+          name="Pix"
+          options={{ headerShown: false }}
+          component={PixScreen}
         />
       </RootStack.Group>
     </RootStack.Navigator>
