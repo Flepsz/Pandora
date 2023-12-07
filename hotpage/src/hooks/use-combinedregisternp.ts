@@ -9,14 +9,17 @@ import { toast } from "react-toastify";
 import { logout, setAuth, setRegisterNumber } from "@/redux/features/authSlice";
 import { useAppDispatch } from "@/redux/hooks";
 
+// Custom hook for handling combined registration and login for Customer NP
 export default function useCombinedRegisterCNP() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  // Mutation hooks for registration, login, and Customer NP registration
   const [register, { isLoading: authLoading }] = useRegisterMutation();
   const [registerCNP, { isLoading }] = useRegisterCNPMutation();
   const [login, { isLoading: loginLoading }] = useLoginMutation();
 
+  // State to manage form data
   const [formData, setFormData] = useState({
     register_number: "",
     password: "",
@@ -35,28 +38,34 @@ export default function useCombinedRegisterCNP() {
     birthdate,
   } = formData;
 
+  // Event handler for input changes
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Event handler for form submission
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    // Register the user
     register({ register_number, password })
       .unwrap()
       .then(() => {
         toast.success("User created with success");
 
-				console.log("Dados enviados para login:", { birthdate, password });
+        console.log("Data sent for login:", { birthdate, password });
 
+        // Login the user
         login({ register_number, password })
           .unwrap()
           .then((data) => {
+            // Set authentication and register number in the Redux store
             dispatch(setAuth({ access: data.access, refresh: data.refresh }));
             dispatch(setRegisterNumber(register_number));
             toast.success("Logged in");
 
+            // Register the Customer NP
             registerCNP({
               customer: register_number,
               name,
@@ -68,7 +77,7 @@ export default function useCombinedRegisterCNP() {
               .unwrap()
               .then(() => {
                 toast.success("Register your Customer NP with Success");
-								dispatch(logout())
+                dispatch(logout());
                 router.push("/login/customernp");
               })
               .catch((cnpError) => {
@@ -86,6 +95,7 @@ export default function useCombinedRegisterCNP() {
       });
   };
 
+  // Return the necessary data and functions for the component
   return {
     register_number,
     password,

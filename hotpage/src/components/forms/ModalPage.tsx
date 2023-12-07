@@ -4,13 +4,14 @@ import ButtonPW from "../ButtonPW";
 import Link from "next/link";
 import Spinner from "../Spinner";
 
+// Interface defining the props expected by the ModalPage component
 interface FormsI {
-	isRegister?: boolean;
-	isCustomerNP?: boolean;
-	children: React.ReactNode;
-	isLoading: boolean;
-	btnText: string;
-	onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  isRegister?: boolean;
+  isCustomerNP?: boolean;
+  children: React.ReactNode;
+  isLoading: boolean;
+  btnText: string;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }
 
 export default function ModalPage({
