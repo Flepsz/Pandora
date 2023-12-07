@@ -4,7 +4,5 @@ from django.apps import apps
 all_models = apps.get_models()
 
 for model in all_models:
-    try:
+    if not admin.site.is_registered(model):
         admin.site.register(model)
-    except admin.sites.AlreadyRegistered:
-        pass

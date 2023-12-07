@@ -5,6 +5,7 @@
   },
   "include": [
     "**/*.ts",
-    "**/*.tsx"
-  ]
+    "**/*.tsx",
+    "src/utils/formatCurrency.js"
+, "src/components/forms/Signfomrt.jsx"  ]
 }

@@ -1,5 +1,7 @@
 from pathlib import Path
 import os
+from datetime import timedelta
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -17,16 +19,21 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles'
+    'django.contrib.staticfiles',
     'django_filters',
     'rest_framework',
-    'core',
+    'rest_framework.authtoken',
+    'djoser',
+    'drf_spectacular',
+    'corsheaders',
+    'api'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -86,24 +93,64 @@ USE_I18N = True
 
 USE_TZ = True
 
+USE_L10N = False
+
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'global/static/')]
 
+MEDIA_URL = 'user_photos/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'user_photos')
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# DRF 
-REST_FRAMEWORK = { 
-    'DEFAULT_AUTHENTICATION_CLASSES': ( 
-        'rest_framework.authentication.SessionAuthentication', 
+AUTH_USER_MODEL = 'api.Customer'
+
+# DRF
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 
-    'DEFAULT_PERMISSION_CLASSES': ( 
-        'rest_framwork.permissions.IsAuthenticatedOrReadOnly', 
-    ) 
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '10/min',
+        'user': '100/min'
+    }
 }
 
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+
+# drf_spectacular
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Pandora Bank API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
+
+# JWT Settings
+SIMPLE_JWT = {
+    'USER_ID_FIELD': 'register_number',
+    'AUTH_HEADER_TYPES': ['Bearer'],
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=60),
+}
+
+# Jazzmin
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
     "site_title": "Pandora Admin",

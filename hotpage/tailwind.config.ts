@@ -7,6 +7,7 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/**/*.{js,ts,jsx,tsx,mdx}',
+    'node_modules/preline/dist/*.js',
   ],
   theme: {
     extend: {
@@ -23,11 +24,17 @@ const config: Config = {
         'light-white-300': '#F3F3F4',
         'light-white-400': '#E2E5F1',
         'light-white-500': '#E4E4E4',
-        gray: '#4D4A4A',
+        'gray': '#4D4A4A',
         'gray-100': '#3d3d4e',
         'black-100': '#252525',
         'primary-purple': '#9747FF',
         'gray-50': '#D9D9D9',
+        'dough': '#FAF5ED',
+        'blackp': '#1C2023',
+        "primary": "#1C2023",
+        "secondary": "#2B2F32",
+        "purple-d": "#530082",
+        "purple-l": "#661395"
       },
       boxShadow: {
         menu: '0px 159px 95px rgba(13,12,34,0.01), 0px 71px 71px rgba(13,12,34,0.02), 0px 18px 39px rgba(13,12,34,0.02), 0px 0px 0px rgba(13,12,34,0.02)',
@@ -40,6 +47,8 @@ const config: Config = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('preline/plugin'),
+  ],
 }
 export default config

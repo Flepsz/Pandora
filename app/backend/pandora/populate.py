@@ -1,16 +1,24 @@
-from datetime import date, timedelta
-import datetime
-import json
-from faker import Faker
 import requests
 import os
 import subprocess
+import multiprocessing
+from time import sleep
 
-BASE_URL = 'http://localhost:8000/api/v1/'
+BASE_URL = 'http://10.109.71.9:8080/api/v1/'
 
-populate_costumers_url = os.path.join(BASE_URL, 'costumers/')
-
-fake = Faker()
+user_create_url = os.path.join(BASE_URL, 'auth/users/')
+jwt_create_url = os.path.join(BASE_URL, 'auth/jwt/create/')
+natural_person_url = os.path.join(BASE_URL, 'customersnp/')
+legal_person_url = os.path.join(BASE_URL, 'customerslp/')
+contacts_url = os.path.join(BASE_URL, 'contacts/')
+address_url = os.path.join(BASE_URL, 'addresses/')
+account_url = os.path.join(BASE_URL, 'accounts/')
+account_investment_url = os.path.join(BASE_URL, 'account-investments/')
+card_url = os.path.join(BASE_URL, 'cards/')
+transaction_url = os.path.join(BASE_URL, 'transactions/')
+pix_url = os.path.join(BASE_URL, 'pix/')
+investment_url = os.path.join(BASE_URL, 'investments/')
+create_loan_url = os.path.join(BASE_URL, 'loans/')
 
 
 def data_base_creation():
@@ -26,7 +34,8 @@ def data_base_creation():
 
 def run_server():
     try:
-        subprocess.run(['py', 'manage.py', 'runserver'], check=True)
+        subprocess.run(['py', 'manage.py', 'runserver',
+                       '10.109.71.9:8080'], check=True)
     except subprocess.CalledProcessError as e:
         print(e)
     except Exception as e:
@@ -40,184 +49,199 @@ def superuser_creation():
         print(e)
     except Exception as e:
         print(e)
-        
-
-class DateEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, (date, datetime, timedelta)):
-            return obj.isoformat()
-        return super(DateEncoder, self).default(obj)
-
-def populate_costumers(num_costumers=10):
-    for _ in range(num_costumers):
-        customer_data = {
-            "full_name": fake.name(),
-            "social_name": fake.name(),
-            "birthdate": fake.date_of_birth(),
-            "username": fake.user_name(),
-            "password": fake.password(),
-        }
-
-        customer_data_json = json.dumps(customer_data, cls=DateEncoder)
-
-        response = requests.post(populate_costumers_url, data=customer_data_json,
-            headers={'Content-Type': 'application/json'})
-
-        if response.status_code == 201:
-            customer_id = response.json()["id"]
-            print(f"Cliente criado com sucesso. ID: {customer_id}")
-        else:
-            print("Erro ao criar o cliente.")
 
 
-# def populate_costumer_np(num_costumers=10):
-#     for _ in range(num_costumers):
-#         response = requests.post(
-#             json={
-#                 "full_name": fake.name(),
-#                 "social_name": fake.name(),
-#                 "birthdate": fake.date_of_birth(),
-#                 "username": fake.user_name(),
-#                 "password": fake.password(),
-#                 "cpf": fake.unique.random_int(min=10000000000, max=99999999999),
-#                 "rg": fake.unique.random_int(min=100000000, max=999999999),
-#             })
-#         return response.json()
+def user_create(first_name, last_name, register_number, password):
+    response = requests.post(user_create_url,
+                             json={
+                                 "first_name": first_name,
+                                 "last_name": last_name,
+                                 "register_number": register_number,
+                                 "password": password,
+                             })
+    return response.json()
 
 
-# def populate_costumer_lp(num_costumers=10):
-#     for _ in range(num_costumers):
-#         response = requests.post(
-#             json={
-#                 "full_name": fake.name(),
-#                 "social_name": fake.name(),
-#                 "birthdate": fake.date_of_birth(),
-#                 "username": fake.user_name(),
-#                 "password": fake.password(),
-#                 "cnpj": fake.unique.random_int(
-#                     min=10000000000000, max=99999999999999),
-#                 "state_registration": fake.unique.random_int(
-#                     min=100000000, max=999999999),
-#                 "municipal_registration": fake.unique.random_int(
-#                     min=10000000000, max=99999999999),
-#             })
-#         return response.json()
+def create_headers(register_number, password):
+    response = requests.post(jwt_create_url,
+                             json={
+                                 'register_number': register_number,
+                                 'password': password
+                             })
+    access_token = response.json()['access']
+    headers = {'Authorization': f'Bearer {access_token}'}
+    return headers
 
 
-# def populate_account(num_accounts=20):
-#     costumers = Costumer.objects.all()
-#     for _ in range(num_accounts):
-#         account = Account(
-#             acc_type=fake.random_element(elements=('SAVINGS', 'CHECKING')),
-#             limit=random.uniform(1000, 10000),
-#             active=fake.boolean(chance_of_getting_true=90),
-#         )
-#         account.save()
-#         account.costumer.set(random.sample(
-#             list(costumers), random.randint(1, 3)))
+def create_natural_person(headers, register_number, name, social_name, cpf, rg, birthdate):
+    response = requests.post(natural_person_url, headers=headers,
+                             json={
+                                 'customer': register_number,
+                                 'name': name,
+                                 'social_name': social_name,
+                                 'cpf': cpf,
+                                 'rg': rg,
+                                 'birthdate': birthdate
+                             })
+    print(response)
+    return response.json()
 
 
-# def populate_address(num_addresses=30):
-#     for _ in range(num_addresses):
-#         address = Address(
-#             street=fake.street_address(),
-#             neighborhood=fake.city_suffix(),
-#             city=fake.city(),
-#             state=fake.state_abbr(),
-#             zip_code=fake.zipcode(),
-#         )
-#         address.save()
+def create_legal_person(headers, register_number, fantasy_name, establishment_date, cnpj, state_registration, municipal_registration
+                        ):
+    response = requests.post(legal_person_url, headers=headers,
+                             json={
+                                 'customer': register_number,
+                                 'fantasy_name': fantasy_name,
+                                 'establishment_date': establishment_date,
+                                 'cnpj': cnpj,
+                                 'sr': state_registration,
+                                 'mr': municipal_registration,
+                             })
+    return response.json()
 
 
-# def populate_contact():
-#     costumers = Costumer.objects.all()
-#     for costumer in costumers:
-#         contact = Contact(
-#             idCostumer=costumer,
-#             number=fake.phone_number(),
-#             email=fake.email(),
-#             observation=fake.text(max_nb_chars=200),
-#         )
-#         contact.save()
+def create_address(headers, register_number, street, number, neighborhood, city, state, cep):
+    response = requests.post(address_url, headers=headers, json={
+        'customer': register_number,
+        'street': street,
+        'number': number,
+        'neighborhood': neighborhood,
+        'city': city,
+        'state': state,
+        'zip_code': cep
+    })
+    return response.json()
 
 
-# def populate_card(num_cards=50):
-#     accounts = Account.objects.all()
-#     for _ in range(num_cards):
-#         card = Card(
-#             idAccount=random.choice(accounts),
-#             active=fake.boolean(chance_of_getting_true=90),
-#         )
-#         card.save()
+def create_contact(headers, register_number, number, email):
+    response = requests.post(address_url, headers=headers, json={
+        'customer': register_number,
+        'number': number,
+        'email': email,
+    })
+    return response.json()
 
 
-# def populate_transaction(num_transactions=100):
-#     cards = Card.objects.all()
-#     for _ in range(num_transactions):
-#         transaction = Transaction(
-#             idCard=random.choice(cards),
-#             date_time=fake.date_time_this_decade(),
-#             operation=fake.random_element(
-#                 elements=('Deposit', 'Withdrawal', 'Payment')),
-#             amount=random.uniform(10, 1000),
-#         )
-#         transaction.save()
+def create_account(headers, register_number, acc_type):
+    response = requests.post(account_url, headers=headers, json={
+        'customer': [register_number],
+        'acc_type': acc_type
+    })
+    return response.json()
 
 
-# def populate_investment(num_investments=10):
-#     accounts = Account.objects.all()
-#     for _ in range(num_investments):
-#         investment = Investment(
-#             idAccount=random.choice(accounts),
-#             inv_type=fake.random_element(
-#                 elements=('Stocks', 'Bonds', 'Mutual Funds', 'Real Estate')),
-#             amount=random.uniform(1000, 10000),
-#             management_fee=random.uniform(0.5, 3.0),
-#             term=timedelta(days=random.randint(365, 3650)),
-#             risk_rate=random.uniform(0.5, 10.0),
-#             profitability=random.uniform(2.0, 12.0),
-#         )
-#         investment.save()
+def create_card(headers, number_account):
+    response = requests.post(card_url, headers=headers, json={
+        'account': number_account
+    })
+    return response.json()
 
 
-# def populate_loan(num_loans=5):
-#     accounts = Account.objects.all()
-#     for _ in range(num_loans):
-#         loan = Loan(
-#             idAccount=random.choice(accounts),
-#             request_date=fake.date_this_decade(),
-#             requested_amount=random.uniform(1000, 10000),
-#             interest_rate=random.uniform(3.0, 12.0),
-#             approved=fake.boolean(chance_of_getting_true=80),
-#             approval_date=fake.date_between(
-#                 start_date='-30d', end_date='today') if fake.boolean(chance_of_getting_true=80) else None,
-#             installment_number=random.randint(6, 36),
-#             observation=fake.text(max_nb_chars=200),
-#         )
-#         loan.save()
+def create_investment(headers, inv_type, amount, management_fee, term, risk_rate, profitability):
+    response = requests.post(investment_url, headers=headers, json={
+        'inv_type': inv_type,
+        'amount': amount,
+        'management_fee': management_fee,
+        'term': term,
+        'risk_rate': risk_rate,
+        'profitability': profitability,
+    })
+    return response.json()
 
 
-# def populate_installment_loan():
-#     loans = Loan.objects.filter(approved=True)
-#     for loan in loans:
-#         for installment_number in range(1, loan.installment_number + 1):
-#             installment = InstallmentLoan(
-#                 idLoan=loan,
-#                 number=installment_number,
-#                 due_date=fake.date_between_dates(
-#                     loan.approval_date, loan.approval_date + timedelta(days=365)),
-#                 amount=loan.requested_amount / loan.installment_number,
-#             )
-#             installment.save()
+def create_account_investment(headers, id_account, id_investment):
+    response = requests.post(account_investment_url, headers=headers, json={
+        'id_account': id_account,
+        'id_investment': id_investment
+    })
+    return response.json()
+
+
+def create_transaction(headers, card, amount, operation, receiver):
+    response = requests.post(transaction_url, headers=headers, json={
+        'card': card,
+        'amount': amount,
+        'operation': operation,
+        'receiver': receiver
+    })
+    return response.json()
+
+
+def create_loan(headers, account, requested_amount, installment_number, observation):
+    response = requests.post(create_loan_url, headers=headers, json={
+        'account': account,
+        'requested_amount': requested_amount,
+        'installment_number': installment_number,
+        'observation': observation
+    })
+    return response.json()
+
+
+def create_pix(headers, account, amount, receiver):
+    response = requests.post(pix_url, headers=headers, json={
+        'account': account,
+        'amount': amount,
+        'receiver': receiver
+    })
+    return response.json()
 
 
 def main():
-    data_base_creation(),
+    data_base_creation()
+    server_process = multiprocessing.Process(target=run_server)
+    server_process.start()
+    sleep(1)
+
     # superuser_creation()
-    populate_costumers()
-    # populate_costumer_np()
-    # populate_costumer_lp()
-    run_server()
+    super_user_header = create_headers(531, '123')
+
+    print("Inicio do populate")
+
+    # # NATURAL PERSON REGISTRATION
+    # print(user_create("Felipe", "Pereira", 123456, "test@test"))
+    # headers_1 = create_headers(123456, "test@test")
+
+    # print(create_natural_person(headers_1, 123456, 'Luís',
+    #       'Felipe', '28345407056', '241767738', '2005-11-03'))
+
+    # print(user_create("NPdois", "Test", 1234567, "test@test"))
+    # headers_2 = create_headers(1234567, "test@test")
+
+    # print(create_natural_person(headers_2, 1234567, 'Felipe',
+    #       'Pereira', '42921996049', '337994134', '2005-11-03'))
+
+    # # LEGAL PERSON REGISTRATION
+    # print(user_create("LPum", "Test", 654321, "test@test"))
+    # headers_3 = create_headers(654321, "test@test")
+
+    # print(create_legal_person(headers_3, 654321, 'Fantasy',
+    #       '2023-06-19', '40205420000129', '1234', '4321'))
+
+    # print(user_create("LPdois", "Test", 7654321, "test@test"))
+    # headers_4 = create_headers(7654321, "test@test")
+
+    # print(create_legal_person(headers_4, 7654321, 'Fantasy',
+    #       '2023-06-19', '05213978000155',  '1234', '4321'))
+
+    # # ADDRESS REGISTRATION
+    # print(create_address(headers_1, 123456, 'Rua Carlo',
+    #       '69', 'Litle Inf', 'Valinhos', 'SP', '12564789'))
+
+    # # ACCOUNT REGISTRATION
+    # accNP = create_account(headers_1, 123456, 'savings')
+    # accLP = create_account(headers_3, 654321, 'checking')
+
+    # print(create_contact(headers_1, 123456, '19748829675', "123456@gmail.com"))
+    # print(create_contact(headers_3, 654321, '19747469523', "654321@gmail.com"))
+
+    print(create_investment(super_user_header, 'Stocks',
+          140.32, 1.5, '2027-10-10', 'Low', 10.4))
+    print(create_investment(super_user_header, 'Bonds',
+          222.22, 3.5, '2027-10-10', 'High', 31.4))
+
+    print("Fim do populate")
+    # print(create_card(headers_1, 1111))
 
 
 if __name__ == '__main__':
