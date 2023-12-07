@@ -9,6 +9,8 @@ import RegisterCLP from "../screens/auth/register/RegisterCLP";
 import LoginCLP from "../screens/auth/login/LoginCLP";
 import LoginCNP from "../screens/auth/login/LoginCNP";
 import AccountsScreen from "../screens/AccountsScreen";
+import CardTransferScreen from "../screens/CardTransferScreen";
+import CardsChooseScreen from "../screens/CardsChooseScreen";
 
 export type RootStackParamList = {
   UserProfile: { avatar?: string };
@@ -19,6 +21,9 @@ export type RootStackParamList = {
   LoginCNP: undefined;
   LoginCLP: undefined;
   Accounts: undefined;
+  CardTransfer: undefined;
+  CardsChoose: undefined;
+  Pix: undefined
 };
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -66,6 +71,16 @@ export default function RootNavigator() {
           name="UserProfile"
           options={{ headerShown: false }}
           component={ProfileScreen}
+        />
+        <RootStack.Screen
+          name="CardTransfer"
+          options={{ headerShown: false }}
+          component={CardTransferScreen}
+        />
+        <RootStack.Screen
+          name="CardsChoose"
+          options={{ headerShown: false }}
+          component={CardsChooseScreen}
         />
       </RootStack.Group>
     </RootStack.Navigator>

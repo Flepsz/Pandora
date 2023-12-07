@@ -19,11 +19,11 @@ export default function App() {
 	return (
 		<TamaguiProvider config={config}>
 			<CustomProvider>
-				<Setup />
 				<NavigationContainer theme={MyTheme}>
 					<RootNavigator />
 				</NavigationContainer>
 			</CustomProvider>
+			<Setup />
 		</TamaguiProvider>
 	);
 }

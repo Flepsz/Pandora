@@ -231,7 +231,7 @@ def main():
  
 	# ACCOUNT REGISTRASTION
 	print(create_account(headers_1, 'Savings'))
-	print(create_account(headers_3, 'Current'))	
+	print(create_account(headers_3, 'Current'))
 
 	# INVESTMENT REGISTRATION
 	print(create_investment(super_user_header, 'LCA', 135.25, 1.5, '2030-12-11', 2.3, 15.6))

@@ -28,6 +28,8 @@ export default function LoginCNP() {
 			isLoading={isLoading}
 			onChange={onChange}
 			onSubmit={onSubmit}
+			titleText="Login for your account"
+			registractionLogin
 		/>
 	);
 }

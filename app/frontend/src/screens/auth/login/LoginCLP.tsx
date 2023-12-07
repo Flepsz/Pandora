@@ -28,6 +28,8 @@ export default function LoginCLP() {
 			isLoading={isLoading}
 			onChange={onChange}
 			onSubmit={onSubmit}
+			titleText="Login for your account"
+			registractionLogin
 		/>
 	);
 }

@@ -46,7 +46,7 @@ export default function RegisterCNP() {
 
   return (
     <View>
-      <Form config={config} btnText="Register" isLoading={isLoading} onChange={onChange} onSubmit={onSubmit} isCustomerNP isRegister/>
+      <Form config={config} btnText="Register" isLoading={isLoading} onChange={onChange} onSubmit={onSubmit} titleText="Register for your account" isCustomerNP isRegister registractionLogin />
     </View>
   )
 }

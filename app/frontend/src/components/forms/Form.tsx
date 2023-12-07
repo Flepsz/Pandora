@@ -13,10 +13,12 @@ export interface Config {
 
 interface Props {
 	isRegister?: boolean;
+	registractionLogin?: boolean;
 	isCustomerNP?: boolean;
 	config: Config[];
 	isLoading: boolean;
 	btnText: string;
+	titleText?: string;
 	onChange: (text: string, labelId: string) => void;
 	onSubmit: () => void;
 }
@@ -27,8 +29,10 @@ export default function Form({
 	config,
 	isLoading,
 	btnText,
+	titleText,
 	onChange,
 	onSubmit,
+	registractionLogin
 }: Props) {
 	return (
 		<ModalPage
@@ -37,6 +41,8 @@ export default function Form({
 			onSubmit={onSubmit}
 			isCustomerNP={isCustomerNP}
 			isRegister={isRegister}
+			registractionLogin={registractionLogin}
+			titleText={titleText}
 		>
 			{config.map((input) => (
 				<InputC

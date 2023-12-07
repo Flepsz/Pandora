@@ -15,7 +15,7 @@ from rest_framework.response import Response
 
 # Import models and serializers from local modules
 from .permissions import IsSuperUser, UserGet, UserGetPost, UserPost, UserPostPatch, UserGetPostPatch
-from .models import Account, Card, Transaction, Investment, Loan, Address, Contact, CustomerNP, CustomerLP, PandoraManager, InstallmentLoan, AccountInvestment
+from .models import Account, Card, Transaction, Investment, Loan, Address, Contact, CustomerNP, CustomerLP, PandoraManager, InstallmentLoan, AccountInvestment, Pix
 from .serializers import (
     NaturalGetPersonSerializer,
     NaturalPostPersonSerializer,
@@ -27,6 +27,8 @@ from .serializers import (
     CardPostSerializer,
     TransactionGetSerializer,
     TransactionPostSerializer,
+    PixGetSerializer,
+    PixPostSerializer,
     InvestmentGetSerializer,
     AccountInvestmentGetSerializer,
     AccountInvestmentPostSerializer,
@@ -229,8 +231,49 @@ class CardViewSet(viewsets.ModelViewSet):
 
         return Response({'status': 'Account does not meet the requirements to receive the card'}, status=status.HTTP_403_FORBIDDEN)
 
+class PixViewSet(viewsets.ModelViewSet):
+    permission_classes = [UserGetPost]
 
-# Define a view set for handling transactions
+    def get_queryset(self):
+        return filter_by_account(self)
+
+    # Define serializer class based on the HTTP method
+    def get_serializer_class(self):
+        if self.request.method in 'POST PATCH':
+            return PixPostSerializer
+        elif self.request.method in 'GET':
+            return PixGetSerializer
+
+    # Custom create method for creating a transaction
+    def create(self, request):
+        account_id = request.data.get('account')
+        account = get_object_or_404(Account, pk=account_id)
+        amount = Decimal(request.data.get('amount'))
+
+        receiver_id = request.data.get('receiver')
+        receiver = get_object_or_404(Account, pk=receiver_id)
+
+        # Check if there is enough balance in the account to make the transaction
+        if account.balance >= amount:
+            if account.limit >= amount:
+
+                # Create Pix
+                Pix.objects.create(
+                    account=account,
+                    amount=amount,
+                    receiver=receiver_id
+                )
+
+                # Update PandoraManager for sender and receiver
+                create_pandoramanager(account, 'Sent', 'Pix', amount)
+                create_pandoramanager(
+                    receiver, 'Received', 'Pix', amount)
+
+                return Response({'status': 'Pix Created With Successfully'}, status=status.HTTP_201_CREATED)
+            return Response({'status': 'Not enough limit for this Pix'})
+        return Response({'status': 'Not enough balance to make the Pix'}, status=status.HTTP_403_FORBIDDEN)
+    
+
 class TransactionViewSet(viewsets.ModelViewSet):
     permission_classes = [UserGetPost]
 

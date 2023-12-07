@@ -1,6 +1,6 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework import serializers
-from .models import Customer, CustomerNP, CustomerLP, Account, Address, Contact, Card, Transaction, Investment, AccountInvestment, Loan, InstallmentLoan, PandoraManager
+from .models import Customer, CustomerNP, CustomerLP, Account, Address, Contact, Card, Transaction, Investment, AccountInvestment, Loan, InstallmentLoan, PandoraManager, Pix
 
 
 class CustomerSerializer(serializers.ModelSerializer):
@@ -142,10 +142,39 @@ class TransactionPostSerializer(serializers.ModelSerializer):
         )
 
 
+class PixGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pix
+        fields = '__all__'
+
+
+class PixPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Pix
+        fields = (
+            'account',
+            'amount',
+            'receiver'
+        )
+
+
 class InvestmentGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Investment
         fields = '__all__'
+
+
+class InvestmentPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Investment
+        fields = [
+            'inv_type',
+            'amount',
+            'management_fee',
+            'term',
+            'risk_rate',
+            'profitability'
+        ]
 
 
 class AccountInvestmentGetSerializer(serializers.ModelSerializer):
@@ -158,7 +187,7 @@ class AccountInvestmentPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountInvestment
         fields = [
-            'id_investment',
+            'investment',
             'account',
         ]
 
@@ -176,9 +205,7 @@ class LoanPostSerializer(serializers.ModelSerializer):
             'id',
             'account',
             'requested_amount',
-            'interest_rate',
-            'paidout',
-            'installment_amount',
+            'installment_number',
             'observation'
         ]
 
@@ -193,7 +220,6 @@ class InstallmentLoanPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = InstallmentLoan
         fields = [
-            'id',
             'number',
             'amount',
             'payment_date',

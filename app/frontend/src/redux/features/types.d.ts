@@ -121,3 +121,43 @@ export interface Managers {
   Managers: Manager[];
 }
 
+export interface AccInv {
+  id:             number;
+  created:        Date;
+  modified:       Date;
+  active:         boolean;
+  inv_type:       string;
+  amount:         string;
+  management_fee: number;
+  term:           Date;
+  risk_rate:      string;
+  profitability:  string;
+  income:         string;
+  account:        string;
+}
+
+export interface AccInvs {
+  accinvs: AccInv[]
+}
+
+
+export interface Loan {
+  id:                      number;
+  created:                 Date;
+  modified:                Date;
+  active:                  boolean;
+  requested_amount:        string;
+  interest_rate:           string;
+  paidout:                 boolean;
+  installment_number:      number;
+  paid_installment_number: number;
+  request_date:            Date;
+  approval_date:           Date;
+  is_approved:             boolean;
+  observation:             string;
+  account:                 string;
+}
+
+export interface Loans {
+  loans: Loan[]
+}

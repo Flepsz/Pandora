@@ -1,6 +1,6 @@
 import { Text, View, XStack, YStack, styled } from "tamagui";
 import { Image } from 'expo-image';
-import imgFlags from "../utils/imgFlags";
+import imgFlags from "../../utils/imgFlags";
 
 interface CardPropsI {
 	color: string;

@@ -1,48 +1,55 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { useRegisterTransactionMutation } from "../redux/features/authApiSlice";
+import {
+  useRegisterPixMutation,
+  useRegisterTransactionMutation,
+} from "../redux/features/authApiSlice";
 import Toast from "react-native-toast-message";
 import { useAppDispatch } from "../redux/hooks";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigator/RootNavigator";
+import { useSelector } from "react-redux";
+import { selectAccount } from "../redux/features/authSlice";
 
 interface UseRegisterTransactionProps {
   initialCard?: string;
 }
 
-export default function useRegisterTransaction({
+export default function useRegisterPix({
   initialCard = "",
 }: UseRegisterTransactionProps = {}) {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  const dispatch = useAppDispatch();
 
-  const [register, { isLoading }] = useRegisterTransactionMutation();
+  const [register, { isLoading }] = useRegisterPixMutation();
+
+  const accountd = useSelector(selectAccount);
 
   const [formData, setFormData] = useState({
-    card: initialCard.cardNumber,
+    account: accountd,
     amount: "",
-    operation: "Deposit",
     receiver: "",
   });
 
-  const { card, amount, operation, receiver } = formData;
+  const { account, amount, receiver } = formData;
 
   const onChange = (text: string, name: string) => {
     setFormData({ ...formData, [name]: text });
   };
 
   const onSubmit = () => {
-    console.log(card, amount, operation, receiver);
-    register({ card, amount, operation, receiver })
+    register({ account, amount, receiver })
       .unwrap()
       .then(() => {
-        Toast.show({ type: "success", text1: "Transfer realized with success" });
+        Toast.show({
+          type: "success",
+          text1: "Pix realized with success",
+        });
 
-        navigation.navigate("Main")
+        navigation.navigate("Main");
       })
       .catch((error) => {
-        Toast.show({ type: "error", text1: "Failed to do transfer" });
+        Toast.show({ type: "error", text1: "Failed to do Pix" });
         console.log(error);
       });
   };

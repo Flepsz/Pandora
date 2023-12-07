@@ -7,10 +7,12 @@ import { ActivityIndicator, Image } from "react-native";
 
 interface FormsI {
 	isRegister?: boolean;
+	registractionLogin?: boolean;
 	isCustomerNP?: boolean;
 	children: React.ReactNode;
 	isLoading: boolean;
 	btnText: string;
+	titleText?: string;
 	onSubmit: () => void;
 }
 
@@ -20,7 +22,9 @@ export default function ModalPage({
 	children,
 	isLoading,
 	btnText,
+	titleText,
 	onSubmit,
+	registractionLogin
 }: FormsI) {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   
@@ -35,9 +39,7 @@ export default function ModalPage({
 				className="flex flex-col justify-center"
 			>
 				<Text className="mx-auto mb-4 text-xl font-bold text-white">
-					{isRegister
-						? "Please register for an account"
-						: "Please login to your account"}
+					{titleText}
 				</Text>
 				<View className="flex flex-col w-[90%] mx-auto" space="$3">
 					{children}
@@ -56,7 +58,8 @@ export default function ModalPage({
 					</Button>
 				</View>
 			</Form>
-			<XStack className="flex items-center justify-between">
+			{registractionLogin && (
+				<XStack className="flex items-center justify-between">
 				<Text className="mb-0 mr-2 text-xl font-bold text-white">
 					{isRegister ? "Already have an account?" : "Don't have an account?"}
 				</Text>
@@ -77,6 +80,7 @@ export default function ModalPage({
 						{isRegister ? "Log In" : "Register"}
 					</Button>
 			</XStack>
+			)}
       </View>
 		</View>
 	);

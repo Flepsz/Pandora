@@ -1,5 +1,7 @@
 import { apiSlice } from "../services/apiSlice";
 import {
+  AccInvs,
+  Account,
   Accounts,
   Addresses,
   Cards,
@@ -73,6 +75,13 @@ const authApiSlice = apiSlice.injectEndpoints({
     retrieveAccounts: builder.query<Accounts, void>({
       query: () => "/accounts/",
     }),
+    retrieveOneAccount: builder.query<Account, { account?: string }>({
+      query: (options) => {
+        const { account, ...restOptions } = options;
+        const url = `/accounts/${account ? `${account}` : ""}`;
+        return url;
+      },
+    }),
     registerAddress: builder.mutation({
       query: ({ customer, street, neighborhood, city, state, zip_code }) => ({
         url: "/addresses/",
@@ -83,7 +92,7 @@ const authApiSlice = apiSlice.injectEndpoints({
     retrieveAddresses: builder.query<Addresses, void>({
       query: () => "/addresses/",
     }),
-    registerCard: builder.query({
+    registerCard: builder.mutation({
       query: ({ account }) => ({
         url: "/cards/",
         method: "POST",
@@ -97,7 +106,7 @@ const authApiSlice = apiSlice.injectEndpoints({
         return url;
       },
     }),
-    registerContact: builder.query({
+    registerContact: builder.mutation({
       query: ({ customer, number, email, observation }) => ({
         url: "/contacts/",
         method: "POST",
@@ -121,6 +130,33 @@ const authApiSlice = apiSlice.injectEndpoints({
         body: { card, amount, operation, receiver },
       }),
     }),
+    registerPix: builder.mutation({
+      query: ({ account, amount, receiver }) => ({
+        url: "/transactions/",
+        method: "POST",
+        body: { account, amount, receiver },
+      }),
+    }),
+    retrieveAccountInvestment: builder.query<AccInvs, void>({
+      query: () => "/account-investments/",
+    }),
+    registerAccountInvestment: builder.mutation({
+      query: ({ id_account, id_investment }) => ({
+        url: "/account-investments/",
+        method: "POST",
+        body: { id_account, id_investment },
+      }),
+    }),
+    retrieveLoans: builder.query<Loans, void>({
+      query: () => "/loans/",
+    }),
+    registerLoans: builder.mutation({
+      query: ({ account, requested_amount, installment_number, observation }) => ({
+        url: "/loans/",
+        method: "POST",
+        body: { account, requested_amount, installment_number, observation },
+      }),
+    }),
   }),
 });
 
@@ -135,11 +171,14 @@ export const {
   useRegisterCLPMutation,
   useRegisterCNPMutation,
   useRegisterAccountQuery,
-  useRegisterAddressQuery,
-  useRegisterCardQuery,
-  useRegisterContactQuery,
+  useRegisterAddressMutation,
+  useRegisterCardMutation,
+  useRegisterContactMutation,
+  useRegisterTransactionMutation,
+  useRegisterPixMutation,
   useRetrieveAddressesQuery,
   useRetrieveCardsQuery,
+  useRetrieveOneAccountQuery,
   useRetrieveContactsQuery,
   useRetrieveManagerQuery
 } = authApiSlice;

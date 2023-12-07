@@ -189,6 +189,19 @@ class Transaction(Base):
 
     def __str__(self):
         return f"{self.operation}"
+    
+class Pix(Base):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=7, decimal_places=2)
+    receiver = models.CharField(max_length=10)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Pix'
+        verbose_name_plural = "Pix's"
+
+    def __str__(self):
+        return f"Pix by {self.account} to {self.receiver}"
 
 # PandoraManager model with bank statement details
 class PandoraManager(Base):
@@ -215,8 +228,6 @@ class InvestmentType(Base):
     INVESTMENT_TYPE_CHOICES = [
         ('Stocks', 'Stocks'),
         ('Bonds', 'Bonds'),
-        ('Mutual Funds', 'Mutual Funds'),
-        ('Real Estate', 'Real Estate')
     ]
 
     RISC_RATE = [
@@ -228,7 +239,7 @@ class InvestmentType(Base):
     inv_type = models.CharField(max_length=30, choices=INVESTMENT_TYPE_CHOICES)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     management_fee = models.FloatField()
-    term = models.DurationField()
+    term = models.DateField()
     risk_rate = models.CharField(
         choices=RISC_RATE, max_length=6)
     profitability = models.DecimalField(max_digits=5, decimal_places=2)

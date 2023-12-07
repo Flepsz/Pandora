@@ -62,7 +62,9 @@ export default function RegisterCLP() {
       isLoading={isLoading}
       onChange={onChange}
       onSubmit={onSubmit}
+      titleText="Register for your account"
       isRegister
+      registractionLogin
     />
   );
 }

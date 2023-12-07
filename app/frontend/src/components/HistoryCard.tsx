@@ -16,7 +16,8 @@ export default function HistoryCard({
 	return (
 		<XStack className="flex items-center">
 			<View className="p-2 mt-4 rounded-xl bg-zinc-300">
-				{source === "Transaction" && <ArrowRightLeft />}
+				{source === "Transaction" && <ArrowRightLeft />} 
+				{source === "Pix" && <ArrowRightLeft />} 
 				{source === "Installment" && <DollarSign />}
 				{source === "Loan" && <DollarSign />}
 			</View>
