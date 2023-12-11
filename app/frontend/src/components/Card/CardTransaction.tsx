@@ -5,7 +5,7 @@ import useRegisterTransaction from "../../hooks/use-transaction";
 export default function CardTransaction({cardNumber}: {cardNumber: string}) {
   const { receiver, amount, isLoading, onChange, onSubmit } =
     useRegisterTransaction({initialCard: cardNumber});
-
+  
 
   const config: Config[] = [
     {

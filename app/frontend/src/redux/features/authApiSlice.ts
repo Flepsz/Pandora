@@ -20,7 +20,7 @@ const authApiSlice = apiSlice.injectEndpoints({
     }),
     updateUserPhoto: builder.mutation({
       query: ({ photo_logo }) => ({
-        url: "/auth/users/me",
+        url: "/auth/users/me/",
         method: "PUT",
         body: { photo_logo },
       }),
