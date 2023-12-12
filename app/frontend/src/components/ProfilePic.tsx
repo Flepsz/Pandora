@@ -13,12 +13,12 @@ interface ProfilePicPropsI {
 
 export default function ProfilePic({ avatar }: ProfilePicPropsI) {
 	const [photo, setPhoto] = useState<string | null>(
-    "https://static-00.iconduck.com/assets.00/profile-major-icon-512x512-xosjbbdq.png"
-  );
-  const [imgPick, setImgPick] = useState<string | null>(null);
+		"https://static-00.iconduck.com/assets.00/profile-major-icon-512x512-xosjbbdq.png"
+	);
+	const [imgPick, setImgPick] = useState<string | null>(null);
 
 	const { data: userData, refetch: refetchUser } = useRetrieveUserQuery();
-	const [updateUserPhoto, { isLoading: isUpdating }] =
+	const [updateUserPhoto, { isLoading: isUpdating, isError }] =
 		useUpdateUserPhotoMutation();
 
 	useEffect(() => {
@@ -36,17 +36,27 @@ export default function ProfilePic({ avatar }: ProfilePicPropsI) {
 			quality: 1,
 		});
 
-		console.log(result);
-		
 		if (!result.canceled) {
 			try {
-				const profilePic = result.assets[0].uri
-				await updateUserPhoto({ profilePic }).unwrap();
-				setImgPick(profilePic);
+				const profilePic = result.assets[0];
+
+				const formData = new FormData();
+				const fileExtension = profilePic.uri.split(".").pop();
+				
+				const fileName = `image-user-${userData?.register_number}.${fileExtension}`;
+				
+				formData.append("file", {
+					uri: profilePic.uri,
+					type: profilePic.type,
+					name: fileName,
+				});
+
+				await updateUserPhoto({ photo_logo: formData }).unwrap();
+
+				setImgPick(profilePic.uri);
 			} catch (error) {
 				alert(`Erro ao atualizar a imagem`);
 				console.log(error);
-				
 			}
 		} else {
 			alert("Erro ao escolher a imagem.");
