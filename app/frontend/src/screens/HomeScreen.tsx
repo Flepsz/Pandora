@@ -1,7 +1,7 @@
 import { RefreshControl, SafeAreaView, View } from "react-native";
 import { Text, XStack, YStack, ScrollView, Button } from "tamagui";
 import User from "../components/User";
-import { ArrowLeftRight, Download } from "@tamagui/lucide-icons";
+import { useFocusEffect } from '@react-navigation/native';
 import { CompositeNavigationProp } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { TabStackParamList } from "../navigator/TabNavigator";
@@ -9,7 +9,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../navigator/RootNavigator";
 import RecentHistory from "../components/RecentHistory";
 import CardList from "../components/Card/CardList";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import {
   useRetrieveOneAccountQuery,
@@ -43,13 +43,6 @@ export default function HomeScreen() {
 
   const dispatch = useAppDispatch();
 
-  const [refreshing, setRefreshing] = useState(false);
-
-  const onRefresh = useCallback(() => {
-    setRefreshing(true);
-    refetch().finally(() => setRefreshing(false));
-  }, [refetch]);
-
   useEffect(() => {
     if (userData) {
       dispatch(setName(userData.first_name));
@@ -59,13 +52,16 @@ export default function HomeScreen() {
 
   const name = useSelector(selectName);
 
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
+
   return (
     <SafeAreaView className="">
       <ScrollView
         className="flex flex-col gap-5 p-3 pt-12"
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
       >
         <YStack className="flex flex-col bg-primary">
           <XStack className="items-start justify-between">
@@ -73,7 +69,7 @@ export default function HomeScreen() {
           </XStack>
         </YStack>
         <Text className="text-2xl font-bold text-white">
-          Balance: {accData?.balance}
+          Balance: ${accData?.balance}
         </Text>
         <YStack>
           <XStack className="flex gap-3 mb-1">

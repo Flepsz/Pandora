@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { selectAccount } from "../redux/features/authSlice";
 import { ActivityIndicator, RefreshControl } from "react-native";
 import { Manager } from "../redux/features/types";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function RecentHistory() {
 	const account = useSelector(selectAccount);
@@ -19,16 +20,11 @@ export default function RecentHistory() {
 		account,
 	});
 
-	const [refreshing, setRefreshing] = useState(false);
-
-	const onRefresh = useCallback(() => {
-		setRefreshing(true);
-		refetch().finally(() => setRefreshing(false));
-	}, [refetch]);
-
-	useEffect(() => {
-		refetch();
-	}, [refetch]);
+	useFocusEffect(
+		useCallback(() => {
+			refetch();
+		}, [refetch])
+	);
 
 	return (
 		<YStack className="p-4 rounded-lg h-80 bg-secondary">
@@ -39,9 +35,7 @@ export default function RecentHistory() {
 					</XStack>
 					<ScrollView
 						className="flex-1"
-						refreshControl={
-							<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-						}
+						
 					>
 						<YStack>
 							{managerData.map((manager: Manager) => (
@@ -52,7 +46,11 @@ export default function RecentHistory() {
 									key={manager.id}
 								/>
 							))}
-							{managerData.length <= 0 && <Text className="mx-auto my-10 text-2xl font-bold text-white">You don't have any extract</Text>}
+							{managerData.length <= 0 && (
+								<Text className="mx-auto my-10 text-2xl font-bold text-white">
+									You don't have any extract
+								</Text>
+							)}
 						</YStack>
 					</ScrollView>
 				</>

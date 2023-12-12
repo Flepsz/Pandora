@@ -3,11 +3,9 @@ import { useNavigation } from "@react-navigation/native";
 import { useAppDispatch } from "../redux/hooks";
 import {
 	useLoginMutation,
-	useRetrieveUserQuery,
 } from "../redux/features/authApiSlice";
 import {
 	setAuth,
-	setName,
 	setRegisterNumber,
 } from "../redux/features/authSlice";
 import Toast from "react-native-toast-message";

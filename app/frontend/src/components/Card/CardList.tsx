@@ -1,5 +1,5 @@
 import { SafeAreaView, ScrollView, TouchableOpacity } from "react-native";
-import { Text, View, XStack } from "tamagui";
+import { Text, XStack } from "tamagui";
 import {
   useRetrieveCardsQuery,
   useRetrieveUserQuery,

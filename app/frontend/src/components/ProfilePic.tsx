@@ -1,9 +1,10 @@
-import { Avatar, Button, Text, View, XStack, YStack } from "tamagui";
+import { Avatar, Button, Text, View, YStack } from "tamagui";
+import { useFocusEffect } from "@react-navigation/native";
 import {
-	usePatchUserPhotoMutation,
 	useRetrieveUserQuery,
+	useUpdateUserPhotoMutation,
 } from "../redux/features/authApiSlice";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 
 interface ProfilePicPropsI {
@@ -11,26 +12,23 @@ interface ProfilePicPropsI {
 }
 
 export default function ProfilePic({ avatar }: ProfilePicPropsI) {
-	const [Photo, setPhoto] = useState(
+	const [photo, setPhoto] = useState<string | null>(
 		"https://static-00.iconduck.com/assets.00/profile-major-icon-512x512-xosjbbdq.png"
 	);
-	const [imgPick, setImgPick] = useState();
+	const [imgPick, setImgPick] = useState<string | null>(null);
+
+	const { data: userData, refetch: refetchUser } = useRetrieveUserQuery();
+	const [updateUserPhoto, { isLoading: isUpdating, isError }] =
+		useUpdateUserPhotoMutation();
 
 	useEffect(() => {
-		async function fetchData() {
-			const {
-				data: userData,
-				isLoading,
-				isError,
-				refetch,
-			} = useRetrieveUserQuery();
+		if (userData) {
 			const profilePhoto = userData?.photo_logo;
 			profilePhoto && setPhoto(profilePhoto);
 		}
-		fetchData();
-	}, [imgPick]);
+	}, [userData, imgPick]);
 
-	async function pickImage() {
+	const pickImage = async () => {
 		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.All,
 			allowsEditing: true,
@@ -39,32 +37,46 @@ export default function ProfilePic({ avatar }: ProfilePicPropsI) {
 		});
 
 		if (!result.canceled) {
-			const [updatePhoto, { isLoading: isUpdating }] =
-				usePatchUserPhotoMutation();
-			const profilePic = result.assets[0];
-
 			try {
-				await updatePhoto({ profilePic })
-					.unwrap()
-					.then(() => {
-						setImgPick(profilePic);
-					});
+				const profilePic = result.assets[0];
+
+				const formData = new FormData();
+				const fileExtension = profilePic.uri.split(".").pop();
+				
+				const fileName = `image-user-${userData?.register_number}.${fileExtension}`;
+				
+				formData.append("file", {
+					uri: profilePic.uri,
+					type: profilePic.type,
+					name: fileName,
+				});
+
+				await updateUserPhoto({ photo_logo: formData }).unwrap();
+
+				setImgPick(profilePic.uri);
 			} catch (error) {
 				alert(`Erro ao atualizar a imagem`);
+				console.log(error);
 			}
 		} else {
 			alert("Erro ao escolher a imagem.");
 		}
-	}
+	};
+
+	useFocusEffect(
+		useCallback(() => {
+			refetchUser();
+		}, [refetchUser])
+	);
 
 	return (
 		<View className="w-full h-[40%] flex justify-center items-center text-center">
 			<YStack className="flex flex-col gap-4">
 				<Avatar size="$13" circular>
-					<Avatar.Image src={Photo} className="" />
+					<Avatar.Image src={photo} className="" />
 					<Avatar.Fallback backgroundColor="$gray5" />
 				</Avatar>
-				<Button className="rounded-full bg-purple-l" onPress={() => pickImage}>
+				<Button className="rounded-full bg-purple-l" onPress={pickImage}>
 					<Text className="text-base font-bold text-center text-white">
 						Change Photo
 					</Text>
