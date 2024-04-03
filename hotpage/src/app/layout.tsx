@@ -16,7 +16,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en">
+		<html lang="en" className="light">
 			<body className={`${sonoma.className} bg-zinc-50 dark:bg-[#0a0c0f]`}>
 				<Provider>
 					<Setup />
