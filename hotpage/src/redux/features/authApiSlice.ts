@@ -96,7 +96,7 @@ const authApiSlice = apiSlice.injectEndpoints({
         body: { customer, fantasy_name, cnpj, sr, mr, establishment_date },
       }),
     }),
-    retrieveAccounts: builder.query<Accounts, void>({
+    retrieveAccounts: builder.query<Account[], void>({
       query: () => "/accounts/",
     }),
     retrieveCNP: builder.query<CustomerNP, void>({
